@@ -24,7 +24,7 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', function () {
-        Alert::success('Success Title', 'Success Message');
+        //Alert::success('Success Title', 'Success Message');
         return view('home');
     })->name('dashboard');
 });

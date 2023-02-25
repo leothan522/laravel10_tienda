@@ -10,13 +10,14 @@ class Counter extends Component
     use LivewireAlert;
     public $count = 0;
 
+    protected $listeners = ['increment'];
 
 
-    public function increment()
+    public function increment($texto)
 
     {
         $this->alert('success', 'Basic Alert');
-        $this->count++;
+        $this->count = $texto;
 
     }
     public function render()

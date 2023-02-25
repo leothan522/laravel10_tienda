@@ -9,6 +9,18 @@
 @section('content')
     <p>Welcome to this beautiful admin panel.</p>
     <livewire:counter />
+
+    {{--<div id="wrapper">
+        <form action="#" method="post">
+        <div id="capaIntermedia">
+            <div id="capaMasInterna">
+                <input type="text" id="boton" value=""/>
+                <input type="submit" value="enviar">
+            </div>
+        </div>
+        </form>
+    </div>--}}
+
 @stop
 
 @section('footer')
@@ -29,9 +41,22 @@
 
 @section('js')
     <script>
-        /*$( "#target" ).submit(function() {
-            alert( "Handler for .click() called." );
-        });*/
+
+        $("#navbarSearch").focus(function(){
+            let form = $(this).closest("form");
+            form.attr("onsubmit","return search()");
+        });
+
+        function search(){
+            let input = $("#navbarSearch");
+            let keyword  = input.val();
+            if (keyword.length > 0){
+                input.blur();
+                Livewire.emit('increment', keyword);
+            }
+            return false;
+        }
+
         console.log('Hi!');
     </script>
 @stop
