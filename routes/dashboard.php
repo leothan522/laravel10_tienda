@@ -17,5 +17,5 @@ use RealRashid\SweetAlert\Facades\Alert;
 Route::get('/admin', function () {
     //Alert::alert('Title', 'Message', 'Type');
     return view('home');
-});
+})->middleware(['user.permisos']);
 

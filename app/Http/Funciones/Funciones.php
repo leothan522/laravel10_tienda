@@ -23,7 +23,7 @@ function verSweetAlert2($mensaje, $alert = null, $type = 'success', $icono = '<i
             alert($title, $mensaje, $type)->iconHtml($icono)->persistent(true,false)->toHtml();
             break;
         case "toast":
-            toast($mensaje, $type);
+            toast($mensaje, $type)->width('400px');
             break;
     }
     /*alert()->success('SuccessAlert','Lorem ipsum dolor sit amet.');

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +16,22 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
-    'verified'
+    'verified',
+    'user.admin',
+    'user.estatus'
 ])->group(function () {
     Route::get('/dashboard', function () {
-        //Alert::success('Success Title', 'Success Message');
         return view('home');
     })->name('dashboard');
 });
+
+Route::get('/cerrar', function () {
+    Auth::logout();
+    return view('welcome');
+})->name('cerrar');
+
