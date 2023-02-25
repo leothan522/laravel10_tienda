@@ -77,37 +77,35 @@
 
 <body class="@yield('classes_body')" @yield('body_data')>
 
-    @include('sweetalert::alert')
-    @livewireScripts
-    {{-- Body Content --}}
-    @yield('body')
+{{-- Body Content --}}
+@yield('body')
 
-    {{-- Base Scripts --}}
-    @if(!config('adminlte.enabled_laravel_mix'))
-        <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
-        <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+{{-- Base Scripts --}}
+@if(!config('adminlte.enabled_laravel_mix'))
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+@else
+    <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
+@endif
+
+{{-- Extra Configured Plugins Scripts --}}
+@include('adminlte::plugins', ['type' => 'js'])
+
+{{-- Livewire Script --}}
+@if(config('adminlte.livewire'))
+    @if(app()->version() >= 7)
+        @livewireScripts
     @else
-        <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
+        <livewire:scripts />
     @endif
+@endif
 
-    {{-- Extra Configured Plugins Scripts --}}
-    @include('adminlte::plugins', ['type' => 'js'])
-
-    {{-- Livewire Script --}}
-    @if(config('adminlte.livewire'))
-        @if(app()->version() >= 7)
-            @livewireScripts
-        @else
-            <livewire:scripts />
-        @endif
-    @endif
-
-    {{-- Custom Scripts --}}
-    @yield('adminlte_js')
-    <x-livewire-alert::scripts />
-
+{{-- Custom Scripts --}}
+@yield('adminlte_js')
+@include('sweetalert::alert')
+<x-livewire-alert::scripts />
 </body>
 
 </html>

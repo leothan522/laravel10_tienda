@@ -15,7 +15,6 @@ use RealRashid\SweetAlert\Facades\Alert;
 */
 
 Route::get('/', function () {
-    //Alert::alert('Title', 'Message', 'Type');
     return view('welcome');
 });
 
@@ -25,6 +24,7 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', function () {
+        Alert::success('Success Title', 'Success Message');
         return view('home');
     })->name('dashboard');
 });

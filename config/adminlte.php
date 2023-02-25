@@ -301,7 +301,7 @@ return [
             'url'          => 'dashboard/navbar/search', // The url used to submit the data ('#' by default).
             'method'       => 'post',          // 'get' or 'post' ('get' by default).
             'input_name'   => 'searchVal',     // Name for the underlying input ('adminlteSearch' by default).
-            //'id'           => 'navbarSearch'   // ID attribute for the underlying input (optional).
+            'id'           => 'navbarSearch'   // ID attribute for the underlying input (optional).
         ],
         [
             'type'         => 'fullscreen-widget',
@@ -404,7 +404,7 @@ return [
                 ]
             ],
         ],
-        ],
+    ],
 
     /*'menu' => [
         // Navbar items:
@@ -583,7 +583,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

@@ -8,6 +8,7 @@
 
 @section('content')
     <p>Welcome to this beautiful admin panel.</p>
+    <livewire:counter />
 @stop
 
 @section('footer')
@@ -23,9 +24,14 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
+    {{--<link rel="stylesheet" href="/css/admin_custom.css">--}}
 @stop
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+    <script>
+        /*$( "#target" ).submit(function() {
+            alert( "Handler for .click() called." );
+        });*/
+        console.log('Hi!');
+    </script>
 @stop
