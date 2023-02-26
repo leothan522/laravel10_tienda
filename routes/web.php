@@ -26,7 +26,7 @@ Route::middleware([
     'user.estatus'
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('home');
+        return view('dashboard.index');
     })->name('dashboard');
 });
 

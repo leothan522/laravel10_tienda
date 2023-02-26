@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Controllers\Dashboard\ParametrosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +14,22 @@ use RealRashid\SweetAlert\Facades\Alert;
 |
 */
 
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'user.admin',
+    'user.estatus',
+    'user.permisos'
+])->prefix('/dashboard')->group(function (){
+
+    Route::get('parametros/', [ParametrosController::class, 'index'])->name('parametros.index');
+
+});
+
+
 Route::get('/admin', function () {
     //Alert::alert('Title', 'Message', 'Type');
     return view('home');
-})->middleware(['user.permisos']);
+})->middleware(['user.permisos'])->name("prueba");
 

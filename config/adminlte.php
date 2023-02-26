@@ -113,7 +113,7 @@ return [
         'img' => [
             /*'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',*/
             'path' => 'img/preloader_171x171.png',
-            'alt' => 'AdminLTE Preloader Image',
+            'alt' => 'Logo',
             'effect' => 'animation__shake',
             'width' => 60,
             'height' => 60,
@@ -310,97 +310,22 @@ return [
 
         // Sidebar items:
 
-        /*[
-            'text'      => 'Ventas',
-            'icon'      => 'fab fa-fw fa-sellcast',
-            'can'       => 'ventas',
-            'submenu' => [
-                [
-                    'text' => 'Pedidos',
-                    'icon' => 'fas fa-fw fa-shopping-bag',
-                    'route'  => 'pedidos.index',
-                    'can'  => 'pedidos',
-                ],
-                [
-                    'text' => 'Clientes',
-                    'icon' => 'far fa-fw fa-address-book',
-                    'route'  => 'clientes.index',
-                    'can'  => 'clientes',
-                ],
-                [
-                    'text' => 'Metodos de Pago',
-                    'icon' => 'fas fa-fw fa-money-check-alt',
-                    'route'  => 'metodos.index',
-                    'can'  => 'metodos',
-                ]
-            ],
-        ],*/
-        /*[
-            'text'      => 'Inventario',
-            'icon'      => 'fas fa-fw fa-cubes',
-            'can'       => 'inventario',
-            'submenu' => [
-                [
-                    'text' => 'Stock',
-                    'icon' => 'fas fa-fw fa-boxes',
-                    'route'  => 'stock.index',
-                    'can'  => 'stock',
-                ],
-                [
-                    'text' => 'Almacen',
-                    'icon' => 'fas fa-fw fa-warehouse',
-                    'route'  => 'almacen.index',
-                    'can'  => 'almacen',
-                ]
-            ],
-        ],*/
-        /*[
-            'text'      => 'E-commerce',
-            'icon'      => 'fas fa-fw fa-store',
-            'can'       => 'ecommerce',
-            'submenu' => [
-                [
-                    'text' => 'Productos',
-                    'icon' => 'fas fa-fw fa-box',
-                    'route'  => 'productos.index',
-                    'can'  => 'productos',
-                ],
-                [
-                    'text' => 'Categorias',
-                    'icon' => 'fas fa-fw fa-tags',
-                    'route'  => 'categorias.index',
-                    'can'  => 'categorias',
-                ],
-                [
-                    'text' => 'Delivery',
-                    'icon' => 'fas fa-fw fa-shipping-fast',
-                    'route' => 'delivery.index',
-                    'can' => 'delivery',
-                ],
-                [
-                    'text' => 'Tiendas',
-                    'icon' => 'fas fa-fw fa-store-alt',
-                    'route' => 'empresas.index',
-                    'can' => 'empresas',
-                ]
-            ],
-        ],*/
         [
             'text'      => 'Configuración',
             'icon'      => 'fas fa-fw fa-cogs',
-            /*'can'       => 'configuracion',*/
+            'can'       => ['usuarios', 'parametros'],
             'submenu' => [
                 [
                     'text' => 'Usuarios',
                     'icon' => 'fas fa-fw fa-users',
-                    'route'  => 'dashboard',
-                    'can'  => 'prueba',
+                    'route'  => 'prueba',
+                    'can'  => 'usuarios',
                 ],
                 [
                     'text' => 'Parametros',
                     'icon' => 'fas fa-fw fa-list',
-                    'route' => 'dashboard',
-                    'can' => 'prueba',
+                    'route' => 'parametros.index',
+                    'can' => 'parametros',
                 ]
             ],
         ],
