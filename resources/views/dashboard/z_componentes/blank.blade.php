@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Parametros')
+@section('title', 'Dashboard')
 
 @section('content_header')
     <div class="container-fluid">
@@ -19,7 +19,7 @@
 @endsection
 
 @section('content')
-    @livewire('dashboard.parametros-component')
+    <p>Welcome to this beautiful admin panel.</p>
 @endsection
 
 @section('right-sidebar')

@@ -75,6 +75,21 @@ function verSweetAlert2($mensaje, $alert = null, $type = 'success', $icono = '<i
 
 }
 
+function verSpinner()
+{
+    $spinner = '
+        <div class="overlay-wrapper" wire:loading>
+            <div class="overlay">
+                <div class="spinner-border text-navy" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    ';
+
+    return $spinner;
+}
+
 function verImagen($path, $name)
 {
     if (!is_null($path)){
