@@ -70,9 +70,10 @@ class User extends Authenticatable implements MustVerifyEmail
     //AdminLTE
     public function adminlte_image()
     {
-        return 'https://picsum.photos/300/300';
+        //return 'https://picsum.photos/300/300';
         //return "https://ui-avatars.com/api/?name=".Auth::user()->name."&color=7F9CF5&background=EBF4FF";
         //return verImagen(auth()->user()->profile_photo_path, auth()->user()->name);
+        return verImagen(Auth::user()->profile_photo_path, true);
     }
 
     public function adminlte_desc()

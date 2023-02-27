@@ -11,6 +11,21 @@ function hola(){
     return "Funciones Personalidas bien creada";
 }
 
+//Leer JSON
+function leerJson($json, $key)
+{
+    if ($json == null) {
+        return null;
+    } else {
+        $json = $json;
+        $json = json_decode($json, true);
+        if (array_key_exists($key, $json)) {
+            return $json[$key];
+        } else {
+            return null;
+        }
+    }
+}
 
 //Alertas de sweetAlert2
 function verSweetAlert2($mensaje, $alert = null, $type = 'success', $icono = '<i class="fa fa-trash-alt"></i>', $title = '¡Éxito!')
@@ -90,24 +105,69 @@ function verSpinner()
     return $spinner;
 }
 
-function verImagen($path, $name)
+function verImagen($path, $user = false)
 {
     if (!is_null($path)){
         if (file_exists(public_path('storage/'.$path))){
             return asset('storage/'.$path);
         }else{
-            if (config('app.type') == 'local'){
+            if ($user){
                 return asset('img/user.png');
             }
-            return "https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF";
+            return asset('img/image.png');
         }
     }else{
-        //return 'https://ui-avatars.com/api/?name='.$name;
-        if (config('app.env') == 'local'){
+        if ($user){
             return asset('img/user.png');
         }
-        return "https://ui-avatars.com/api/?name=$name&color=7F9CF5&background=EBF4FF";
+        return asset('img/image.png');
     }
+}
+
+function iconoPlataforma($plataforma)
+{
+    if ($plataforma == 0) {
+        return '<i class="fas fa-desktop"></i>';
+    } else {
+        return '<i class="fas fa-mobile"></i>';
+    }
+}
+
+function verRole($role, $roles_id)
+{
+    $roles = [
+        '0'     => 'Estandar',
+        '1'     => 'Administrador',
+        '100'   => 'Root'
+    ];
+
+    if (is_null($roles_id)){
+        return $roles[$role];
+    }else{
+        $roles = Parametro::where('tabla_id', '-1')->where('id', $roles_id)->first();
+        if ($roles){
+            return ucwords($roles->nombre);
+        }else{
+            return "NO definido";
+        }
+    }
+}
+
+function verEstatusUsuario($i, $icon = null)
+{
+    if (is_null($icon)){
+        $suspendido = "Suspendido";
+        $activado = "Activo";
+    }else{
+        $suspendido = '<i class="fa fa-user-slash"></i>';
+        $activado = '<i class="fa fa-user-check"></i>';
+    }
+    $status = [
+        '0' => '<span class="text-danger">'.$suspendido.'</span>',
+        '1' => '<span class="text-success">'.$activado.'</span>'/*,
+        '2' => '<span class="text-success">Confirmado</span>'*/
+    ];
+    return $status[$i];
 }
 
 function haceCuanto($fecha){
@@ -115,11 +175,25 @@ function haceCuanto($fecha){
     return $carbon->parse($fecha)->diffForHumans();
 }
 
-function fecha($fecha, $format = null){
+function verFecha($fecha, $format = null){
     $carbon = new Carbon();
     if ($format == null){ $format = "j/m/Y"; }
     return $carbon->parse($fecha)->format($format);
 }
+
+function numRowsPaginate(){
+    $default = 15;
+    $parametro = Parametro::where("nombre", "numRowsPaginate")->first();
+    if ($parametro) {
+        if (is_numeric($parametro->valor)) {
+            return $parametro->valor;
+        }
+    }
+    return $default;
+}
+
+//-------------------------------------------------------------------------------------
+
 
 function cuantosDias($fecha_inicio, $fecha_final){
 
@@ -147,21 +221,7 @@ function mesEspanol($numMes){
     return $mes;
 }
 
-//Leer JSON
-function leerJson($json, $key)
-{
-    if ($json == null) {
-        return null;
-    } else {
-        $json = $json;
-        $json = json_decode($json, true);
-        if (array_key_exists($key, $json)) {
-            return $json[$key];
-        } else {
-            return null;
-        }
-    }
-}
+
 
 //funcion formato millares
 function formatoMillares($cantidad, $decimal = 2)
@@ -245,55 +305,6 @@ function hourIsBetween($from, $to, $input) {
     /*En la función lo que haremos será pasarle, el desde y el hasta del rango de horas que queremos que se encuentre y el datetime con la hora que nos llega.
 Comprobaremos si la segunda hora que le pasamos es inferior a la primera, con lo cual entenderemos que es para el día siguiente.
 Y al final devolveremos true o false dependiendo si el valor introducido se encuentra entre lo que le hemos pasado.*/
-}
-
-
-function role($i = null, $role = null){
-
-    $roles = \App\Models\Parametro::where('tabla_id', '-1')->where('id', $role)->first();
-    if ($roles){
-        return ucwords($roles->nombre);
-    }
-
-    $status = [
-        '0'     => 'Estandar',
-        '1'     => 'Administrador',
-        '100'   => 'Root'
-    ];
-
-    if (is_null($i)){
-        unset($status["100"]);
-        return $status;
-    }else{
-        return $status[$i];
-    }
-}
-
-
-function estatusUsuario($i, $icon = null){
-    if (is_null($icon)){
-        $suspendido = "Suspendido";
-        $activado = "Activo";
-    }else{
-        $suspendido = '<i class="fa fa-user-slash"></i>';
-        $activado = '<i class="fa fa-user-check"></i>';
-    }
-
-    $status = [
-        '0' => '<span class="text-danger">'.$suspendido.'</span>',
-        '1' => '<span class="text-success">'.$activado.'</span>'/*,
-        '2' => '<span class="text-success">Confirmado</span>'*/
-    ];
-    return $status[$i];
-}
-
-function iconoPlataforma($plataforma)
-{
-    if ($plataforma == 0) {
-        return '<i class="fas fa-desktop"></i>';
-    } else {
-        return '<i class="fas fa-mobile"></i>';
-    }
 }
 
 function empresaDefault($default)

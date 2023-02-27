@@ -1,6 +1,14 @@
-<div class="card card-outline card-navy">
+<div class="card card-outline card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="card-header">
-        <h3 class="card-title">Fixed Header Table</h3>
+        <h3 class="card-title">
+            @if($keyword)
+                Resultados de la Busqueda { <b class="text-danger">{{ $keyword }}</b> }
+                <button class="btn btn-tool text-danger" wire:click="limpiar"><i class="fas fa-times-circle"></i>
+                </button>
+            @else
+                Fixed Header Table
+            @endif
+        </h3>
 
         <div class="card-tools">
             <ul class="pagination pagination-sm float-right">
@@ -12,7 +20,6 @@
             </ul>
         </div>
     </div>
-    <!-- /.card-header -->
     <div class="card-body table-responsive p-0" {{--style="height: 400px;"--}}>
         <table class="table {{--table-head-fixed--}} table-hover text-nowrap">
             <thead>
@@ -21,7 +28,7 @@
                 <th>User</th>
                 <th>Date</th>
                 <th>Status</th>
-                <th>Reason</th>
+                <th style="width: 5%;">Reason</th>
             </tr>
             </thead>
             <tbody>
@@ -30,7 +37,17 @@
                 <td>John Doe</td>
                 <td>11-7-2014</td>
                 <td><span class="tag tag-success">Approved</span></td>
-                <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                <td class="justify-content-end">
+                    <div class="btn-group">
+                        <button {{--wire:click="edit({{ $parametro->id }})"--}} class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i>
+                        </button>
+
+                        <button {{--wire:click="destroy({{ $parametro->id }})"--}} class="btn btn-primary btn-sm">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </td>
             </tr>
             <tr>
                 <td>219</td>
@@ -49,5 +66,4 @@
             </tbody>
         </table>
     </div>
-    <!-- /.card-body -->
 </div>

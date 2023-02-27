@@ -21,9 +21,11 @@ class ParametrosComponent extends Component
 
     public function render()
     {
-        $parametros = Parametro::buscar($this->keyword)->orderBy('updated_at', 'DESC')->paginate(15);
+        $parametros = Parametro::buscar($this->keyword)->orderBy('updated_at', 'ASC')->paginate(numRowsPaginate());
+        $rows = Parametro::count();
         return view('livewire.dashboard.parametros-component')
-            ->with('parametros', $parametros);
+            ->with('parametros', $parametros)
+            ->with('rows', $rows);
     }
 
     public function limpiar()

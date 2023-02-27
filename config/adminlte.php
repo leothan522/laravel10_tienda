@@ -318,7 +318,7 @@ return [
                 [
                     'text' => 'Usuarios',
                     'icon' => 'fas fa-fw fa-users',
-                    'route'  => 'prueba',
+                    'route'  => 'usuarios.index',
                     'can'  => 'usuarios',
                 ],
                 [

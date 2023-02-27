@@ -6,7 +6,7 @@
                 <button class="btn btn-tool text-danger" wire:click="limpiar"><i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Parametros Registrados
+                Parametros Registrados [ <b class="text-navy">{{ $rows }}</b> ]
             @endif
         </h3>
 
@@ -33,8 +33,24 @@
                     <tr>
                         <td class="text-bold">{{ $parametro->id }}</td>
                         <td>{{ $parametro->nombre }}</td>
-                        <td>{{ $parametro->tabla_id }}</td>
-                        <td>{{ $parametro->valor }}</td>
+                        <td>
+                            @if(is_null($parametro->tabla_id))
+                                null
+                            @else
+                                {{ $parametro->tabla_id }}
+                            @endif
+                        </td>
+                        <td>
+                            @if(is_null($parametro->valor))
+                                null
+                            @else
+                                @if($parametro->tabla_id == "-1")
+                                    json{...}
+                                @else
+                                    {{ $parametro->valor }}
+                                @endif
+                            @endif
+                        </td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $parametro->id }})" class="btn btn-primary btn-sm">

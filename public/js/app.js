@@ -14,3 +14,19 @@ function search(){
     }
     return false;
 }
+
+$(function() {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+    });
+    $('.swalDefaultInfo').click(function() {
+        Toast.fire({
+            icon: 'info',
+            title: 'Generando Archivo'
+        })
+    });
+
+});
