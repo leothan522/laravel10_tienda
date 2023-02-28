@@ -8,11 +8,13 @@
         <li class="nav-item">
             <span class="text-small text-muted float-right">Right-Sidebar</span>
         </li>
-        {{--<li class="nav-item">
-            <a href="{{ route('welcome') }}" class="nav-link" target="_blank">
-                <i class="fas fa-store-alt"></i> Inicio
-            </a>
-        </li>--}}
+        @if(auth()->user()->role == 100)
+            <li class="nav-item">
+                <a href="{{ route('prueba') }}" class="nav-link" target="_blank">
+                    <i class="fas fa-store-alt"></i> Pagina de Prueba
+                </a>
+            </li>
+        @endif
         {{--@if(Auth::user()->role == 100)
             <li class="dropdown-divider"></li>
             <li class="nav-item">

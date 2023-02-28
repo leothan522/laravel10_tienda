@@ -32,7 +32,7 @@ Route::middleware([
 
 Route::get('/prueba', function () {
     //Alert::alert('Title', 'Message', 'Type');
-    return view('home');
+    return view('dashboard.pagina_pruebas');
 
 })->middleware(['user.permisos'])->name("prueba");
 
