@@ -44,7 +44,7 @@ class UsuariosComponent extends Component
     {
         $this->reset([
             'view', 'keyword', 'name', 'email', 'password', 'role', 'usuario_id',
-            'edit_name', 'edit_email', 'edit_role', 'edit_roles_id', 'created_at', 'estatus', 'photo', 'empresas_id',
+            'edit_name', 'edit_email', 'edit_password', 'edit_role', 'edit_roles_id', 'created_at', 'estatus', 'photo', 'empresas_id',
             'tabla', 'tabla_id', 'tabla_nombre', 'tabla_permisos', 'tabla_email'
         ]);
     }
@@ -90,7 +90,7 @@ class UsuariosComponent extends Component
         if (is_null($this->usuario_id)) {
             //nuevo
             $usuarios = new User();
-            $usuarios->name = $this->name;
+            $usuarios->name = ucwords($this->name);
             $usuarios->email = strtolower($this->email);
             $usuarios->password = Hash::make($this->password);
             if ($this->role > 1) {
@@ -111,7 +111,7 @@ class UsuariosComponent extends Component
         } else {
             //editar
             $usuarios = User::find($this->usuario_id);
-            $usuarios->name = $this->edit_name;
+            $usuarios->name = ucwords($this->edit_name);
             $usuarios->email = strtolower($this->edit_email);
             if ($this->edit_role > 1) {
                 $usuarios->role = 2;

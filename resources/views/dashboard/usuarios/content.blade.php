@@ -1,7 +1,9 @@
 <div class="row justify-content-center">
-    <div class="col-md-3">
-        @include('dashboard.usuarios.card_form')
-    </div>
+    @if(comprobarPermisos('usuarios.create'))
+        <div class="col-md-3">
+            @include('dashboard.usuarios.card_form')
+        </div>
+    @endif
     <div class="col-md-9">
         @include('dashboard.usuarios.card_table')
         @include('dashboard.usuarios.modal_edit')
@@ -10,5 +12,9 @@
 </div>
 
 @section('right-sidebar')
-    @include('dashboard.usuarios.right-sidebar')
+    @if(comprobarPermisos())
+        @include('dashboard.usuarios.right-sidebar')
+    @else
+        @include('dashboard.right-sidebar')
+    @endif
 @endsection

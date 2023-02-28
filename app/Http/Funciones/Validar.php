@@ -2,7 +2,7 @@
 //Funciones Personalizadas para el Proyecto
 use Illuminate\Support\Facades\Auth;
 
-function comprobarPermisos($routeName)
+function comprobarPermisos($routeName = null)
 {
 
     if (leerJson(Auth::user()->permisos, $routeName) || Auth::user()->role == 1 || Auth::user()->role == 100) {
@@ -21,7 +21,8 @@ function allPermisos()
             'submenu' => [
                 'Crear Usuarios' => 'usuarios.create',
                 'Editar Usuarios' => 'usuarios.edit',
-                'Reestablecer Contraseña' => 'usuarios.update',
+                'Suspender Usuarios' => 'usuarios.estatus',
+                'Reestablecer Contraseña' => 'usuarios.password',
                 'Descargar Excel' => 'usuarios.excel',
                 'Eliminar Usuarios' => 'usuarios.destroy',
             ]

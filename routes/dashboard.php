@@ -30,7 +30,7 @@ Route::middleware([
 });
 
 
-Route::get('/admin', function () {
+Route::get('/prueba', function () {
     //Alert::alert('Title', 'Message', 'Type');
     return view('home');
 

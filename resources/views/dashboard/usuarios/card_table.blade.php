@@ -11,9 +11,11 @@
         </h3>
 
         <div class="card-tools">
-            <a href="{{ route('usuarios.excel', [$keyword]) }}" class="btn btn-tool text-success swalDefaultInfo">
-                <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
-            </a>
+            @if(comprobarPermisos('usuarios.excel'))
+                <a href="{{ route('usuarios.excel', [$keyword]) }}" class="btn btn-tool text-success swalDefaultInfo">
+                    <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
+                </a>
+            @endif
             <ul class="pagination pagination-sm float-right m-1">
                 {{ $users->links() }}
             </ul>
@@ -49,15 +51,16 @@
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $user->id }})" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#modal-user-edit">
+                                        data-toggle="modal" data-target="#modal-user-edit"
+                                        @if(!comprobarPermisos('usuarios.edit') || !($user->role != 1 || ($user->role ==1 && comprobarPermisos())) || ($user->id == auth()->id() && auth()->user()->role != 100)) disabled @endif>
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button wire:click="verPermisos('usuarios', {{ $user->id }})" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#modal-user-permisos">
+                                        data-toggle="modal" data-target="#modal-user-permisos" @if(!comprobarPermisos() || ($user->role == 1 && auth()->user()->role != 100)) disabled @endif>
                                     <i class="fas fa-user-cog"></i>
                                 </button>
                                 <button wire:click="destroyUser({{ $user->id }})" class="btn btn-primary btn-sm"
-                                        @if($user->role == 100 || $user->id == auth()->id()) disabled @endif>
+                                        @if(!comprobarPermisos('usuarios.destroy') || !($user->role != 1 || ($user->role ==1 && comprobarPermisos())) || ($user->id == auth()->id())) disabled @endif>
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>

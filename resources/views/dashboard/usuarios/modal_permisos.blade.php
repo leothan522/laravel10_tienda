@@ -21,7 +21,6 @@
 
             </div>
             <div class="modal-footer justify-content-end">
-                {{--@if(!is_null($tabla_id) && $tabla == "parametros")--}}
                 @if($tabla == "parametros")
                     <button type="button" class="btn btn-danger btn-sm" wire:click="destroyRol({{ $tabla_id }})"><i class="fas fa-trash-alt"></i></button>
                     <form wire:submit.prevent="updateRol()">

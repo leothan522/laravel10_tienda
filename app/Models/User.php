@@ -78,7 +78,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function adminlte_desc()
     {
-        return Auth::user()->email;
+        return Auth::user()->email." [".verRole(Auth::user()->role, Auth::user()->roles_id)."]";
     }
 
     public function adminlte_profile_url()

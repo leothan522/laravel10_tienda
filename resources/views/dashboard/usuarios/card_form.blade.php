@@ -3,10 +3,6 @@
     <div class="card-header">
         <h3 class="card-title">Crear Usuario</h3>
         <div class="card-tools">
-            {{--<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i>
-            </button>--}}
-            {{--<span class="btn btn-tool"><i class="fas fa-list"></i></span>--}}
-            {{--<span class="btn btn-tool"><i class="fas fa-ban"></i> Cancelar</span>--}}
             <span class="btn btn-tool"><i class="fas fa-file"></i></span>
         </div>
     </div>
@@ -81,7 +77,7 @@
                         @foreach($roles as $role)
                             <option value="{{ $role->id }}">{{ ucwords($role->nombre) }}</option>
                         @endforeach
-                        @if(auth()->user()->role == 1 || auth()->user()->role ==100)
+                        @if(comprobarPermisos())
                             <option value="1">Administrador</option>
                         @endif
                     </select>
