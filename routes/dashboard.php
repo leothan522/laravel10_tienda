@@ -29,6 +29,7 @@ Route::middleware([
     Route::get('export/usuarios/{buscar?}', [UsuariosController::class, 'export'])->name('usuarios.excel');
 });
 
+Route::get('dashboard/perfil', [UsuariosController::class, 'perfil'])->middleware('auth')->name('usuarios.perfil');
 
 Route::get('/prueba', function () {
     //Alert::alert('Title', 'Message', 'Type');

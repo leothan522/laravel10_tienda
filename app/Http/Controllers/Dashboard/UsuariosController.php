@@ -19,4 +19,9 @@ class UsuariosController extends Controller
     {
         return Excel::download(new UsersExport($keyword), "Usuarios_Registrados_".date('d-m-Y').".xlsx");
     }
+
+    public function perfil()
+    {
+        return view('dashboard.usuarios.profile');
+    }
 }

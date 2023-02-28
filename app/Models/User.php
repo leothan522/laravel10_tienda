@@ -83,7 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function adminlte_profile_url()
     {
-        return 'user/profile';
+        return 'dashboard/perfil';
     }
 
     public function scopeBuscar($query, $keyword)

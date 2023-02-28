@@ -21,7 +21,10 @@
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+
+            @if(\Illuminate\Support\Facades\Route::currentRouteName() != 'usuarios.perfil')
+                @livewire('navigation-menu')
+            @endif
 
             <!-- Page Heading -->
             @if (isset($header))
