@@ -8,18 +8,11 @@
 
 @section('content')
     <p>Welcome to this beautiful admin panel.</p>
-    <livewire:counter />
+    <livewire:counter/>
 
-    {{--<div id="wrapper">
-        <form action="#" method="post">
-        <div id="capaIntermedia">
-            <div id="capaMasInterna">
-                <input type="text" id="boton" value=""/>
-                <input type="submit" value="enviar">
-            </div>
-        </div>
-        </form>
-    </div>--}}
+    <br>
+    <hr>
+    @include('dashboard.z_componentes.vista_desde_array')
 
 @stop
 
@@ -42,15 +35,15 @@
 @section('js')
     <script>
 
-        $("#navbarSearch").focus(function(){
+        $("#navbarSearch").focus(function () {
             let form = $(this).closest("form");
-            form.attr("onsubmit","return search()");
+            form.attr("onsubmit", "return search()");
         });
 
-        function search(){
+        function search() {
             let input = $("#navbarSearch");
-            let keyword  = input.val();
-            if (keyword.length > 0){
+            let keyword = input.val();
+            if (keyword.length > 0) {
                 input.blur();
                 Livewire.emit('increment', keyword);
             }

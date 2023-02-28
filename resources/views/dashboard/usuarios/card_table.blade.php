@@ -52,7 +52,8 @@
                                         data-toggle="modal" data-target="#modal-user-edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button {{--wire:click="verPermisos({{ $user->id }}, 'users')"--}} class="btn btn-primary btn-sm">
+                                <button wire:click="verPermisos('usuarios', {{ $user->id }})" class="btn btn-primary btn-sm"
+                                        data-toggle="modal" data-target="#modal-user-permisos">
                                     <i class="fas fa-user-cog"></i>
                                 </button>
                                 <button wire:click="destroyUser({{ $user->id }})" class="btn btn-primary btn-sm"

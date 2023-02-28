@@ -22,9 +22,9 @@
     @livewire('dashboard.usuarios-component')
 @endsection
 
-@section('right-sidebar')
+{{--@section('right-sidebar')
     @include('dashboard.right-sidebar')
-@endsection
+@endsection--}}
 
 @section('footer')
     @include('dashboard.footer')
@@ -36,5 +36,42 @@
 
 @section('js')
     <script src="{{ asset("js/app.js") }}"></script>
-    <script> console.log('Hi!'); </script>
+    <script>
+
+        $("#from_rol").submit(function(e) {
+            e.preventDefault();
+            let nombre = document.getElementById("nuevo_rol");
+            Livewire.emit('saveRol', nombre.value);
+        });
+
+        Livewire.on('addRolList', (idRol, nombreRol) => {
+            let input = document.getElementById("nuevo_rol");
+            input.value = null;
+            input.blur();
+            let boton = '<button type="button" ' +
+                'class="btn btn-primary btn-sm btn-block m-1" ' +
+                'data-toggle="modal" data-target="#modal-user-permisos" ' +
+                'class="btn btn-info btn-sm" ' +
+                'onclick="verRoles(' +  idRol + ')" id="set_rol_id_' + idRol + '">' +  nombreRol + ' </button>';
+            $('#listar_roles').append(boton);
+        });
+
+        Livewire.on('setRolList', (idRol, nombreRol) => {
+            let boton = document.getElementById('set_rol_id_' + idRol);
+            boton.innerText = nombreRol;
+        });
+
+        Livewire.on('removeRolList', idRol =>{
+            let boton = document.getElementById("set_rol_id_" + idRol);
+            let cerrar = document.getElementById('boton_rol_modal_cerrar');
+            boton.classList.add("d-none");
+            cerrar.click();
+        });
+
+        function verRoles(id){
+            Livewire.emit('verPermisos', 'parametros', id);
+        }
+
+        console.log('Hi!');
+    </script>
 @endsection

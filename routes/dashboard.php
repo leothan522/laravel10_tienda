@@ -33,5 +33,6 @@ Route::middleware([
 Route::get('/admin', function () {
     //Alert::alert('Title', 'Message', 'Type');
     return view('home');
+
 })->middleware(['user.permisos'])->name("prueba");
 
