@@ -7,7 +7,11 @@
 @endsection
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+    <p>Bienvenido al panel de administración.</p>
+    <div class="visible-print">
+        {!! QrCode::size(100)->generate("https://t.me/Leothan"); !!}
+        <p class="text-lightblue"><i class="fab fa-telegram"></i> Telegram</p>
+    </div>
 @endsection
 
 @section('right-sidebar')

@@ -1,28 +1,13 @@
 @extends('adminlte::page')
 
-@section('title', 'Pruebas')
+@section('title', 'Dashboard')
 
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0 text-dark"><i class="fas fa-list"></i> Pruebas</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Parametros del Sistema</li>
-                </ol>
-            </div>
-        </div>
-    </div>
+    <h1>Dashboard</h1>
 @endsection
 
 @section('content')
-
-    hola
-
-
+    <p>Welcome to this beautiful admin panel.</p>
 @endsection
 
 @section('right-sidebar')
@@ -39,5 +24,19 @@
 
 @section('js')
     <script src="{{ asset("js/app.js") }}"></script>
-    <script> console.log('Hi!'); </script>
+    <script>
+
+        function search(){
+            let input = $("#navbarSearch");
+            let keyword  = input.val();
+            if (keyword.length > 0){
+                input.blur();
+                alert('Falta vincular con el componente Livewire');
+                //Livewire.emit('increment', keyword);
+            }
+            return false;
+        }
+
+        console.log('Hi!');
+    </script>
 @endsection
