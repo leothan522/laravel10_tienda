@@ -15,9 +15,9 @@ class ChatComponent extends Component
     use LivewireAlert;
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
-    protected $listeners = ['bajarScroll', 'refresh'];
+    protected $listeners = ['bajarScroll', 'refresh', 'verMessage'];
 
-    public $chat_id, $chat_tipo;
+    public $chat_id, $chat_tipo, $chat_count, $count_new;
     public $new_message;
 
     public function mount()
@@ -26,6 +26,7 @@ class ChatComponent extends Component
         if ($chatuser){
             $this->chat_id = $chatuser['chats_id'];
             $this->chat_tipo = $chatuser->chat->tipo;
+            $this->chat_count = ChatMessage::where('chats_id', $this->chat_id)->count();
         }else{
             $chat = Chat::where('id', 1)->first();
             if (!$chat){
@@ -38,6 +39,7 @@ class ChatComponent extends Component
             $chatuser->chats_id = $chat->id;
             $chatuser->save();
             $this->chat_id = $chat->id;
+            $this->chat_count = ChatMessage::where('chats_id', $this->chat_id)->count();
         }
     }
 
@@ -45,11 +47,9 @@ class ChatComponent extends Component
     public function render()
     {
         $chat = Chat::find($this->chat_id);
-        $chatUser = ChatUser::where('users_id', Auth::id())->count();
         $chatmessages = ChatMessage::where('chats_id', $this->chat_id)->orderBy('created_at')->get();
         return view('livewire.chat.chat-component')
             ->with('chat', $chat)
-            ->with('room', $chatUser)
             ->with('messages', $chatmessages);
     }
 
@@ -77,6 +77,8 @@ class ChatComponent extends Component
         $chatmessage->users_id = Auth::id();
         $chatmessage->message = $this->new_message;
         $chatmessage->save();
+        $this->chat_count = ChatMessage::where('chats_id', $this->chat_id)->count();
+        $this->count_new = 0;
         $this->emit('bajarScroll', $chatmessage->id);
         $this->limpiar();
         /*$this->alert(
@@ -87,10 +89,18 @@ class ChatComponent extends Component
 
     public function refresh()
     {
-        $chatMessage = ChatMessage::orderBy('created_at', 'DESC')->first();
-        if ($chatMessage){
-            $this->emit('bajarScroll', $chatMessage->id);
+        $count = ChatMessage::where('chats_id', $this->chat_id)->count();
+        if ($count > $this->chat_count){
+            $this->count_new = $count - $this->chat_count;
         }
+    }
+
+    public function verMessage()
+    {
+        $this->chat_count = ChatMessage::where('chats_id', $this->chat_id)->count();
+        $this->count_new = 0;
+        $ultimo = ChatMessage::where('chats_id', $this->chat_id)->orderBy('created_at', 'DESC')->first();
+        $this->emit('bajarScroll', $ultimo->id);
     }
 
     public function bajarScroll()

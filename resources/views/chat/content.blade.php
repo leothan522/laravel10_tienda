@@ -3,8 +3,11 @@
         <h3 class="card-title">Chat Directo</h3>
 
         <div class="card-tools">
-            @if($room > 1)
-                <span title="{{ $room }} Chat Activos" class="badge bg-primary">{{ $room }}</span>
+
+            @if($count_new > 0)
+                <button title="{{ $count_new }} Nuevos Mensajes" class="btn btn-tool badge bg-primary" wire:click="verMessage">
+                    {{ $count_new }}
+                </button>
             @endif
             {{--<button type="button" class="btn btn-tool" data-card-widget="collapse">
                 <i class="fas fa-minus"></i>
