@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
@@ -91,6 +92,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $query->where('name', 'LIKE', "%$keyword%")
             ->orWhere('email', 'LIKE', "%$keyword%")
             ->orWhere('id', 'LIKE', "%$keyword%")
-            ;    }
+            ;
+    }
+
+    public function chatusers(): HasMany
+    {
+        return $this->hasMany(ChatUser::class, 'users_id', 'id');
+    }
+
+    public function chatmessages(): HasMany
+    {
+        return $this->hasMany(ChatMessage::class, 'users_id', 'id');
+    }
 
 }

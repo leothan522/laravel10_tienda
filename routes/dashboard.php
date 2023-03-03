@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\ParametrosController;
 use App\Http\Controllers\Dashboard\UsuariosController;
+use App\Http\Controllers\Chat\ChatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,9 @@ Route::get('dashboard/perfil', [UsuariosController::class, 'perfil'])->middlewar
 
 Route::get('/prueba', function () {
     //Alert::alert('Title', 'Message', 'Type');
-    return view('dashboard.pagina_pruebas');
+    return view('dashboard.z_componentes.android');
 
 })->middleware(['user.permisos'])->name("prueba");
+
+Route::get('chat-directo', [ChatController::class, 'index'])->middleware('auth')->name('chat.directo');
 

@@ -8,6 +8,11 @@
         <li class="nav-item">
             <span class="text-small text-muted float-right">Right-Sidebar</span>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('chat.directo') }}" class="nav-link" target="_blank">
+                <i class="fas fa-comments"></i> Chat Directo
+            </a>
+        </li>
         @if(auth()->user()->role == 100)
             <li class="nav-item">
                 <a href="{{ route('prueba') }}" class="nav-link" target="_blank">

@@ -35,3 +35,4 @@ Route::get('/cerrar', function () {
     return view('welcome');
 })->name('cerrar');
 
+

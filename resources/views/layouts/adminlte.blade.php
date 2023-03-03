@@ -20,6 +20,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     {{--<link rel="stylesheet" href="../../dist/css/adminlte.min.css">--}}
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
+    @livewireStyles
     @yield('css')
 </head>
 <body class="hold-transition layout-top-nav">
@@ -55,6 +56,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- AdminLTE App -->
 {{--<script src="../../dist/js/adminlte.min.js"></script>--}}
 <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
+@livewireScripts
+<x-livewire-alert::scripts />
 @yield('js')
 </body>
 </html>
