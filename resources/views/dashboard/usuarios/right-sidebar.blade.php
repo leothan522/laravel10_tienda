@@ -1,5 +1,11 @@
 <div class="p-3">
-    <h5>Roles de Usuarios</h5>
+    <ul class="nav nav-pills flex-column">
+        @livewire('dashboard.dolar-component')
+        <li class="dropdown-divider"></li>
+        <li class="nav-item">
+            <span class="text-small text-muted float-right">Roles de Usuarios</span>
+        </li>
+    </ul>
     <hr class="mb-2">
     <h6>Crear nuevo Rol</h6>
     <form id="from_rol">

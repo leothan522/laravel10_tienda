@@ -15,7 +15,7 @@
                                            @if(leerJson($tabla_permisos, $value)) checked @endif
                                            class="custom-control-input"
                                            id="customSwitch_title_{{ $i }}"{{-- @if(is_null($tabla_id)) disabled @endif--}}>
-                                    <label class="custom-control-label" for="customSwitch_title_{{ $i }}"></label>
+                                    <label class="custom-control-label" for="customSwitch_title_{{ $i }}" role="button"></label>
                                 </div>
                             @endif
                         @endforeach
@@ -40,7 +40,7 @@
                                                class="custom-control-input"
                                                id="customSwitch_{{ $x }}_{{ $i }}"{{-- @if(is_null($tabla_id)) disabled @endif--}}>
                                         <label class="custom-control-label"
-                                               for="customSwitch_{{ $x }}_{{ $i }}"></label>
+                                               for="customSwitch_{{ $x }}_{{ $i }}" role="button"></label>
                                     </div>
                                 </li>
                             @endforeach

@@ -3,10 +3,10 @@
     <p>Sidebar content</p>--}}
 
     <ul class="nav nav-pills flex-column">
-        {{--@livewire('dolar-component')--}}
-        {{--<li class="dropdown-divider"></li>--}}
+        @livewire('dashboard.dolar-component')
+        <li class="dropdown-divider"></li>
         <li class="nav-item">
-            <span class="text-small text-muted float-right">Right-Sidebar</span>
+            <span class="text-small text-muted float-right">Extras</span>
         </li>
         <li class="nav-item">
             <a href="{{ route('chat.directo') }}" class="nav-link" target="_blank">
