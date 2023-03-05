@@ -37,7 +37,7 @@ Route::get('chat-directo', [ChatController::class, 'index'])->middleware('auth')
 
 Route::get('/prueba', function () {
     //Alert::alert('Title', 'Message', 'Type');
-    return view('dashboard.z_componentes.android');
+    return view('dashboard.z_componentes.home');
 
 })->middleware(['user.permisos'])->name("prueba");
 

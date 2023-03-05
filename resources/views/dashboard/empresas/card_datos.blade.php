@@ -22,7 +22,7 @@
     {!! verSpinner() !!}
 
     @if($footer)
-        <div class="card-footer text-center">
+        <div class="card-footer text-center @if(!comprobarAccesoEmpresa($permisos, auth()->id())) d-none @endif">
 
             @if(!$verDefault)
                 <button type="button" class="btn btn-default btn-sm mr-1"

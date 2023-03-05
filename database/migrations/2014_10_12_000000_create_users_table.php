@@ -41,6 +41,17 @@ return new class extends Migration
                 "created_at" => \Carbon\Carbon::now(),
                 "updated_at" => \Carbon\Carbon::now(),
             ]);
+
+        DB::table("users")
+            ->insert([
+                "name" => "Administrador",
+                "email" => "admin@tienda.com",
+                "email_verified_at" => \Carbon\Carbon::now(),
+                "password" => \Illuminate\Support\Facades\Hash::make("20025623"),
+                "role" => 1,
+                "created_at" => \Carbon\Carbon::now(),
+                "updated_at" => \Carbon\Carbon::now(),
+            ]);
     }
 
     /**

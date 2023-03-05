@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Empresa;
 use App\Models\Parametro;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
@@ -18,7 +19,7 @@ class EmpresasComponent extends Component
 
     public $view = "show", $keyword, $title = "Datos de la Tienda", $btn_cancelar = false, $footer = true;
     public $empresa_id, $empresa_default, $verDefault, $verImagen;
-    public $rif, $nombre, $jefe, $moneda, $telefonos, $email, $direccion, $photo, $default = 0;
+    public $rif, $nombre, $jefe, $moneda, $telefonos, $email, $direccion, $photo, $default = 0, $permisos;
     public $horario, $horario_id, $lunes, $martes, $miercoles, $jueves, $viernes, $sabado, $domingo, $apertura, $cierre;
 
 
@@ -46,7 +47,7 @@ class EmpresasComponent extends Component
     {
         $this->reset([
             'view', 'title', 'btn_cancelar', 'footer', 'empresa_id', 'verDefault', 'verImagen', 'keyword',
-            'rif', 'nombre', 'jefe', 'moneda', 'telefonos', 'email', 'direccion', 'photo'
+            'rif', 'nombre', 'jefe', 'moneda', 'telefonos', 'email', 'direccion', 'photo', 'permisos'
         ]);
     }
 
@@ -99,6 +100,9 @@ class EmpresasComponent extends Component
             if ($this->default){
                 $this->default = 0;
             }
+            $permisos[Auth::id()] = true;
+            $permisos = json_encode($permisos);
+            $empresa->permisos = $permisos;
         }
 
         $empresa->rif = strtoupper($this->rif);
@@ -149,6 +153,7 @@ class EmpresasComponent extends Component
         $this->telefonos = $empresa->telefono;
         $this->email = $empresa->email;
         $this->direccion = $empresa->direccion;
+        $this->permisos = $empresa->permisos;
         $this->verDefault = $empresa->default;
         $this->verImagen = $empresa->mini;
         $this->view = "show";

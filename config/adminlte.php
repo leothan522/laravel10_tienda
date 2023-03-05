@@ -506,13 +506,21 @@ return [
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
+                    'asset' => true,
+                    /*'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',*/
+                    'location' => 'vendor/select2/js/select2.full.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
+                    'asset' => true,
+                    /*'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',*/
+                    'location' => 'vendor/select2/css/select2.min.css',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/select2-bootstrap4-theme/select2-bootstrap4.min.css',
+                    /*'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',*/
                 ],
             ],
         ],

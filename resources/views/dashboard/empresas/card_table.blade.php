@@ -32,7 +32,7 @@
                             <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
                                 <input type="checkbox" class="custom-control-input" id="customSwitchIdL_{{ $tienda->id }}"
                                     @if(estatusTienda($tienda->id, true)) checked @endif
-                                       wire:click="estatusTienda({{ $tienda->id }})" @if(!comprobarPermisos('empresas.estatus')) disabled @endif>
+                                       wire:click="estatusTienda({{ $tienda->id }})" @if(!comprobarPermisos('empresas.estatus') || !comprobarAccesoEmpresa($tienda->permisos, auth()->id())) disabled @endif>
                                 <label class="custom-control-label" for="customSwitchIdL_{{ $tienda->id }}" role="button"></label>
                             </div>
                         </td>

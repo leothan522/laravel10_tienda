@@ -25,6 +25,16 @@ function leerJson($json, $key)
     }
 }
 
+//Crear JSON
+function crearJson($array)
+{
+    $json = array();
+    foreach ($array as $key){
+        $json[$key] = true;
+    }
+    return json_encode($json);
+}
+
 //Alertas de sweetAlert2
 function verSweetAlert2($mensaje, $alert = null, $type = 'success', $icono = '<i class="fa fa-trash-alt"></i>', $title = '¡Éxito!')
 {

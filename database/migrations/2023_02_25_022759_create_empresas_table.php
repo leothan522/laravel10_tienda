@@ -26,6 +26,7 @@ return new class extends Migration
             $table->text('detail')->nullable();
             $table->text('cart')->nullable();
             $table->text('banner')->nullable();
+            $table->text('permisos')->nullable();
             $table->timestamps();
         });
     }

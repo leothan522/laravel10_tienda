@@ -13,6 +13,15 @@ function comprobarPermisos($routeName = null)
 
 }
 
+function comprobarAccesoEmpresa($permisos, $user_id)
+{
+    if (leerJson($permisos, $user_id) || Auth::user()->roler == 1 || Auth::user()->role == 100){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 function allPermisos()
 {
     $permisos = [

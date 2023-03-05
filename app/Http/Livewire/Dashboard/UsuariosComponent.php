@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard;
 
+use App\Models\Empresa;
 use App\Models\Parametro;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -17,11 +18,14 @@ class UsuariosComponent extends Component
     use WithPagination;
 
     protected $paginationTheme = 'bootstrap';
-    protected $listeners = ['buscar', 'confirmedUser', 'verPermisos',
-        'saveRol', 'addRolList', 'setRolList', 'confirmedRol', 'removeRolList'];
+    protected $listeners = [
+        'buscar', 'confirmedUser', 'verPermisos',
+        'saveRol', 'addRolList', 'setRolList', 'confirmedRol', 'removeRolList',
+        'selectEmpresas', 'empresasSeleccionadas'
+    ];
 
     public $view = "create", $keyword;
-    public $name, $email, $password, $role, $usuario_id;
+    public $name, $email, $password, $role, $usuario_id, $select_empresas, $ver_empresas;
     public $edit_name, $edit_email, $edit_password, $edit_role = 0, $edit_roles_id = 0, $created_at, $estatus = 1, $photo, $empresas_id;
     public $tabla = "usuarios", $tabla_id, $tabla_nombre, $tabla_email, $tabla_permisos;
 
@@ -81,6 +85,23 @@ class UsuariosComponent extends Component
 
     ];
 
+    public function accesoEmpresa($array, $id)
+    {
+        //acceso a aempresas
+        foreach ($array as $id){
+            $empresa = Empresa::find($id);
+            $permisos = json_decode($empresa->permisos, true);
+            if (!leerJson($empresa->permisos, $this->usuario_id)){
+                $permisos[$this->usuario_id] = true;
+            }else{
+                unset($permisos[$this->usuario_id]);
+            }
+            $permisos = json_encode($permisos);
+            $empresa->permisos = $permisos;
+            $empresa->update();
+        }
+    }
+
     public function save()
     {
         $type = 'success';
@@ -106,6 +127,7 @@ class UsuariosComponent extends Component
             }
             $message = "Usuario Creado";
             $usuarios->save();
+            $this->accesoEmpresa($this->select_empresas, $usuarios->id);
             $this->alert($type, $message);
             $this->limpiar();
         } else {
@@ -126,10 +148,12 @@ class UsuariosComponent extends Component
             }
             $message = "Usuario Actualizado";
             $usuarios->update();
+            $this->accesoEmpresa($this->select_empresas, $usuarios->id);
             $this->alert($type, $message);
             $this->edit($this->usuario_id);
 
         }
+
     }
 
     public function edit($id)
@@ -149,6 +173,23 @@ class UsuariosComponent extends Component
         $this->created_at = $usuario->created_at;
         $this->photo = $usuario->profile_photo_path;
         $this->empresas_id = $usuario->empresas_id;
+
+        //acceso a empresas
+        $getEmpresas = Empresa::orderBy('nombre', 'ASC')->get();
+        $data = array();
+        $placeholder = '';
+        foreach ($getEmpresas as $empresa){
+            $option = [
+                'id' => $empresa->id,
+                'text' => $empresa->nombre
+            ];
+            if (leerJson($empresa->permisos, $this->usuario_id)){
+                $placeholder .= '['.$empresa->nombre.'] <br>';
+            }
+            array_push($data, $option);
+        }
+        $this->ver_empresas = $placeholder;
+        $this->emit('selectEmpresas', $data, $placeholder);
     }
 
     public function cambiarEstatus($id)
@@ -376,17 +417,16 @@ class UsuariosComponent extends Component
             $tabla_permisos = $tabla->permisos;
         }
 
+        $permisos = json_decode($tabla_permisos, true);
         if (!leerJson($tabla_permisos, $permiso)){
-            $permisos = json_decode($tabla_permisos, true);
             $permisos[$permiso] = true;
-            $permisos = json_encode($permisos);
             $message = "Permiso Agregado.";
         }else{
-            $permisos = json_decode($tabla_permisos, true);
             unset($permisos[$permiso]);
-            $permisos = json_encode($permisos);
             $message = "Permiso Eliminado.";
         }
+
+        $permisos = json_encode($permisos);
 
         if ($this->tabla == "parametros"){
             $tabla->valor = $permisos;
@@ -416,6 +456,11 @@ class UsuariosComponent extends Component
         );
     }
 
+    public function empresasSeleccionadas($data)
+    {
+        $this->select_empresas = $data;
+    }
+
     public function addRolList()
     {
         //agrego rol nuevo al right-sidebar
@@ -429,6 +474,11 @@ class UsuariosComponent extends Component
     public function removeRolList()
     {
         //elimino a un rol del right-sidebar
+    }
+
+    public function selectEmpresas($data)
+    {
+        //select acceso a empresas
     }
 
 }

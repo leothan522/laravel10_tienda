@@ -159,16 +159,28 @@
                                                     </select>
                                                     @error('edit_role')
                                                     <span class="col-sm-12 text-sm text-bold text-danger">
-                                                    <i class="icon fas fa-exclamation-triangle"></i>
-                                                    {{ $message }}
-                                                </span>
+                                                        <i class="icon fas fa-exclamation-triangle"></i>
+                                                        {{ $message }}
+                                                    </span>
                                                     @enderror
                                                 </div>
                                             </div>
 
                                         @endif
 
-                                        <div class="form-group text-right">
+                                        <div class="form-group" >
+                                            <label>Acceso a Tiendas</label>
+                                            <p class="col-md-12 text-sm text-bold text-primary">
+                                                {!! $ver_empresas !!}
+                                            </p>
+                                            <div wire:ignore>
+                                                <select class="form-control" multiple="multiple" {{--wire:model="select_empresas"--}}
+                                                data-placeholder="Seleccione las Tiendas" id="select_acceso_empresas">
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group text-right mb-4">
                                             {{--<input type="submit" class="btn btn-block btn-success" value="Guardar">--}}
                                             @if($edit_role != 100)
                                                 <button type="submit" class="btn btn-block btn-success">
