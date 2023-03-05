@@ -72,7 +72,10 @@
             </div>
 
             <div class="form-group text-right">
-                <input type="submit" class="btn btn-block btn-success" value="Guardar @if($view == "edit") Cambios @endif">
+                {{--<input type="submit" class="btn btn-block btn-success" value="Guardar @if($view == "edit") Cambios @endif">--}}
+                <button type="submit" class="btn btn-block btn-success">
+                    <i class="fas fa-save"></i> Guardar @if($view == "edit") Cambios @endif
+                </button>
             </div>
 
         </form>

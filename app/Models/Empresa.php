@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Empresa extends Model
 {
     use HasFactory;
-    protected $table = "empresa";
+    protected $table = "empresas";
     protected $fillable = [
         'rif',
         'nombre',
@@ -17,9 +17,18 @@ class Empresa extends Model
         'email',
         'moneda',
         'supervisor',
-        'logo',
-        'miniatura',
-        'banner',
         'default',
+        'imagen',
+        'mini',
+        'detail',
+        'cart',
+        'banner',
     ];
+
+    public function scopeBuscar($query, $keyword)
+    {
+        return $query->where('rif', 'LIKE', "%$keyword%")
+            ->orWhere('nombre', 'LIKE', "%$keyword%")
+            ;
+    }
 }

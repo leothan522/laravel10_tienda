@@ -169,7 +169,12 @@
                                         @endif
 
                                         <div class="form-group text-right">
-                                            <input type="submit" class="btn btn-block btn-success" value="Guardar">
+                                            {{--<input type="submit" class="btn btn-block btn-success" value="Guardar">--}}
+                                            @if($edit_role != 100)
+                                                <button type="submit" class="btn btn-block btn-success">
+                                                    <i class="fas fa-save"></i> Guardar
+                                                </button>
+                                            @endif
                                         </div>
 
                                     </form>

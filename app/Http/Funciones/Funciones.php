@@ -2,10 +2,8 @@
 //Funciones Personalizadas para el Proyecto
 
 use App\Models\Parametro;
-//use App\Models\Producto;
-//use App\Models\Stock;
 use Carbon\Carbon;
-//use Intervention\Image\Facades\Image;
+use Intervention\Image\Facades\Image;
 
 function hola(){
     return "Funciones Personalidas bien creada";
@@ -107,9 +105,14 @@ function verSpinner()
 
 function verImagen($path, $user = false)
 {
+    if ($user){
+        $path_image = 'storage/'.$path;
+    }else{
+        $path_image = $path;
+    }
     if (!is_null($path)){
-        if (file_exists(public_path('storage/'.$path))){
-            return asset('storage/'.$path);
+        if (file_exists(public_path($path_image))){
+            return asset($path_image);
         }else{
             if ($user){
                 return asset('img/user.png');
@@ -192,61 +195,72 @@ function numRowsPaginate(){
     return $default;
 }
 
-//-------------------------------------------------------------------------------------
-
-
-function cuantosDias($fecha_inicio, $fecha_final){
-
-    if ($fecha_inicio == null){
-        return 0;
-    }
-
-    $carbon = new Carbon();
-    $fechaEmision = $carbon->parse($fecha_inicio);
-    $fechaExpiracion = $carbon->parse($fecha_final);
-    $diasDiferencia = $fechaExpiracion->diffInDays($fechaEmision);
-    return $diasDiferencia;
-}
-
-function diaEspanol($fecha){
-    $diaSemana = date("w",strtotime($fecha));
-    $diasEspanol = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
-    $dia = $diasEspanol[$diaSemana];
-    return $dia;
-}
-
-function mesEspanol($numMes){
-    $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-    $mes = $meses[$numMes - 1];
-    return $mes;
-}
-
-
-
 //funcion formato millares
 function formatoMillares($cantidad, $decimal = 2)
 {
     return number_format($cantidad, $decimal, ',', '.');
 }
 
-//Ceros a la izquierda
-function cerosIzquierda($cantidad, $cantCeros = 2)
+function crearMiniaturas($imagen_data, $path_data)
 {
-    if ($cantidad == 0) {
-        return 0;
+    //ejemplo de path
+    //$miniatura = 'storage/productos/size_'.$nombreImagen;
+
+    //definir tamaños
+    $sizes = [
+        'mini' => [
+            'width' => 320,
+            'height' => 320,
+            'path' => str_replace('size_', 'mini_', $path_data)
+        ],
+        'detail' => [
+            'width' => 540,
+            'height' => 560,
+            'path' => str_replace('size_', 'detail_', $path_data)
+        ],
+        'cart' => [
+            'width' => 101,
+            'height' => 100,
+            'path' => str_replace('size_', 'cart_', $path_data)
+        ],
+        'banner' => [
+            'width' => 570,
+            'height' => 270,
+            'path' => str_replace('size_', 'banner_', $path_data)
+        ]
+    ];
+
+    $respuesta = array();
+
+    $image = Image::make($imagen_data);
+    foreach ($sizes as $nombre => $items){
+        $width = null;
+        $height = null;
+        $path = null;
+        foreach ($items as $key => $valor){
+            if ($key == 'width') { $width = $valor; }
+            if ($key == 'height') { $height = $valor; }
+            if ($key == 'path') { $path = $valor; }
+        }
+        $respuesta[$nombre] = $path;
+        $image->resize($width, $height);
+        $image->save($path);
     }
-    return str_pad($cantidad, $cantCeros, "0", STR_PAD_LEFT);
+
+    return $respuesta;
+
 }
 
-//calculo de porcentaje
-function obtenerPorcentaje($cantidad, $total)
-{
-    if ($total != 0) {
-        $porcentaje = ((float)$cantidad * 100) / $total; // Regla de tres
-        $porcentaje = round($porcentaje, 2);  // Quitar los decimales
-        return $porcentaje;
-    }
-    return 0;
+//Función comprueba una hora entre un rango
+function hourIsBetween($from, $to, $input) {
+    $dateFrom = DateTime::createFromFormat('!H:i', $from);
+    $dateTo = DateTime::createFromFormat('!H:i', $to);
+    $dateInput = DateTime::createFromFormat('!H:i', $input);
+    if ($dateFrom > $dateTo) $dateTo->modify('+1 day');
+    return ($dateFrom <= $dateInput && $dateInput <= $dateTo) || ($dateFrom <= $dateInput->modify('+1 day') && $dateInput <= $dateTo);
+    /*En la función lo que haremos será pasarle, el desde y el hasta del rango de horas que queremos que se encuentre y el datetime con la hora que nos llega.
+Comprobaremos si la segunda hora que le pasamos es inferior a la primera, con lo cual entenderemos que es para el día siguiente.
+Y al final devolveremos true o false dependiendo si el valor introducido se encuentra entre lo que le hemos pasado.*/
 }
 
 //Estado de Tienda Abierto o Cerrada
@@ -295,50 +309,58 @@ function estatusTienda($id, $boton = false)
     return $estatus;
 }
 
-//Función comprueba una hora entre un rango
-function hourIsBetween($from, $to, $input) {
-    $dateFrom = DateTime::createFromFormat('!H:i', $from);
-    $dateTo = DateTime::createFromFormat('!H:i', $to);
-    $dateInput = DateTime::createFromFormat('!H:i', $input);
-    if ($dateFrom > $dateTo) $dateTo->modify('+1 day');
-    return ($dateFrom <= $dateInput && $dateInput <= $dateTo) || ($dateFrom <= $dateInput->modify('+1 day') && $dateInput <= $dateTo);
-    /*En la función lo que haremos será pasarle, el desde y el hasta del rango de horas que queremos que se encuentre y el datetime con la hora que nos llega.
-Comprobaremos si la segunda hora que le pasamos es inferior a la primera, con lo cual entenderemos que es para el día siguiente.
-Y al final devolveremos true o false dependiendo si el valor introducido se encuentra entre lo que le hemos pasado.*/
+//-------------------------------------------------------------------------------------
+
+
+function cuantosDias($fecha_inicio, $fecha_final){
+
+    if ($fecha_inicio == null){
+        return 0;
+    }
+
+    $carbon = new Carbon();
+    $fechaEmision = $carbon->parse($fecha_inicio);
+    $fechaExpiracion = $carbon->parse($fecha_final);
+    $diasDiferencia = $fechaExpiracion->diffInDays($fechaEmision);
+    return $diasDiferencia;
 }
 
-function empresaDefault($default)
-{
-    if ($default){
-        return '<i class="fas fa-certificate text-muted text-xs"></i>';
-    }else{
-        return false;
-    }
+function diaEspanol($fecha){
+    $diaSemana = date("w",strtotime($fecha));
+    $diasEspanol = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
+    $dia = $diasEspanol[$diaSemana];
+    return $dia;
 }
 
-function verImg($path, $banner = false)
-{
-    if ($banner){
-        $img = 'img/b_img_placeholder.png';
-    }else{
-        $img = 'img/img_placeholder.png';
-    }
-    if (!is_null($path)){
-        if (file_exists(public_path($path))){
-            $img = $path;
-        }
-    }
-    return $img;
+function mesEspanol($numMes){
+    $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+    $mes = $meses[$numMes - 1];
+    return $mes;
 }
 
-/*function crearMiniaturas($data, $path, $width = 320, $height = 320)
+//Ceros a la izquierda
+function cerosIzquierda($cantidad, $cantCeros = 2)
 {
-    //$nombre = explode('logo/', $empresa->logo);
-    //$path = 'storage/logo/t_'.$nombre[1]
-    $img = Image::make($data);
-    $img->resize($width, $height);
-    $img->save($path);
-}*/
+    if ($cantidad == 0) {
+        return 0;
+    }
+    return str_pad($cantidad, $cantCeros, "0", STR_PAD_LEFT);
+}
+
+//calculo de porcentaje
+function obtenerPorcentaje($cantidad, $total)
+{
+    if ($total != 0) {
+        $porcentaje = ((float)$cantidad * 100) / $total; // Regla de tres
+        $porcentaje = round($porcentaje, 2);  // Quitar los decimales
+        return $porcentaje;
+    }
+    return 0;
+}
+
+
+
+
 
 /*function calcularIVA($id, $pvp, $iva = false, $label = false)
 {

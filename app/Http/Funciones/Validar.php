@@ -27,6 +27,17 @@ function allPermisos()
                 'Eliminar Usuarios' => 'usuarios.destroy',
             ]
         ],
+        'Tiendas' => [
+            'route' => 'empresas.index',
+            'submenu' => [
+                'Crear Tiendas' => 'empresas.create',
+                '[Abrir][Cerrar] Tiendas' => 'empresas.estatus',
+                'Definir Horarios' => 'empresas.horario',
+                'Editar Tiendas' => 'empresas.edit',
+                'Borrar Tiendas' => 'empresas.destroy'
+
+            ]
+        ]
     ];
     return $permisos;
 }

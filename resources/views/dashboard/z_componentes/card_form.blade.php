@@ -32,7 +32,10 @@
             </div>
 
             <div class="form-group text-right">
-                <input type="submit" class="btn btn-block btn-success" value="Guardar">
+                {{--<input type="submit" class="btn btn-block btn-success" value="Guardar">--}}
+                <button type="submit" class="btn btn-block btn-success">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
             </div>
 
         </form>

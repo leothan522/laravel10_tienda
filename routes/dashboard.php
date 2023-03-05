@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\ParametrosController;
 use App\Http\Controllers\Dashboard\UsuariosController;
 use App\Http\Controllers\Chat\ChatController;
+use App\Http\Controllers\Dashboard\EmpresasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,9 +29,11 @@ Route::middleware([
     Route::get('parametros', [ParametrosController::class, 'index'])->name('parametros.index');
     Route::get('usuarios', [UsuariosController::class, 'index'])->name('usuarios.index');
     Route::get('export/usuarios/{buscar?}', [UsuariosController::class, 'export'])->name('usuarios.excel');
+    Route::get('empresas', [EmpresasController::class, 'index'])->name('empresas.index');
 });
 
 Route::get('dashboard/perfil', [UsuariosController::class, 'perfil'])->middleware('auth')->name('usuarios.perfil');
+Route::get('chat-directo', [ChatController::class, 'index'])->middleware('auth')->name('chat.directo');
 
 Route::get('/prueba', function () {
     //Alert::alert('Title', 'Message', 'Type');
@@ -38,5 +41,5 @@ Route::get('/prueba', function () {
 
 })->middleware(['user.permisos'])->name("prueba");
 
-Route::get('chat-directo', [ChatController::class, 'index'])->middleware('auth')->name('chat.directo');
+
 

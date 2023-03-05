@@ -20,10 +20,12 @@ return new class extends Migration
             $table->string('email');
             $table->string('moneda')->default('Bs.');
             $table->string('supervisor')->nullable();
-            $table->text('logo')->nullable();
-            $table->text('miniatura')->nullable();
-            $table->text('banner')->nullable();
             $table->integer('default')->default(0);
+            $table->text('imagen')->nullable();
+            $table->text('mini')->nullable();
+            $table->text('detail')->nullable();
+            $table->text('cart')->nullable();
+            $table->text('banner')->nullable();
             $table->timestamps();
         });
     }
