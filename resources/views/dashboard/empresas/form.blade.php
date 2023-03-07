@@ -158,8 +158,8 @@
                                 <div class="custom-file">
                                     <input type="file" wire:model="photo" class="custom-file-input" id="customFileLang"
                                            lang="es" accept="image/jpeg, image/png">
-                                    <label class="custom-file-label" for="customFileLang" data-browse="Elegir">
-                                        Seleccionar Archivo</label>
+                                    <label class="custom-file-label text-sm" for="customFileLang" data-browse="Elegir">
+                                        Seleccionar Imagen</label>
                                 </div>
                             </div>
                             @error('photo')

@@ -1,6 +1,6 @@
 <div wire:ignore.self class="modal fade" id="modal-user-edit" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content fondo">
+        <div class="modal-content">
             <div class="modal-header">
                 {{--<h4 class="modal-title">Large Modal</h4>--}}
                 <button type="button" wire:click="limpiar()" class="close" data-dismiss="modal" aria-label="Close">

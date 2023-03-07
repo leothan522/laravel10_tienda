@@ -5,6 +5,7 @@ use App\Http\Controllers\Dashboard\ParametrosController;
 use App\Http\Controllers\Dashboard\UsuariosController;
 use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Dashboard\EmpresasController;
+use App\Http\Controllers\Dashboard\ArticulosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,8 @@ Route::middleware([
     Route::get('usuarios', [UsuariosController::class, 'index'])->name('usuarios.index');
     Route::get('export/usuarios/{buscar?}', [UsuariosController::class, 'export'])->name('usuarios.excel');
     Route::get('empresas', [EmpresasController::class, 'index'])->name('empresas.index');
+    Route::get('articulos', [ArticulosController::class, 'index'])->name('articulos.index');
+
 });
 
 Route::get('dashboard/perfil', [UsuariosController::class, 'perfil'])->middleware('auth')->name('usuarios.perfil');

@@ -311,6 +311,25 @@ return [
         // Sidebar items:
 
         [
+            'text'      => 'Inventario',
+            'icon'      => 'fas fa-fw fa-cubes',
+            'can'       => ['articulos'],
+            'submenu' => [
+                [
+                    'text' => 'Articulos',
+                    'icon' => 'fas fa-fw fa-box',
+                    'route'  => 'articulos.index',
+                    'can'  => 'articulos',
+                ],
+                /*[
+                    'text' => 'Parametros',
+                    'icon' => 'fas fa-fw fa-list',
+                    'route' => 'parametros.index',
+                    'can' => 'parametros',
+                ]*/
+            ],
+        ],
+        [
             'text'      => 'E-commerce',
             'icon'      => 'fas fa-fw fa-store ',
             'can'       => ['empresas'],

@@ -1,6 +1,6 @@
 <div wire:ignore.self class="modal fade" id="modal-user-permisos" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content fondo">
+        <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">
                     @if($tabla == "parametros")

@@ -46,6 +46,24 @@ function allPermisos()
                 'Borrar Tiendas' => 'empresas.destroy'
 
             ]
+        ],
+        'Articulos' => [
+            'route' => 'articulos.index',
+            'submenu' => [
+                'Crear Articulos' => 'articulos.create',
+                'Editar Articulos' => 'articulos.edit',
+                'Borrar Articulos' => 'articulos.destroy'
+
+            ]
+        ],
+        'Categorias' => [
+            'route' => 'categorias.index',
+            'submenu' => [
+                'Crear categorias' => 'categorias.create',
+                'Editar categorias' => 'categorias.edit',
+                'Borrar categorias' => 'categorias.destroy'
+
+            ]
         ]
     ];
     return $permisos;
