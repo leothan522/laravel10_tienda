@@ -28,8 +28,8 @@
         </li>
         <li class="nav-item">
             <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                    data-toggle="modal" data-target="#modal-user-permisos"
-                {{--onclick="verRoles({{ $parametro->id }})" id="set_rol_id_{{ $parametro->id }}"--}}>
+                    data-toggle="modal" data-target="#modal-tributarios" onclick="verTributarios()"
+                    @if(!comprobarPermisos('tributarios.index')) disabled @endif >
                 Tributarios
             </button>
         </li>

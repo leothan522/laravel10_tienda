@@ -20,9 +20,8 @@
         <table class="table table-head-fixed table-hover text-nowrap">
             <thead>
             <tr class="text-navy">
-                <th style="width: 10%">Codigo</th>
+                <th style="width: 20%">Codigo</th>
                 <th>Nombre</th>
-                <th class="text-center" style="width: 10%"><i class="fas fa-boxes"></i></th>
                 <th style="width: 5%;">&nbsp;</th>
             </tr>
             </thead>

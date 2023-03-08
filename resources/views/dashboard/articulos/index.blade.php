@@ -57,6 +57,10 @@
             Livewire.emit('limpiarUnidades');
         }
 
+        function verTributarios() {
+            Livewire.emit('limpiarTributarios');
+        }
+
         console.log('Hi!');
     </script>
 @endsection
