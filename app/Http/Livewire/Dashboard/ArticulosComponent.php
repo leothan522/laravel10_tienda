@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Categoria;
+use App\Models\Procedencia;
 use App\Models\Unidad;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -19,11 +20,13 @@ class ArticulosComponent extends Component
     protected $paginationTheme = 'bootstrap';
     protected $listeners = [
         'limpiarCategorias', 'confirmedCategorias',
-        'limpiarUnidades', 'confirmedUnidades'
+        'limpiarUnidades', 'confirmedUnidades',
+        'limpiarProcedencias', 'confirmedProcedencias'
     ];
 
     public $categoria_id, $categoria_codigo, $categoria_nombre, $categoriaPhoto, $keywordCategorias;
-    public $unidad_id, $unidad_codigo, $unidad_nombre, $unidadPhoto, $keywordUnidades;
+    public $unidad_id, $unidad_codigo, $unidad_nombre, $keywordUnidades;
+    public $procedencia_id, $procedencia_codigo, $procedencia_nombre, $keywordProcedencias;
     public $verMini;
 
     public function render()
@@ -33,11 +36,15 @@ class ArticulosComponent extends Component
         $rowsCategorias = Categoria::count();
         $unidades = Unidad::buscar($this->keywordUnidades)->orderBy('codigo', 'ASC')->paginate($paginate);
         $rowsUnidades = Unidad::count();
+        $procedencias = Procedencia::buscar($this->keywordProcedencias)->orderBy('codigo', 'ASC')->paginate($paginate);
+        $rowsProcedencias = Procedencia::count();
         return view('livewire.dashboard.articulos-component')
             ->with('listarCategorias', $categorias)
             ->with('rowsCategorias', $rowsCategorias)
             ->with('listarUnidades', $unidades)
             ->with('rowsUnidades', $rowsUnidades)
+            ->with('listarProcedencias', $procedencias)
+            ->with('rowsProcedencias', $rowsProcedencias)
             ;
     }
 
@@ -263,6 +270,106 @@ class ArticulosComponent extends Component
     }
 
     public function buscarUnidades()
+    {
+        //
+    }
+
+    public function limpiarProcedencias()
+    {
+        $this->reset([
+            'procedencia_id', 'procedencia_codigo', 'procedencia_nombre', 'keywordProcedencias'
+        ]);
+    }
+
+    public function saveProcedencia()
+    {
+        $rules = [
+            'procedencia_codigo'       =>  ['required', 'min:2', 'max:6', 'alpha_num:ascii', Rule::unique('procedencias', 'codigo')->ignore($this->procedencia_id)],
+            'procedencia_nombre'    =>  'required|min:4',
+        ];
+        $messages = [
+            'procedencia_codigo.required' => 'El campo codigo es obligatorio.',
+            'procedencia_codigo.min' => 'El campo codigo debe contener al menos 6 caracteres.',
+            'procedencia_codigo.max' => 'El campo codigo no debe ser mayor que 8 caracteres.',
+            'procedencia_codigo.alpha_num' => ' El campo codigo sólo debe contener letras y números.',
+            'procedencia_nombre.required' => 'El campo nombre es obligatorio.',
+            'procedencia_nombre.min' => 'El campo nombre debe contener al menos 4 caracteres.'
+        ];
+
+        $this->validate($rules, $messages);
+        $message = null;
+        if (is_null($this->procedencia_id)){
+            //nuevo
+            $procedencia = new Procedencia();
+            $message = "Procedencia Creada.";
+        }else{
+            //editar
+            $procedencia = Procedencia::find($this->procedencia_id);
+            $message = "Procedencia Actualizada.";
+        }
+        $procedencia->codigo = $this->procedencia_codigo;
+        $procedencia->nombre = $this->procedencia_nombre;
+
+        $procedencia->save();
+        $this->editProcedencia($procedencia->id);
+        $this->alert(
+            'success',
+            $message
+        );
+
+
+    }
+
+    public function editProcedencia($id)
+    {
+        $procedencia = Procedencia::find($id);
+        $this->procedencia_id = $procedencia->id;
+        $this->procedencia_codigo = $procedencia->codigo;
+        $this->procedencia_nombre = $procedencia->nombre;
+    }
+
+    public function destroyProcedencia($id)
+    {
+        $this->procedencia_id = $id;
+        $this->confirm('¿Estas seguro?', [
+            'toast' => false,
+            'position' => 'center',
+            'showConfirmButton' => true,
+            'confirmButtonText' =>  '¡Sí, bórralo!',
+            'text' =>  '¡No podrás revertir esto!',
+            'cancelButtonText' => 'No',
+            'onConfirmed' => 'confirmedProcedencias',
+        ]);
+    }
+
+    public function confirmedProcedencias()
+    {
+        $procedencia = Procedencia::find($this->procedencia_id);
+
+        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+        $vinculado = false;
+
+        if ($vinculado) {
+            $this->alert('warning', '¡No se puede Borrar!', [
+                'position' => 'center',
+                'timer' => '',
+                'toast' => false,
+                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
+                'showConfirmButton' => true,
+                'onConfirmed' => '',
+                'confirmButtonText' => 'OK',
+            ]);
+        } else {
+            $procedencia->delete();
+            $this->alert(
+                'success',
+                'Procedencia Eliminada.'
+            );
+            $this->limpiarProcedencias();
+        }
+    }
+
+    public function buscarProcedencias()
     {
         //
     }

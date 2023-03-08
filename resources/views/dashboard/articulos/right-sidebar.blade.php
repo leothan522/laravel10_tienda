@@ -21,6 +21,13 @@
         </li>
         <li class="nav-item">
             <button type="button" class="btn btn-primary btn-sm btn-block m-1"
+                    data-toggle="modal" data-target="#modal-procedencias" onclick="verProcedencias()"
+                    @if(!comprobarPermisos('procedencias.index')) disabled @endif >
+                Procedencias
+            </button>
+        </li>
+        <li class="nav-item">
+            <button type="button" class="btn btn-primary btn-sm btn-block m-1"
                     data-toggle="modal" data-target="#modal-user-permisos"
                 {{--onclick="verRoles({{ $parametro->id }})" id="set_rol_id_{{ $parametro->id }}"--}}>
                 Tributarios

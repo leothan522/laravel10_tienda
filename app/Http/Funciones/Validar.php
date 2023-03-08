@@ -64,6 +64,24 @@ function allPermisos()
                 'Borrar categorias' => 'categorias.destroy'
 
             ]
+        ],
+        'Unidades' => [
+            'route' => 'unidades.index',
+            'submenu' => [
+                'Crear unidades' => 'unidades.create',
+                'Editar unidades' => 'unidades.edit',
+                'Borrar unidades' => 'unidades.destroy'
+
+            ]
+        ],
+        'Procedencias' => [
+            'route' => 'procedencias.index',
+            'submenu' => [
+                'Crear procedencias' => 'procedencias.create',
+                'Editar procedencias' => 'procedencias.edit',
+                'Borrar procedencias' => 'procedencias.destroy'
+
+            ]
         ]
     ];
     return $permisos;
