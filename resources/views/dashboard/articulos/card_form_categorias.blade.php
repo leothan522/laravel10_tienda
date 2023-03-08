@@ -76,7 +76,9 @@
                     <div class="input-group">
                         <div class="custom-file">
                             <input type="file" wire:model="categoriaPhoto" class="custom-file-input" id="customFileLang"
-                                   lang="es" accept="image/jpeg, image/png">
+                                   lang="es" accept="image/jpeg, image/png"
+                                   @if(!comprobarPermisos('categorias.create') || ($categoria_id && !comprobarPermisos('categorias.edit')))
+                                   disabled @endif >
                             <label class="custom-file-label text-sm" for="customFileLang" data-browse="Elegir">
                                 Seleccionar Imagen
                             </label>

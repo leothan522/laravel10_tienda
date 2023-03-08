@@ -82,6 +82,15 @@ function allPermisos()
                 'Borrar procedencias' => 'procedencias.destroy'
 
             ]
+        ],
+        'Tributarios' => [
+            'route' => 'tributarios.index',
+            'submenu' => [
+                'Crear tributarios' => 'tributarios.create',
+                'Editar tributarios' => 'tributarios.edit',
+                'Borrar tributarios' => 'tributarios.destroy'
+
+            ]
         ]
     ];
     return $permisos;
