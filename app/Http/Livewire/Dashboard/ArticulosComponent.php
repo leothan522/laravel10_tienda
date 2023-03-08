@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Categoria;
+use App\Models\Unidad;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
@@ -16,9 +17,13 @@ class ArticulosComponent extends Component
     use WithFileUploads;
 
     protected $paginationTheme = 'bootstrap';
-    protected $listeners = ['limpiarCategorias', 'confirmedCategorias'];
+    protected $listeners = [
+        'limpiarCategorias', 'confirmedCategorias',
+        'limpiarUnidades', 'confirmedUnidades'
+    ];
 
     public $categoria_id, $categoria_codigo, $categoria_nombre, $categoriaPhoto, $keywordCategorias;
+    public $unidad_id, $unidad_codigo, $unidad_nombre, $unidadPhoto, $keywordUnidades;
     public $verMini;
 
     public function render()
@@ -26,9 +31,14 @@ class ArticulosComponent extends Component
         if (numRowsPaginate() < 10){ $paginate = 10; }else{ $paginate = numRowsPaginate(); }
         $categorias = Categoria::buscar($this->keywordCategorias)->orderBy('codigo', 'ASC')->paginate($paginate);
         $rowsCategorias = Categoria::count();
+        $unidades = Unidad::buscar($this->keywordUnidades)->orderBy('codigo', 'ASC')->paginate($paginate);
+        $rowsUnidades = Unidad::count();
         return view('livewire.dashboard.articulos-component')
             ->with('listarCategorias', $categorias)
-            ->with('rowsCategorias', $rowsCategorias);
+            ->with('rowsCategorias', $rowsCategorias)
+            ->with('listarUnidades', $unidades)
+            ->with('rowsUnidades', $rowsUnidades)
+            ;
     }
 
     public function limpiarCategorias()
@@ -153,6 +163,106 @@ class ArticulosComponent extends Component
     }
 
     public function buscarCategoria()
+    {
+        //
+    }
+
+    public function limpiarUnidades()
+    {
+        $this->reset([
+            'unidad_id', 'unidad_codigo', 'unidad_nombre', 'keywordUnidades'
+        ]);
+    }
+
+    public function saveUnidad()
+    {
+        $rules = [
+            'unidad_codigo'       =>  ['required', 'min:2', 'max:6', 'alpha_num:ascii', Rule::unique('unidades', 'codigo')->ignore($this->unidad_id)],
+            'unidad_nombre'    =>  'required|min:4',
+        ];
+        $messages = [
+            'unidad_codigo.required' => 'El campo codigo es obligatorio.',
+            'unidad_codigo.min' => 'El campo codigo debe contener al menos 6 caracteres.',
+            'unidad_codigo.max' => 'El campo codigo no debe ser mayor que 8 caracteres.',
+            'unidad_codigo.alpha_num' => ' El campo codigo sólo debe contener letras y números.',
+            'unidad_nombre.required' => 'El campo nombre es obligatorio.',
+            'unidad_nombre.min' => 'El campo nombre debe contener al menos 4 caracteres.'
+        ];
+
+        $this->validate($rules, $messages);
+        $message = null;
+        if (is_null($this->unidad_id)){
+            //nuevo
+            $unidad = new Unidad();
+            $message = "Unidad Creada.";
+        }else{
+            //editar
+            $unidad = Unidad::find($this->unidad_id);
+            $message = "Unidad Actualizada.";
+        }
+        $unidad->codigo = $this->unidad_codigo;
+        $unidad->nombre = $this->unidad_nombre;
+
+        $unidad->save();
+        $this->editUnidad($unidad->id);
+        $this->alert(
+            'success',
+            $message
+        );
+
+
+    }
+
+    public function editUnidad($id)
+    {
+        $unidad = Unidad::find($id);
+        $this->unidad_id = $unidad->id;
+        $this->unidad_codigo = $unidad->codigo;
+        $this->unidad_nombre = $unidad->nombre;
+    }
+
+    public function destroyUnidad($id)
+    {
+        $this->unidad_id = $id;
+        $this->confirm('¿Estas seguro?', [
+            'toast' => false,
+            'position' => 'center',
+            'showConfirmButton' => true,
+            'confirmButtonText' =>  '¡Sí, bórralo!',
+            'text' =>  '¡No podrás revertir esto!',
+            'cancelButtonText' => 'No',
+            'onConfirmed' => 'confirmedUnidades',
+        ]);
+    }
+
+    public function confirmedUnidades()
+    {
+        $unidad = Unidad::find($this->unidad_id);
+
+        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+        $vinculado = false;
+
+        if ($vinculado) {
+            $this->alert('warning', '¡No se puede Borrar!', [
+                'position' => 'center',
+                'timer' => '',
+                'toast' => false,
+                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
+                'showConfirmButton' => true,
+                'onConfirmed' => '',
+                'confirmButtonText' => 'OK',
+            ]);
+        } else {
+            $unidad->delete();
+            $this->alert(
+                'success',
+                'Unidad Eliminada.'
+            );
+            $this->limpiarUnidades();
+        }
+    }
+
+    public function buscarUnidades()
     {
         //
     }

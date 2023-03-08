@@ -53,6 +53,10 @@
                 Livewire.emit('limpiarCategorias');
         }
 
+        function verUnidades() {
+            Livewire.emit('limpiarUnidades');
+        }
+
         console.log('Hi!');
     </script>
 @endsection
