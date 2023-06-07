@@ -1,4 +1,4 @@
-<div class="col-12 table-responsive" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="col-12 table-responsive @if($view != "stock") d-none @endif" xmlns:wire="http://www.w3.org/1999/xhtml">
 
     <table class="table table-striped">
         <thead>

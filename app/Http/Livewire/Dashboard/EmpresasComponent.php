@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard;
 
+use App\Models\Almacen;
 use App\Models\Empresa;
 use App\Models\Parametro;
 use Illuminate\Support\Facades\Auth;
@@ -89,6 +90,8 @@ class EmpresasComponent extends Component
     {
         $tipo = 'success';
         $message = null;
+        $almacen = false;
+
         $this->validate();
 
         if ($this->empresa_id){
@@ -108,6 +111,7 @@ class EmpresasComponent extends Component
             $permisos[Auth::id()] = true;
             $permisos = json_encode($permisos);
             $empresa->permisos = $permisos;
+            $almacen = true;
         }
 
         $empresa->rif = strtoupper($this->rif);
@@ -148,7 +152,14 @@ class EmpresasComponent extends Component
 
         $empresa->save();
 
-
+        if ($almacen){
+            $almacen = new Almacen();
+            $almacen->empresas_id = $empresa->id;
+            $almacen->codigo = "ALMP";
+            $almacen->nombre = "Almacen Principal";
+            $almacen->tipo = 1;
+            $almacen->save();
+        }
 
         $this->show($empresa->id);
 

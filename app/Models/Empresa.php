@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Empresa extends Model
 {
     use HasFactory;
+
     protected $table = "empresas";
     protected $fillable = [
         'rif',
@@ -30,8 +31,7 @@ class Empresa extends Model
     public function scopeBuscar($query, $keyword)
     {
         return $query->where('rif', 'LIKE', "%$keyword%")
-            ->orWhere('nombre', 'LIKE', "%$keyword%")
-            ;
+            ->orWhere('nombre', 'LIKE', "%$keyword%");
     }
 
     public function precio(): HasMany
@@ -42,6 +42,11 @@ class Empresa extends Model
     public function stock(): HasMany
     {
         return $this->hasMany(Stock::class, 'empresas_id', 'id');
+    }
+
+    public function almacen(): HasMany
+    {
+        return $this->hasMany(Almacen::class, 'empresas_id', 'id');
     }
 
 }

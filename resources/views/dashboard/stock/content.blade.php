@@ -25,21 +25,31 @@
                 {{--<button type="button" class="btn btn-default btn-sm">
                     <i class="fas fa-plus-circle"></i> Stock
                 </button>--}}
+                <span class="btn" style="cursor: default;">
+                    @if($view != "stock")
+                        Ajustes
+                    @else
+                        Existencias
+                    @endif
+                </span>
 
                 @if(/*$keyword*/false)
                     <span class="btn">
                     Resultados de la Búsqueda { <b class="text-danger">{{--{{ $keyword }}--}}hola</b> }
-                </span>
+                    </span>
                     <button class="btn btn-tool text-danger"{{-- wire:click="limpiarArticulos"--}}><i class="fas fa-times-circle"></i>
                     </button>
-            @endif
+                @endif
 
-            <!-- Right -->
-                <button type="button" class="btn btn-default btn-sm float-right ml-1 mr-1" {{--style="margin-right: 5px;"--}}>
-                    <i class="fas fa-list"></i> Ajuste
+                <!-- Right -->
+                <button type="button" class="btn btn-default btn-sm float-right ml-1 mr-1" wire:click="verAjustes">
+                    @if($view == "stock")
+                        <i class="fas fa-list"></i> Ajustes
+                    @else
+                        <i class="fas fa-boxes"></i> Existencias
+                    @endif
                 </button>
-                <button type="button" wire:click="show"
-                class="btn btn-default btn-sm float-right ml-1 mr-1" {{--style="margin-right: 5px;"--}}>
+                <button type="button" wire:click="show" class="btn btn-default btn-sm float-right ml-1 mr-1" {{--style="margin-right: 5px;"--}}>
                     <i class="fas fa-sync"></i> Actualizar
                 </button>
             </div>
@@ -50,29 +60,38 @@
         <div class="row">
             @include('dashboard.stock.table_stock')
             @include('dashboard.stock.modal')
+            @include('dashboard.stock.modal_almacenes')
         </div>
 
-        <div class="overlay-wrapper" wire:loading wire:target="empresa_id, setEstatus, show">
-        <div class="overlay">
-            <div class="spinner-border text-navy" role="status">
-                <span class="sr-only">Loading...</span>
+        <div class="overlay-wrapper" wire:loading wire:target="empresa_id, setEstatus, show, verAjustes">
+            <div class="overlay">
+                <div class="spinner-border text-navy" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
         </div>
 
     </div>
-
+    <div class="row @if($view != "ajustes") d-none @endif">
+        <div class="col-md-4">
+            @include('dashboard.stock.table_ajustes')
+        </div>
+        <div class="col-md-8">
+            @include('dashboard.stock.show_ajustes')
+        </div>
     </div>
-    @else
+@else
     @if(!$modulo_empresa || !$modulo_articulo)
         <div class="callout callout-info">
             <h5><i class="fas fa-info"></i> Nota:</h5>
-            Para que este Modulo este <span class="text-bold text-navy">Activo</span>,
-            es Necesario previmente crear una
+            Para que este Modulo este <span class="text-bold text-navy">Activo</span>, es Necesario previmente crear una
             <span class="text-bold @if($modulo_empresa) text-success @else text-danger @endif">Tienda</span>,
-            un <span class="text-bold @if(/*$count_almacenes*/ false) text-success @else text-danger @endif">Almacen</span> y Tener Al menos
-            un <span class="text-bold @if($modulo_articulo) text-success @else text-danger @endif">Articulo</span> Registrado.
+            un <span
+                    class="text-bold @if(/*$count_almacenes*/ false) text-success @else text-danger @endif">Almacen</span>
+            y Tener Al menos un <span class="text-bold @if($modulo_articulo) text-success @else text-danger @endif">Articulo</span>
+            Registrado.
         </div>
-        @else
+    @else
         <div class="callout callout-info">
             <h5><i class="fas fa-info"></i> Nota:</h5>
             El <span class="text-bold text-danger">Usuario</span> actual

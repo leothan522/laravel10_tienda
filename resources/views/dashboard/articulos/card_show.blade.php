@@ -1,5 +1,4 @@
-<div class="card card-navy" style="height: inherit; width: inherit; transition: all 0.15s ease 0s;"
-     xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy" style="height: inherit; width: inherit; transition: all 0.15s ease 0s;" xmlns:wire="http://www.w3.org/1999/xhtml">
 
     <div class="card-header">
         <h3 class="card-title">

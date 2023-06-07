@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\AjustesController;
 use App\Http\Controllers\FCM\FcmController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\ParametrosController;

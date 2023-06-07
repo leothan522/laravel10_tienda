@@ -2,15 +2,15 @@
      xmlns:wire="http://www.w3.org/1999/xhtml">
 
     <div class="card-header">
-        @if($procedencia_id)
-            <h3 class="card-title">Editar Proce.</h3>
+        @if($almacen_id)
+            <h3 class="card-title">Editar Almacen</h3>
             <div class="card-tools">
-                <button class="btn btn-tool" wire:click="limpiarProcedencias">
+                <button class="btn btn-tool" wire:click="limpiarAlmacenes">
                     <i class="fas fa-ban"></i> Cancelar
                 </button>
             </div>
             @else
-            <h3 class="card-title">Crear Proce.</h3>
+            <h3 class="card-title">Crear Almacen</h3>
             <div class="card-tools">
                 <span class="btn btn-tool"><i class="fas fa-file"></i></span>
             </div>
@@ -20,7 +20,7 @@
     <div class="card-body">
 
 
-        <form wire:submit.prevent="saveProcedencia">
+        <form wire:submit.prevent="saveAlmacen">
 
             <div class="form-group">
                 <label for="name">Codigo</label>
@@ -28,8 +28,8 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-code"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="procedencia_codigo" placeholder="Codigo Procedencia">
-                    @error('procedencia_codigo')
+                    <input type="text" class="form-control" wire:model.defer="almacen_codigo" placeholder="Codigo Almacen">
+                    @error('almacen_codigo')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
                         {{ $message }}
@@ -44,8 +44,8 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-tag"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="procedencia_nombre" placeholder="Nombre Procedencia">
-                    @error('procedencia_nombre')
+                    <input type="text" class="form-control" wire:model.defer="almacen_nombre" placeholder="Nombre Almacen">
+                    @error('almacen_nombre')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
                         {{ $message }}
@@ -57,9 +57,9 @@
             <div class="form-group mt-3">
                 {{--<input type="submit" class="btn btn-block btn-success" value="Guardar">--}}
                 <button type="submit" class="btn btn-block btn-success"
-                @if(!comprobarPermisos('procedencias.create') || ($procedencia_id && !comprobarPermisos('procedencias.edit')))
+                @if(!comprobarPermisos('almacen.create') || ($almacen_id && !comprobarPermisos('almacen.edit')))
                 disabled @endif >
-                    <i class="fas fa-save"></i> Guardar @if($procedencia_id) Cambios @endif
+                    <i class="fas fa-save"></i> Guardar @if($almacen_id) Cambios @endif
                 </button>
             </div>
 

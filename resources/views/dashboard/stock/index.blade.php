@@ -23,7 +23,7 @@
 @endsection
 
 @section('right-sidebar')
-    @include('dashboard.right-sidebar')
+    @include('dashboard.stock.right-sidebar')
 @endsection
 
 @section('footer')
@@ -47,6 +47,10 @@
                 //Livewire.emit('increment', keyword);
             }
             return false;
+        }
+
+        function verAlmacenes() {
+            Livewire.emit('limpiarAlmacenes');
         }
 
         console.log('Hi!');
