@@ -176,8 +176,28 @@
             </div>
         </div>
 
+    </div>
 
+    <div class="card-footer text-center {{--@if(!$footer) d-none @endif--}}">
 
+        <button type="button" class="btn btn-default btn-sm" wire:click="btnUnidad"
+                {{--@if(!comprobarPermisos('empresas.horario')) disabled @endif--}}>
+            <i class="fas fa-print"></i> Imprimir
+        </button>
+
+        {{--<button type="button" class="btn btn-default btn-sm" wire:click="btnActivoInactivo"
+                --}}{{--@if(!comprobarPermisos('empresas.horario')) disabled @endif--}}{{-->
+            @if($articulo_estatus)
+                <i class="fas fa-check"></i> Activo
+            @else
+                <i class="fas fa-ban"></i> Inactivo
+            @endif
+        </button>--}}
+
+        <button type="button" class="btn btn-default btn-sm" wire:click="destroy()"
+                {{--@if(!comprobarPermisos('empresas.horario')) disabled @endif--}}>
+            <i class="fas fa-trash-alt"></i> Borrar
+        </button>
 
     </div>
 

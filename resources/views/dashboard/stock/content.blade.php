@@ -27,9 +27,9 @@
                 </button>--}}
                 <span class="btn" style="cursor: default;">
                     @if($view != "stock")
-                        Ajustes
+                        Mostrando Ajustes
                     @else
-                        Existencias
+                        Mostrando Existencias
                     @endif
                 </span>
 

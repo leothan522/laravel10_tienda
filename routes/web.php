@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Web\WebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,9 @@ Route::get('/', function () {
 Route::get('/perfil', function (){
     return view('profile.show_default');
 })->name('web.perfil')->middleware('auth');
+
+Route::get('/recuperar/{token}/{email}', [WebController::class, 'recuperar'])->name('web.recuperar');
+Route::post('/reset', [WebController::class, 'reset'])->name('web.reset');
 
 Route::middleware([
     'auth:sanctum',
