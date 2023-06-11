@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Dashboard\AjustesController;
 use App\Http\Controllers\FCM\FcmController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\ParametrosController;
@@ -46,7 +45,7 @@ Route::get('chat-directo/{id?}', [ChatController::class, 'index'])->middleware([
 
 Route::get('/prueba', function () {
     //Alert::alert('Title', 'Message', 'Type');
-    return view('dashboard.z_componentes.home');
+    return view('dashboard._componentes.home');
 })->middleware(['user.permisos'])->name("prueba");
 
 

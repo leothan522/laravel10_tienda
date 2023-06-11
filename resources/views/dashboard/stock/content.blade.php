@@ -42,12 +42,11 @@
                 @endif
 
                 <!-- Right -->
-                <button type="button" class="btn btn-default btn-sm float-right ml-1 mr-1" wire:click="verAjustes">
-                    @if($view == "stock")
-                        <i class="fas fa-list"></i> Ajustes
-                    @else
-                        <i class="fas fa-boxes"></i> Existencias
-                    @endif
+                <button type="button" class="btn btn-default btn-sm float-right ml-1 mr-1" wire:click="verAjustes" @if($view == "ajustes") disabled @endif>
+                    <i class="fas fa-list"></i> Ajustes
+                </button>
+                <button type="button" class="btn btn-default btn-sm float-right ml-1 mr-1" wire:click="verAjustes" @if($view == "stock") disabled @endif>
+                    <i class="fas fa-boxes"></i> Existencias
                 </button>
                 <button type="button" wire:click="show" class="btn btn-default btn-sm float-right ml-1 mr-1" {{--style="margin-right: 5px;"--}}>
                     <i class="fas fa-sync"></i> Actualizar
