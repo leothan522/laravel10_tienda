@@ -49,4 +49,9 @@ class Empresa extends Model
         return $this->hasMany(Almacen::class, 'empresas_id', 'id');
     }
 
+    public function ajustes(): HasMany
+    {
+        return $this->hasMany(Ajuste::class, 'empresas_id', 'id');
+    }
+
 }

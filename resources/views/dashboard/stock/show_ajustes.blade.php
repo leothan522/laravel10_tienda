@@ -185,14 +185,14 @@
             <i class="fas fa-print"></i> Imprimir
         </button>
 
-        {{--<button type="button" class="btn btn-default btn-sm" wire:click="btnActivoInactivo"
-                --}}{{--@if(!comprobarPermisos('empresas.horario')) disabled @endif--}}{{-->
-            @if($articulo_estatus)
+        <button type="button" class="btn btn-default btn-sm" wire:click="btnActivoInactivo"
+                {{--@if(!comprobarPermisos('empresas.horario')) disabled @endif--}}>
+            @if(/*$articulo_estatus*/ false)
                 <i class="fas fa-check"></i> Activo
             @else
-                <i class="fas fa-ban"></i> Inactivo
+                <i class="fas fa-ban"></i> Anular
             @endif
-        </button>--}}
+        </button>
 
         <button type="button" class="btn btn-default btn-sm" wire:click="destroy()"
                 {{--@if(!comprobarPermisos('empresas.horario')) disabled @endif--}}>

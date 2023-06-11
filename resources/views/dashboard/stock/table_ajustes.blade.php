@@ -6,7 +6,7 @@
                 <button class="btn btn-tool text-danger" wire:click="limpiar"><i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Fixed Header Table
+                Ajustes de [Entrada|Salida]
             @endif
         </h3>
 

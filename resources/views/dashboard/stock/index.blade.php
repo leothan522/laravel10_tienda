@@ -53,6 +53,10 @@
             Livewire.emit('limpiarAlmacenes');
         }
 
+        function verTiposAjuste() {
+            Livewire.emit('limpiarTiposAjuste');
+        }
+
         console.log('Hi!');
     </script>
 @endsection

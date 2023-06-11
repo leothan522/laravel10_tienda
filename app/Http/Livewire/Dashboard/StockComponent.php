@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard;
 
+use App\Models\AjusTipo;
 use App\Models\Almacen;
 use App\Models\Articulo;
 use App\Models\Empresa;
@@ -20,13 +21,15 @@ class StockComponent extends Component
     protected $paginationTheme = 'bootstrap';
 
     protected $listeners = [
-        'limpiarAlmacenes', 'confirmedAlmacenes'
+        'limpiarAlmacenes', 'confirmedAlmacenes',
+        'limpiarTiposAjuste', 'confirmedTiposAjuste'
     ];
 
     public $modulo_activo = false, $modulo_empresa, $modulo_articulo;
     public $empresa_id, $listarEmpresas, $empresa;
     public $listarStock, $getStock;
     public $almacen_id, $almacen_codigo, $almacen_nombre, $keywordAlmacenes;
+    public $tipos_ajuste_id, $tipos_ajuste_codigo, $tipos_ajuste_nombre, $tipos_ajuste_tipo = 1, $keywordTiposAjuste;
     public $view = "stock";
 
     public function mount()
@@ -42,10 +45,14 @@ class StockComponent extends Component
         $this->getEmpresas();
         $almacenes = Almacen::buscar($this->keywordAlmacenes)->where('empresas_id', $this->empresa_id)->orderBy('codigo', 'ASC')->paginate($paginate);
         $rowsAlmacenes = Almacen::count();
+        $tiposAjuste = AjusTipo::buscar($this->keywordTiposAjuste)->orderBy('codigo', 'ASC')->paginate($paginate);
+        $rowsTiposAjuste = AjusTipo::count();
 
         return view('livewire.dashboard.stock-component')
             ->with('listarAlmacenes', $almacenes)
-            ->with('rowsAlmacenes', $rowsAlmacenes);
+            ->with('rowsAlmacenes', $rowsAlmacenes)
+            ->with('listarTiposAjuste', $tiposAjuste)
+            ->with('rowsTiposAjuste', $rowsTiposAjuste);
     }
 
     public function getEmpresaDefault()
@@ -249,6 +256,112 @@ class StockComponent extends Component
         }else{
             $this->view = "stock";
         }
+    }
+
+    // ************************* Tipos de AJuste ********************************************
+
+    public function limpiarTiposAjuste()
+    {
+        $this->reset([
+            'tipos_ajuste_id', 'tipos_ajuste_codigo', 'tipos_ajuste_nombre', 'tipos_ajuste_tipo', 'keywordTiposAjuste'
+        ]);
+    }
+
+    public function saveTiposAjuste()
+    {
+        $rules = [
+            'tipos_ajuste_codigo'       =>  ['required', 'min:2', 'max:6', 'alpha_num:ascii', Rule::unique('ajustes_tipos', 'codigo')->ignore($this->tipos_ajuste_id)],
+            'tipos_ajuste_nombre'    =>  'required|min:4',
+        ];
+        $messages = [
+            'tipos_ajuste_codigo.required' => 'El campo codigo es obligatorio.',
+            'tipos_ajuste_codigo.min' => 'El campo codigo debe contener al menos 2 caracteres.',
+            'tipos_ajuste_codigo.max' => 'El campo codigo no debe ser mayor que 6 caracteres.',
+            'tipos_ajuste_codigo.alpha_num' => ' El campo codigo sólo debe contener letras y números.',
+            'tipos_ajuste_nombre.required' => 'El campo nombre es obligatorio.',
+            'tipos_ajuste_nombre.min' => 'El campo nombre debe contener al menos 4 caracteres.'
+        ];
+
+        $this->validate($rules, $messages);
+        $message = null;
+        if (is_null($this->tipos_ajuste_id)){
+            //nuevo
+            $tipo = new AjusTipo();
+            $message = "Tipo de Ajuste Creado.";
+        }else{
+            //editar
+            $tipo = AjusTipo::find($this->tipos_ajuste_id);
+            $message = "Tipo de Ajuste Actualizado.";
+        }
+        $tipo->codigo = $this->tipos_ajuste_codigo;
+        $tipo->descripcion = $this->tipos_ajuste_nombre;
+        $tipo->tipo = $this->tipos_ajuste_tipo;
+        $tipo->save();
+
+        $this->editTiposAjuste($tipo->id);
+
+        $this->alert(
+            'success',
+            $message
+        );
+
+    }
+
+    public function editTiposAjuste($id)
+    {
+        $tipo = AjusTipo::find($id);
+        $this->tipos_ajuste_id = $tipo->id;
+        $this->tipos_ajuste_codigo = $tipo->codigo;
+        $this->tipos_ajuste_nombre = $tipo->descripcion;
+        $this->tipos_ajuste_tipo = $tipo->tipo;
+    }
+
+    public function destroyTiposAjuste($id)
+    {
+        $this->tipos_ajuste_id = $id;
+        $this->confirm('¿Estas seguro?', [
+            'toast' => false,
+            'position' => 'center',
+            'showConfirmButton' => true,
+            'confirmButtonText' =>  '¡Sí, bórralo!',
+            'text' =>  '¡No podrás revertir esto!',
+            'cancelButtonText' => 'No',
+            'onConfirmed' => 'confirmedTiposAjuste',
+        ]);
+
+    }
+
+    public function confirmedTiposAjuste()
+    {
+
+        $tipo = AjusTipo::find($this->tipos_ajuste_id);
+
+        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+        $vinculado = false;
+
+        if ($vinculado) {
+            $this->alert('warning', '¡No se puede Borrar!', [
+                'position' => 'center',
+                'timer' => '',
+                'toast' => false,
+                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
+                'showConfirmButton' => true,
+                'onConfirmed' => '',
+                'confirmButtonText' => 'OK',
+            ]);
+        } else {
+            $tipo->delete();
+            $this->alert(
+                'success',
+                'Tipo de Ajuste Eliminado.'
+            );
+            $this->limpiarTiposAjuste();
+        }
+    }
+
+    public function buscarTiposAjuste()
+    {
+        //
     }
 
 }

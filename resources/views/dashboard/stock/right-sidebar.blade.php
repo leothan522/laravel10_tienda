@@ -14,13 +14,13 @@
         </li>
 
         @if(auth()->user()->role == 100)
-            {{--<li class="nav-item">
+            <li class="nav-item">
                 <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                        data-toggle="modal" data-target="#modal-procedencias" onclick="verProcedencias()"
-                        @if(!comprobarPermisos('procedencias.index')) disabled @endif >
-                    Procedencias
+                        data-toggle="modal" data-target="#modal-tipos-ajuste" onclick="verTiposAjuste()"
+                        @if(!comprobarPermisos('tipos_ajuste.index')) disabled @endif >
+                    Tipos de Ajuste
                 </button>
-            </li>--}}
+            </li>
         @endif
 
         <li class="dropdown-divider"></li>

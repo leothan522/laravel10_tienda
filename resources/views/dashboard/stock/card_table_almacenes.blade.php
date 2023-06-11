@@ -6,7 +6,7 @@
                 <button class="btn btn-tool text-danger" wire:click="limpiarAlmacenes"><i class="fas fa-times-circle"></i>
                 </button>
             @else
-                ALmacenes Registrados [ <b class="text-navy">{{ $rowsAlmacenes }}</b> ]
+                Almacenes Registrados [ <b class="text-navy">{{ $rowsAlmacenes }}</b> ]
             @endif
         </h3>
 
@@ -20,7 +20,7 @@
         <table class="table table-head-fixed table-hover text-nowrap">
             <thead>
             <tr class="text-navy">
-                <th style="width: 20%">Codigo</th>
+                <th style="width: 20%">Código</th>
                 <th>Nombre</th>
                 <th style="width: 5%;">&nbsp;</th>
             </tr>

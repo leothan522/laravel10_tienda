@@ -60,6 +60,7 @@
             @include('dashboard.stock.table_stock')
             @include('dashboard.stock.modal')
             @include('dashboard.stock.modal_almacenes')
+            @include('dashboard.stock.modal_tipos_ajuste')
         </div>
 
         <div class="overlay-wrapper" wire:loading wire:target="empresa_id, setEstatus, show, verAjustes">
