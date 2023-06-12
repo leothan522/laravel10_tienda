@@ -38,7 +38,7 @@ class ParametrosComponent extends Component
     protected function rules($id = null)
     {
         $rules = [
-            'nombre' => ['required', 'min:3', 'alpha_dash', Rule::unique('parametros', 'nombre')->ignore($id)],
+            'nombre' => ['required', 'min:3', 'alpha_dash'/*, Rule::unique('parametros', 'nombre')->ignore($id)*/],
             'tabla_id' => 'nullable|integer'
         ];
         return $rules;

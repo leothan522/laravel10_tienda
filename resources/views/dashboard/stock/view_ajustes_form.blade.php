@@ -5,7 +5,7 @@
         </div>
         <div class="col-md-2 mb-2">
             <input type="text" class="form-control form-control-sm @error('ajuste_codigo') is-invalid @enderror"
-                   placeholder="Código" wire:model.defer="ajuste_codigo">
+                   placeholder="Código" wire:model.defer="ajuste_codigo" @if(!$proximo_codigo['editable']) readonly @endif>
         </div>
         <div class="col-md-3">
             &nbsp;
@@ -15,7 +15,7 @@
         </div>
         <div class="col-md-3">
             <input type="date" class="form-control form-control-sm @error('ajuste_fecha') is-invalid @enderror"
-                   wire:model.defer="ajuste_fecha">
+                   wire:model.defer="ajuste_fecha" @if(!$proximo_codigo['editable_fecha']) readonly @endif>
         </div>
     </div>
 
@@ -78,36 +78,43 @@
                                             <span>{{ $i + 1 }}</span>
                                         </th>
                                         <td>
-                                            <input type="text" class="form-control form-control-sm
-                                            {{ $classTipo[$i] }}" wire:model.lazy="ajusteTipo.{{ $i }}"
-                                                   placeholder="código">
+                                            <input type="text" class="form-control form-control-sm {{ $classTipo[$i] }}
+                                            @error('ajusteTipo.'.$i) is-invalid @enderror" wire:model.lazy="ajusteTipo.{{ $i }}" placeholder="código">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-control-sm
-                                            {{ $classArticulo[$i] }}" wire:model.lazy="ajusteArticulo.{{ $i }}"
-                                                   placeholder="código">
+                                            <input type="text" class="form-control form-control-sm {{ $classArticulo[$i] }}
+                                            @error('ajusteArticulo.'.$i) is-invalid @enderror" wire:model.lazy="ajusteArticulo.{{ $i }}"
+                                                   data-toggle="tooltip" data-placement="bottom" title="{{ $ajusteArticulo[$i] }}" placeholder="código">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-control-sm"
-                                                   wire:model="ajusteDescripcion.{{ $i }}" placeholder="Descripción"
-                                                   readonly>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend" wire:click="itemTemporalAjuste({{ $i }})"
+                                                     data-toggle="modal" data-target="#modal-buscar-articulo" style="cursor: pointer">
+                                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-sm"
+                                                       data-toggle="tooltip" data-placement="bottom" title="{{ $ajusteDescripcion[$i] }}"
+                                                       wire:model="ajusteDescripcion.{{ $i }}" placeholder="Descripción"
+                                                       readonly>
+                                            </div>
+
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-control-sm
-                                            {{ $classAlmacen[$i] }}" wire:model.lazy="ajusteAlmacen.{{ $i }}"
-                                                   placeholder="código">
+                                            <input type="text" class="form-control form-control-sm {{ $classAlmacen[$i] }} @error('ajusteAlmacen.'.$i) is-invalid @enderror"
+                                                   wire:model.lazy="ajusteAlmacen.{{ $i }}" placeholder="código">
                                         </td>
                                         <td>
-                                            <select class="form-control form-control-sm"
-                                                    wire:model.defer="ajusteUnidad.{{ $i }}">
+                                            <select class="form-control form-control-sm
+                                            @error('ajusteUnidad.'.$i) is-invalid @enderror" wire:model.defer="ajusteUnidad.{{ $i }}">
                                                 @foreach($selectUnidad[$i] as $unidad)
                                                     <option value="{{ $unidad['id'] }}">{{ $unidad['codigo'] }}</option>
                                                 @endforeach
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control form-control-sm" min="0.001"
-                                                   step=".001" wire:model.defer="ajusteCantidad.{{ $i }}">
+                                            <input type="number" class="form-control form-control-sm
+                                            @error('ajusteCantidad.'.$i) is-invalid @enderror" min="0.001" step=".001"
+                                            wire:model.defer="ajusteCantidad.{{ $i }}">
                                         </td>
                                     </tr>
                                 @endfor
@@ -152,3 +159,4 @@
         </div>
     </div>
 </form>
+@include('dashboard.stock.modal_buscar_articulo')

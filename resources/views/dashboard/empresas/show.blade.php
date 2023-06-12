@@ -14,24 +14,30 @@
                     </li>
                     <li class="list-group-item">
                         <b>Jefe</b> <a
-                            class="float-right">{{ $jefe }}</a>
+                                class="float-right">{{ $jefe }}</a>
                     </li>
                     <li class="list-group-item">
                         <b>Moneda Base</b> <a
-                            class="float-right">{{ $moneda }}</a>
+                                class="float-right">{{ $moneda }}</a>
                     </li>
                     <li class="list-group-item">
                         <b>Telefonos</b> <a
-                            class="float-right">{{ $telefonos }}</a>
+                                class="float-right">{{ $telefonos }}</a>
                     </li>
                     <li class="list-group-item">
                         <b>Email</b> <a
-                            class="float-right">{{ strtolower($email) }}</a>
+                                class="float-right">{{ strtolower($email) }}</a>
                     </li>
                     <li class="list-group-item">
                         <b>Dirección</b> <a
-                            class="float-right">{{ $direccion }}</a>
+                                class="float-right">{{ $direccion }}</a>
                     </li>
+                    @if(auth()->user()->role == 100)
+                        <li class="list-group-item">
+                            <b>empresa_id</b> <a
+                                    class="float-right">{{ $empresa_id }}</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
 
@@ -68,7 +74,8 @@
 
                         <div class="row col-12 justify-content-center mb-3 mt-3">
                             <div class="col-8">
-                                <img class="img-thumbnail" src="{{ asset(verImagen($verImagen)) }}" {{--width="101" height="100"--}}  alt="Logo Tienda"/>
+                                <img class="img-thumbnail" src="{{ asset(verImagen($verImagen)) }}"
+                                     {{--width="101" height="100"--}}  alt="Logo Tienda"/>
                             </div>
                         </div>
 
@@ -91,7 +98,8 @@
                             <ul class="list-group text-sm">
                                 <li class="list-group-item bg-warning text-bold">
                                     Tienda Default
-                                    <span class="float-right text-bold"><i class="fas fa-certificate text-muted text-xs"></i></span>
+                                    <span class="float-right text-bold"><i
+                                                class="fas fa-certificate text-muted text-xs"></i></span>
                                 </li>
                             </ul>
                         @endif
