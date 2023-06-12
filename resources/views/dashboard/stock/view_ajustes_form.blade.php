@@ -105,7 +105,7 @@
                                         </td>
                                         <td>
                                             <select class="form-control form-control-sm
-                                            @error('ajusteUnidad.'.$i) is-invalid @enderror" wire:model.defer="ajusteUnidad.{{ $i }}">
+                                            @error('ajusteUnidad.'.$i) is-invalid @enderror" wire:model="ajusteUnidad.{{ $i }}">
                                                 @foreach($selectUnidad[$i] as $unidad)
                                                     <option value="{{ $unidad['id'] }}">{{ $unidad['codigo'] }}</option>
                                                 @endforeach
@@ -114,7 +114,7 @@
                                         <td>
                                             <input type="number" class="form-control form-control-sm
                                             @error('ajusteCantidad.'.$i) is-invalid @enderror" min="0.001" step=".001"
-                                            wire:model.defer="ajusteCantidad.{{ $i }}">
+                                            wire:model="ajusteCantidad.{{ $i }}">
                                         </td>
                                     </tr>
                                 @endfor
