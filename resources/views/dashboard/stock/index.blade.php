@@ -57,6 +57,11 @@
             Livewire.emit('limpiarTiposAjuste');
         }
 
+        function cambiarEmpresa()
+        {
+            Livewire.emit('changeEmpresa');
+        }
+
         console.log('Hi!');
     </script>
 @endsection
