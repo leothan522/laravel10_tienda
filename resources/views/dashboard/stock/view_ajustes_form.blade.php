@@ -5,7 +5,8 @@
         </div>
         <div class="col-md-2 mb-2">
             <input type="text" class="form-control form-control-sm @error('ajuste_codigo') is-invalid @enderror"
-                   placeholder="Código" wire:model.defer="ajuste_codigo" @if(!$proximo_codigo['editable']) readonly @endif>
+                   placeholder="Código" wire:model.defer="ajuste_codigo"
+                   @if(!$proximo_codigo['editable']) readonly @endif>
         </div>
         <div class="col-md-3">
             &nbsp;
@@ -14,7 +15,8 @@
             <label>Fecha:</label>
         </div>
         <div class="col-md-3">
-            <input type="datetime-local" class="form-control form-control-sm @error('ajuste_fecha') is-invalid @enderror"
+            <input type="datetime-local"
+                   class="form-control form-control-sm @error('ajuste_fecha') is-invalid @enderror"
                    wire:model.defer="ajuste_fecha" @if(!$proximo_codigo['editable_fecha']) readonly @endif>
         </div>
     </div>

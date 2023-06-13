@@ -44,7 +44,7 @@ class AjusDetalle extends Model
 
     public function unidad(): BelongsTo
     {
-        return $this->belongsTo(Unidad::class, 'almacenes_id', 'id');
+        return $this->belongsTo(Unidad::class, 'unidades_id', 'id');
     }
 
 }

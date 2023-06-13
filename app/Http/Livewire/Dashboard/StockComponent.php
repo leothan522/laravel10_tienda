@@ -42,7 +42,7 @@ class StockComponent extends Component
             $ajusteArticulo = [], $classArticulo = [], $ajusteDescripcion = [], $ajusteUnidad = [], $selectUnidad = [],
             $ajusteAlmacen = [], $classAlmacen = [], $ajusteCantidad = [],
             $ajuste_tipos_id = [], $ajuste_articulos_id = [], $ajuste_almacenes_id = [], $ajuste_tipos_tipo = [], $ajuste_almacenes_tipo = [],
-            $ajusteItem, $ajusteListarArticulos, $keywordAjustesArticulos;
+            $ajusteItem, $ajusteListarArticulos, $keywordAjustesArticulos, $detallesItem;
     public $proximo_codigo;
 
     public function mount()
@@ -403,7 +403,7 @@ class StockComponent extends Component
             'ajusteTipo', 'classTipo', 'ajusteArticulo', 'classArticulo', 'ajusteDescripcion', 'ajusteUnidad',
             'selectUnidad', 'ajusteAlmacen', 'ajusteCantidad', 'ajusteListarArticulos', 'keywordAjustesArticulos', 'ajusteItem',
             'ajuste_tipos_id', 'ajuste_articulos_id', 'ajuste_almacenes_id', 'tipos_ajuste_tipo', 'ajuste_almacenes_tipo',
-            'listarDetalles'
+            'listarDetalles', 'detallesItem'
         ]);
         $this->resetErrorBag();
     }
@@ -436,14 +436,6 @@ class StockComponent extends Component
             //show ajuste
             $this->showAjustes($this->ajuste_id);
         }
-    }
-
-    public function btnEditar()
-    {
-        $this->view_ajustes = 'form';
-        $this->btn_editar = false;
-        $this->btn_cancelar = true;
-        $this->footer = false;
     }
 
     public function btnContador($opcion)
@@ -501,7 +493,7 @@ class StockComponent extends Component
             $this->ajuste_fecha = date("Y-m-d H:i:s");
         }
 
-        $procecar = true;
+        $procesar = true;
         $html = null;
 
         for ($i = 0; $i < $this->ajuste_contador; $i++){
@@ -512,19 +504,19 @@ class StockComponent extends Component
                 if ($stock){
                     $disponible = $stock->disponible;
                     if ($this->ajusteCantidad[$i] > $disponible){
-                        $procecar = false;
+                        $procesar = false;
                         $html .= 'Para <strong>'.formatoMillares($this->ajusteCantidad[$i], 3).'</strong> del articulo <strong>'.$this->ajusteArticulo[$i].'</strong>. el stock actual es <strong>'.formatoMillares($disponible, 3).'</strong><br>';
                         $this->addError('ajusteCantidad.'.$i, 'error');
                     }
                 }else{
-                    $procecar = false;
+                    $procesar = false;
                     $html .= 'Para <strong>'.formatoMillares($this->ajusteCantidad[$i],3).'</strong> del articulo <strong>'.$this->ajusteArticulo[$i].'</strong>. el stock actual es <strong>0,000</strong><br>';
                     $this->addError('ajusteCantidad.'.$i, 'error');
                 }
             }
         }
 
-        if ($procecar){
+        if ($procesar){
 
             $ajuste = new Ajuste();
             $ajuste->empresas_id = $this->empresa_id;
@@ -698,6 +690,43 @@ class StockComponent extends Component
         $this->ajuste_fecha = $ajuste->fecha;
         $this->ajuste_descripcion = $ajuste->descripcion;
         $this->listarDetalles = AjusDetalle::where('ajustes_id', $this->ajuste_id)->get();
+        $this->ajuste_contador = AjusDetalle::where('ajustes_id', $this->ajuste_id)->count();
+    }
+
+    public function btnEditar()
+    {
+        $this->view_ajustes = 'form';
+        $this->new_ajuste = false;
+        $this->btn_editar = false;
+        $this->btn_cancelar = true;
+        $this->footer = false;
+
+        $i = 0;
+        foreach ($this->listarDetalles as $detalle){
+            $array = array();
+            $array[] = [
+                'id'        => $detalle->articulo->unidades_id,
+                'codigo'    => $detalle->articulo->unidad->codigo
+            ];
+            $unidades = ArtUnid::where('articulos_id', $detalle->articulos_id)->get();
+            foreach ($unidades as $unidad){
+                $array[] = [
+                    'id'        => $unidad->unidades_id,
+                    'codigo'    => $unidad->unidad->codigo
+                ];
+            }
+            $this->ajusteTipo[$i] = $detalle->tipo->codigo;
+            $this->classTipo[$i] = null;
+            $this->ajusteArticulo[$i] = $detalle->articulo->codigo;
+            $this->classArticulo[$i] = null;
+            $this->ajusteDescripcion[$i] = $detalle->articulo->descripcion;
+            $this->selectUnidad[$i] = $array;
+            $this->ajusteUnidad[$i] = $detalle->unidades_id;
+            $this->ajusteAlmacen[$i] = $detalle->almacen->codigo;
+            $this->classAlmacen[$i] = null;
+            $this->ajusteCantidad[$i] = $detalle->cantidad;
+            $i++;
+        }
     }
 
 }
