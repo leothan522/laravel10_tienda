@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('empresas_id')->unsigned();
             $table->string('codigo')->unique();
             $table->string('descripcion');
-            $table->date('fecha');
+            $table->dateTime('fecha');
             $table->text('auditoria')->nullable();
             $table->integer('estatus')->default(1);
             $table->foreign('empresas_id')->references('id')->on('empresas')->cascadeOnDelete();

@@ -30,18 +30,39 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>183</td>
-                <td>John Doe</td>
-                <td class="justify-content-end">
-                    <div class="btn-group">
-                        <button wire:click="{{--showArticulos({{ $articulo->id }})--}}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
+            @if(-$listarAjustes->isNotEmpty())
+                @foreach($listarAjustes as $ajuste)
+                    <tr>
+                        <td>{{ $ajuste->codigo }}</td>
+                        <td>{{ $ajuste->descripcion }}</td>
+                        <td class="justify-content-end">
+                            <div class="btn-group">
+                                <button wire:click="showAjustes({{ $ajuste->id }})" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            @else
+                <tr class="text-center">
+                    <td colspan="3">
+                        @if(/*$keyword*/false)
+                            <span>Sin resultados</span>
+                        @else
+                            <span>Sin registros guardados</span>
+                        @endif
+                    </td>
+                </tr>
+            @endif
             </tbody>
         </table>
+    </div>
+    <div class="overlay-wrapper" wire:loading wire:target="empresa_id, show, verAjustes, saveAjustes">
+        <div class="overlay">
+            <div class="spinner-border text-navy" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
     </div>
 </div>

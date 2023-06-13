@@ -45,7 +45,7 @@
 
     </div>
 
-    <div class="overlay-wrapper" wire:loading wire:target="empresa_id, setEstatus, show, verAjustes, limpiarAjustes, createAjuste, btnCancelar, btnEditar, btnContador, saveAjustes">
+    <div class="overlay-wrapper" wire:loading wire:target="empresa_id, setEstatus, show, verAjustes, limpiarAjustes, createAjuste, btnCancelar, btnEditar, btnContador, saveAjustes, showAjustes">
         <div class="overlay">
             <div class="spinner-border text-navy" role="status">
                 <span class="sr-only">Loading...</span>

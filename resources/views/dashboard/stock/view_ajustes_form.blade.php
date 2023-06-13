@@ -14,7 +14,7 @@
             <label>Fecha:</label>
         </div>
         <div class="col-md-3">
-            <input type="date" class="form-control form-control-sm @error('ajuste_fecha') is-invalid @enderror"
+            <input type="datetime-local" class="form-control form-control-sm @error('ajuste_fecha') is-invalid @enderror"
                    wire:model.defer="ajuste_fecha" @if(!$proximo_codigo['editable_fecha']) readonly @endif>
         </div>
     </div>

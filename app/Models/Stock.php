@@ -13,11 +13,13 @@ class Stock extends Model
     protected $fillable = [
         'empresas_id',
         'articulos_id',
+        'almacenes_id',
         'actual',
         'comprometido',
         'disponible',
         'vendido',
         'estatus',
+        'almacen_principal',
         'auditoria'
     ];
 

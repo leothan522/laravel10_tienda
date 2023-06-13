@@ -9,6 +9,7 @@ use App\Models\Almacen;
 use App\Models\Articulo;
 use App\Models\ArtUnid;
 use App\Models\Empresa;
+use App\Models\Parametro;
 use App\Models\Precio;
 use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +41,7 @@ class StockComponent extends Component
     public $ajusteTipo = [], $classTipo = [],
             $ajusteArticulo = [], $classArticulo = [], $ajusteDescripcion = [], $ajusteUnidad = [], $selectUnidad = [],
             $ajusteAlmacen = [], $classAlmacen = [], $ajusteCantidad = [],
-            $ajuste_tipos_id = [], $ajuste_articulos_id = [], $ajuste_almacenes_id = [],
+            $ajuste_tipos_id = [], $ajuste_articulos_id = [], $ajuste_almacenes_id = [], $ajuste_tipos_tipo = [], $ajuste_almacenes_tipo = [],
             $ajusteItem, $ajusteListarArticulos, $keywordAjustesArticulos;
     public $proximo_codigo;
 
@@ -59,12 +60,13 @@ class StockComponent extends Component
         $rowsAlmacenes = Almacen::count();
         $tiposAjuste = AjusTipo::buscar($this->keywordTiposAjuste)->orderBy('codigo', 'ASC')->paginate($paginate);
         $rowsTiposAjuste = AjusTipo::count();
-
+        $ajustes = Ajuste::where('empresas_id', $this->empresa_id)->orderBy('codigo', 'desc')->paginate($paginate);
         return view('livewire.dashboard.stock-component')
             ->with('listarAlmacenes', $almacenes)
             ->with('rowsAlmacenes', $rowsAlmacenes)
             ->with('listarTiposAjuste', $tiposAjuste)
-            ->with('rowsTiposAjuste', $rowsTiposAjuste);
+            ->with('rowsTiposAjuste', $rowsTiposAjuste)
+            ->with('listarAjustes', $ajustes);
     }
 
     public function getEmpresaDefault()
@@ -107,6 +109,18 @@ class StockComponent extends Component
         $this->listarEmpresas = dataSelect2($array);
     }
 
+    public function changeEmpresa()
+    {
+        $this->limpiarAjustes();
+        $this->limpiarTiposAjuste();
+        $this->limpiarAlmacenes();
+        $this->reset([
+            'ajuste_id'
+        ]);
+    }
+
+    //************************************ STOCK **************************************************
+
     public function show()
     {
         $empresa = Empresa::find($this->empresa_id);
@@ -125,15 +139,6 @@ class StockComponent extends Component
         });
         $this->listarStock = $stock;
     }
-
-    public function changeEmpresa()
-    {
-        $this->limpiarAjustes();
-        $this->limpiarTiposAjuste();
-        $this->limpiarAlmacenes();
-    }
-
-    //************************************ STOCK **************************************************
 
     public function setEstatus($id, $modal = false)
     {
@@ -379,6 +384,7 @@ class StockComponent extends Component
     public function verAjustes()
     {
         if ($this->view == "stock"){
+            $this->limpiarAjustes();
             $this->view = "ajustes";
         }else{
             $this->view = "stock";
@@ -388,11 +394,11 @@ class StockComponent extends Component
     public function limpiarAjustes()
     {
         $this->reset([
-            'ajuste_id', 'view_ajustes', 'footer', 'new_ajuste', 'btn_nuevo', 'btn_editar', 'btn_cancelar',
+            'view_ajustes', 'footer', 'new_ajuste', 'btn_nuevo', 'btn_editar', 'btn_cancelar',
             'ajuste_contador', 'ajuste_codigo', 'ajuste_descripcion', 'ajuste_fecha',
             'ajusteTipo', 'classTipo', 'ajusteArticulo', 'classArticulo', 'ajusteDescripcion', 'ajusteUnidad',
             'selectUnidad', 'ajusteAlmacen', 'ajusteCantidad', 'ajusteListarArticulos', 'keywordAjustesArticulos', 'ajusteItem',
-            'ajuste_tipos_id', 'ajuste_articulos_id', 'ajuste_almacenes_id'
+            'ajuste_tipos_id', 'ajuste_articulos_id', 'ajuste_almacenes_id', 'tipos_ajuste_tipo', 'ajuste_almacenes_tipo'
         ]);
         $this->resetErrorBag();
     }
@@ -416,15 +422,14 @@ class StockComponent extends Component
         $this->ajusteAlmacen[0] = null;
         $this->classAlmacen[0] = null;
         $this->ajusteCantidad[0] = null;
-        $this->ajuste_fecha = date("Y-m-d");
     }
 
     public function btnCancelar()
     {
+        $this->limpiarAjustes();
         if ($this->ajuste_id){
             //show ajuste
-        }else{
-            $this->limpiarAjustes();
+            $this->showAjustes($this->ajuste_id);
         }
     }
 
@@ -468,7 +473,7 @@ class StockComponent extends Component
     protected function rules(){
         return [
             'ajuste_codigo'         =>  ['nullable', 'min:4', 'alpha_num:ascii', Rule::unique('ajustes', 'codigo')->ignore($this->ajuste_id)],
-            'ajuste_fecha'          => 'required',
+            'ajuste_fecha'          => 'nullable',
             'ajuste_descripcion'    => 'required|min:4',
             'ajusteTipo.*'          => ['required', Rule::exists('ajustes_tipos', 'codigo')],
             'ajusteArticulo.*'      => ['required', Rule::exists('articulos', 'codigo')],
@@ -487,27 +492,102 @@ class StockComponent extends Component
             $this->ajuste_codigo = $this->proximo_codigo['formato'] . cerosIzquierda($this->proximo_codigo['proximo'], numSizeCodigo());
         }
 
-        $ajuste = new Ajuste();
-        $ajuste->empresas_id = $this->empresa_id;
-        $ajuste->codigo = $this->ajuste_codigo;
-        $ajuste->descripcion = $this->ajuste_descripcion;
-        $ajuste->fecha = $this->ajuste_fecha;
-        $ajuste->save();
+        if (empty($this->ajuste_fecha)){
+            $this->ajuste_fecha = date("Y-m-d H:i");
+        }
+
+        $procecar = true;
+        $html = null;
 
         for ($i = 0; $i < $this->ajuste_contador; $i++){
-            $detalles = new AjusDetalle();
-            $detalles->ajustes_id = $ajuste->id;
-            $detalles->tipos_id = $this->ajuste_tipos_id[$i];
-            $detalles->articulos_id = $this->ajuste_articulos_id[$i];
-            $detalles->almacenes_id = $this->ajuste_almacenes_id[$i];
-            $detalles->unidades_id = $this->ajusteUnidad[$i];
-            $detalles->cantidad = $this->ajusteCantidad[$i];
-            $detalles->save();
+            if ($this->ajuste_tipos_tipo[$i] == 2){
+                $stock = Stock::where('empresas_id', $this->empresa_id)
+                    ->where('articulos_id', $this->ajuste_articulos_id[$i])
+                    ->where('almacenes_id', $this->ajuste_almacenes_id[$i])->first();
+                if ($stock){
+                    $disponible = $stock->disponible;
+                    if ($this->ajusteCantidad[$i] > $disponible){
+                        $procecar = false;
+                        $html .= 'Para <strong>'.formatoMillares($this->ajusteCantidad[$i], 3).'</strong> del articulo <strong>'.$this->ajusteArticulo[$i].'</strong>. el stock actual es <strong>'.formatoMillares($disponible, 3).'</strong><br>';
+                        $this->addError('ajusteCantidad.'.$i, 'error');
+                    }
+                }else{
+                    $procecar = false;
+                    $html .= 'Para <strong>'.formatoMillares($this->ajusteCantidad[$i],3).'</strong> del articulo <strong>'.$this->ajusteArticulo[$i].'</strong>. el stock actual es <strong>0,000</strong><br>';
+                    $this->addError('ajusteCantidad.'.$i, 'error');
+                }
+            }
+        }
+
+        if ($procecar){
+
+            $ajuste = new Ajuste();
+            $ajuste->empresas_id = $this->empresa_id;
+            $ajuste->codigo = $this->ajuste_codigo;
+            $ajuste->descripcion = $this->ajuste_descripcion;
+            $ajuste->fecha = $this->ajuste_fecha;
+            $ajuste->save();
+
+            $parametro = Parametro::find($this->proximo_codigo['id']);
+            $parametro->valor++;
+            $parametro->save();
+
+            for ($i = 0; $i < $this->ajuste_contador; $i++){
+                $detalles = new AjusDetalle();
+                $detalles->ajustes_id = $ajuste->id;
+                $detalles->tipos_id = $this->ajuste_tipos_id[$i];
+                $detalles->articulos_id = $this->ajuste_articulos_id[$i];
+                $detalles->almacenes_id = $this->ajuste_almacenes_id[$i];
+                $detalles->unidades_id = $this->ajusteUnidad[$i];
+                $detalles->cantidad = $this->ajusteCantidad[$i];
+                $detalles->save();
+                $exite = Stock::where('empresas_id', $this->empresa_id)
+                    ->where('articulos_id', $this->ajuste_articulos_id[$i])
+                    ->where('almacenes_id', $this->ajuste_almacenes_id[$i])->first();
+                if ($exite){
+                    //edito
+                    $stock = Stock::find($exite->id);
+                    $compometido = $stock->comprometido;
+                    $disponible = $stock->disponible;
+                    if ($this->ajuste_tipos_tipo[$i] == 1){
+                        //sumo entrada
+                        $stock->disponible = $disponible + $this->ajusteCantidad[$i];
+                    }else{
+                        //resto salida
+                        $stock->disponible = $disponible - $this->ajusteCantidad[$i];
+                    }
+                    $stock->actual = $compometido + $stock->disponible;
+                    $stock->save();
+                }else{
+                    //nuevo
+                    $stock = new Stock();
+                    $stock->empresas_id = $this->empresa_id;
+                    $stock->articulos_id = $this->ajuste_articulos_id[$i];
+                    $stock->almacenes_id = $this->ajuste_almacenes_id[$i];
+                    $stock->actual = $this->ajusteCantidad[$i];
+                    $stock->comprometido = 0;
+                    $stock->disponible = $this->ajusteCantidad[$i];
+                    $stock->vendido = 0;
+                    $stock->almacen_principal = $this->ajuste_almacenes_tipo[$i];
+                    $stock->save();
+                }
+            }
+            $this->showAjustes($ajuste->id);
+            $this->alert('success', 'Ajuste Guardado Correctamente.');
+        }else{
+            $this->alert('warning', '¡Stock Insuficiente!', [
+                'position' => 'center',
+                'timer' => '',
+                'toast' => false,
+                'html' => $html,
+                'showConfirmButton' => true,
+                'onConfirmed' => '',
+                'confirmButtonText' => 'OK',
+            ]);
         }
 
 
 
-        $this->alert('success', 'Hola');
     }
 
     public function updatedAjusteTipo()
@@ -517,11 +597,13 @@ class StockComponent extends Component
                 $tipo = AjusTipo::where('codigo', $value)->first();
                 if ($tipo){
                     $this->ajuste_tipos_id[$key] = $tipo->id;
+                    $this->ajuste_tipos_tipo[$key] = $tipo->tipo;
                     $this->classTipo[$key] = "is-valid";
                     $this->resetErrorBag('ajusteTipo.'.$key);
                 }else{
                     $this->classTipo[$key] = "is-invalid";
                     $this->ajuste_tipos_id[$key] = null;
+                    $this->ajuste_tipos_tipo[$key] = null;
                 }
             }
         }
@@ -573,9 +655,11 @@ class StockComponent extends Component
                 if ($almacen){
                     $this->resetErrorBag('ajusteAlmacen.'.$key);
                     $this->ajuste_almacenes_id[$key] = $almacen->id;
+                    $this->ajuste_almacenes_tipo[$key] = $almacen->tipo;
                     $this->classAlmacen[$key] = "is-valid";
                 }else{
                     $this->ajuste_almacenes_id[$key] = null;
+                    $this->ajuste_almacenes_tipo[$key] = null;
                     $this->classAlmacen[$key] = "is-invalid";
                 }
             }
@@ -596,6 +680,13 @@ class StockComponent extends Component
     {
          $this->ajusteArticulo[$this->ajusteItem] = $codigo;
          $this->updatedAjusteArticulo();
+    }
+
+    public function showAjustes($id)
+    {
+        $this->limpiarAjustes();
+        $this->ajuste_id = $id;
+        $this->btn_editar = true;
     }
 
 }
