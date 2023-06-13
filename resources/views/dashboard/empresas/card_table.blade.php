@@ -21,7 +21,7 @@
             <tbody>
             @if($tiendas->isNotEmpty())
                 @foreach($tiendas as $tienda)
-                    <tr class="@if($empresa_id == $tienda->id) table-primary @endif">
+                    <tr class="@if($empresa_id == $tienda->id) table-warning @endif">
                         <td>
                             <button type="button" class="btn @if($empresa_id == $tienda->id) text-bold @endif"
                                     wire:click="show({{ $tienda->id }})">

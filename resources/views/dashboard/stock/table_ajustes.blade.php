@@ -10,13 +10,9 @@
             @endif
         </h3>
 
-        <div class="card-tools">
+        <div class="card-tools pt-1">
             <ul class="pagination pagination-sm float-right">
-                <li class="page-item"><a class="page-link" href="#">«</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">»</a></li>
+                {{ $listarAjustes->links() }}
             </ul>
         </div>
     </div>
@@ -30,9 +26,9 @@
             </tr>
             </thead>
             <tbody>
-            @if(-$listarAjustes->isNotEmpty())
+            @if($listarAjustes->isNotEmpty())
                 @foreach($listarAjustes as $ajuste)
-                    <tr>
+                    <tr class="@if($ajuste_id == $ajuste->id) text-bold table-warning @endif">
                         <td>{{ $ajuste->codigo }}</td>
                         <td>{{ $ajuste->descripcion }}</td>
                         <td class="justify-content-end">

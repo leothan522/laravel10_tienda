@@ -87,7 +87,7 @@
             Para que este Modulo este <span class="text-bold text-navy">Activo</span>, es Necesario previmente crear una
             <span class="text-bold @if($modulo_empresa) text-success @else text-danger @endif">Tienda</span>,
             un <span
-                    class="text-bold @if(/*$count_almacenes*/ false) text-success @else text-danger @endif">Almacen</span>
+                    class="text-bold @if(/*$count_almacenes*/ true) text-success @else text-danger @endif">Almacen</span>
             y Tener Al menos un <span class="text-bold @if($modulo_articulo) text-success @else text-danger @endif">Articulo</span>
             Registrado.
         </div>

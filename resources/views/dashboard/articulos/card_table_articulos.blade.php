@@ -10,7 +10,7 @@
             @endif
         </h3>
 
-        <div class="card-tools">
+        <div class="card-tools pt-1">
             <ul class="pagination pagination-sm float-right">
                 {{ $listarArticulos->links() }}
             </ul>
@@ -28,7 +28,7 @@
             <tbody>
             @if($listarArticulos->isNotEmpty())
                 @foreach($listarArticulos as $articulo)
-                    <tr>
+                    <tr class="@if($articulo_id == $articulo->id) text-bold table-warning @endif">
                         <td>{{ $articulo->codigo }}</td>
                         <td>{{ $articulo->descripcion }}</td>
                         <td class="justify-content-end">

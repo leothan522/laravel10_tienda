@@ -4,13 +4,13 @@
             <label>Código:</label>
         </div>
         <div class="col-md-5 mb-2">
-            <span class="border badge-pill">hola</span>
+            <span class="border badge-pill">{{ $ajuste_codigo }}</span>
         </div>
         <div class="col-md-2 text-md-right">
             <label>Fecha:</label>
         </div>
         <div class="col-md-3">
-            <span class="border badge-pill">21/12/2023</span>
+            <span class="border badge-pill">{{ verFecha($ajuste_fecha, 'd/m/Y h:i:s a') }}</span>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
             <label>Descripción:</label>
         </div>
         <div class="col-md-10">
-            <span class="border badge-pill">ajuste por inventario inicial</span>
+            <span class="border badge-pill">{{ $ajuste_descripcion }}</span>
         </div>
     </div>
 
@@ -49,104 +49,30 @@
                                         <th>Almacen</th>
                                         <th>Unidad</th>
                                         <th class="text-right">Cantidad</th>
-                                        <th style="width: 5%;">&nbsp;</th>
                                     </tr>
                                     </thead>
-                                    {{--<tbody>
+                                    <tbody>
                                     @php($i = 0)
-                                    @foreach($listarPrecios as $precio)
-                                        @php($i++)
-                                        @if(comprobarAccesoEmpresa($precio->empresa->permisos, auth()->id()))
+                                    @if($listarDetalles)
+                                        @foreach($listarDetalles as $detalle)
                                             <tr>
-                                                <th scope="row">
-                                                    <span>{{ $i }}</span>
-                                                </th>
-                                                <td>
-                                                    <span>{{ $precio->empresa->nombre }}</span>
-                                                </td>
-                                                <td>
-                                                    <span>{{ $precio->moneda }}</span>
-                                                </td>
+                                                <td>{{ $i + 1 }}</td>
+                                                <td>{{ $detalle->tipo->codigo }}</td>
+                                                <td>{{ $detalle->articulo->codigo }}</td>
+                                                <td>{{ $detalle->articulo->descripcion }}</td>
+                                                <td>{{ $detalle->almacen->codigo }}</td>
+                                                <td>{{ $detalle->unidad->codigo }}</td>
                                                 <td class="text-right">
-                                                    <span> {{ formatoMillares($precio->precio, 2) }}</span>
-                                                </td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <button type="button" wire:click="editarPrecio({{ $precio->id }})" class="btn btn-primary btn-sm">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                    </div>
+                                                    @if($detalle->tipo->tipo == 2)
+                                                        <span>-</span>
+                                                    @endif
+                                                    {{ formatoMillares($detalle->cantidad, 3) }}
                                                 </td>
                                             </tr>
-                                        @endif
-                                    @endforeach
-
-                                    <tr class="table-sm @if(!$precio_form) d-none @endif">
-                                        <td colspan="5">&nbsp;</td>
-                                    </tr>
-
-                                    <tr class="table-primary @if(!$precio_form) d-none @endif">
-                                        <th scope="row">
-                                <span>
-                                    @if($precio_id)
-                                        {{ $precio_id }}
-                                    @else
-                                        {{ $listarPrecios->count() + 1  }}
+                                            @php($i++)
+                                        @endforeach
                                     @endif
-                                </span>
-                                            <input type="hidden" wire:model="precio_id" />
-                                        </th>
-                                        <td>
-                                            <div class="form-group">
-                                                <div wire:ignore>
-                                                    <div class="input-group">
-                                                        <select id="select_precios_empresas"></select>
-                                                    </div>
-                                                </div>
-                                                @error('precio_empresas_id')
-                                                <span class="col-sm-12 text-sm text-bold text-danger">
-                                        <i class="icon fas fa-exclamation-triangle"></i>
-                                        {{ $message }}
-                                    </span>
-                                                @enderror
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group">
-                                                <select class="custom-select" wire:model.defer="precio_moneda">
-                                                    <option value="">Seleccione</option>
-                                                    <option value="Bolivares">Bolivares</option>
-                                                    <option value="Dolares">Dolares</option>
-                                                </select>
-                                                @error('precio_moneda')
-                                                <span class="col-sm-12 text-sm text-bold text-danger">
-                                        <i class="icon fas fa-exclamation-triangle"></i>
-                                        {{ $message }}
-                                    </span>
-                                                @enderror
-                                            </div>
-                                        </td>
-                                        <td class="text-right">
-                                            <div class="form-group">
-                                                <input type="number" class="form-control" wire:model.defer="precio_precio" placeholder="Precio" min="0.01" step=".01">
-                                                @error('precio_precio')
-                                                <span class="col-sm-12 text-sm text-bold text-danger">
-                                        <i class="icon fas fa-exclamation-triangle"></i>
-                                        {{ $message }}
-                                    </span>
-                                                @enderror
-                                            </div>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="btn-group">
-                                                <button type="submit" class="btn btn-success btn-sm">
-                                                    <i class="fas fa-save"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    </tbody>--}}
+                                    </tbody>
                                 </table>
                             </form>
                         </div>

@@ -27,9 +27,24 @@ class AjusDetalle extends Model
         return $this->belongsTo(Ajuste::class, 'ajustes_id', 'id');
     }
 
-    public function tipos(): BelongsTo
+    public function tipo(): BelongsTo
     {
         return $this->belongsTo(AjusTipo::class, 'tipos_id', 'id');
+    }
+
+    public function articulo(): BelongsTo
+    {
+        return $this->belongsTo(Articulo::class, 'articulos_id', 'id');
+    }
+
+    public function almacen(): BelongsTo
+    {
+        return $this->belongsTo(Almacen::class, 'almacenes_id', 'id');
+    }
+
+    public function unidad(): BelongsTo
+    {
+        return $this->belongsTo(Unidad::class, 'almacenes_id', 'id');
     }
 
 }

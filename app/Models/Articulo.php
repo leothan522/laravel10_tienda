@@ -33,6 +33,13 @@ class Articulo extends Model
         'banner'
     ];
 
+    public function scopeBuscar($query, $keyword)
+    {
+        return $query->where('codigo', 'LIKE', "%$keyword%")
+            ->orWhere('descripcion', 'LIKE', "%$keyword%")
+            ;
+    }
+
     public function categoria(): BelongsTo
     {
         return $this->belongsTo(Categoria::class, 'categorias_id', 'id');
@@ -83,11 +90,11 @@ class Articulo extends Model
         return $this->hasMany(Stock::class, 'articulos_id', 'id');
     }
 
-    public function scopeBuscar($query, $keyword)
+    public function ajusdetalles(): HasMany
     {
-        return $query->where('codigo', 'LIKE', "%$keyword%")
-            ->orWhere('descripcion', 'LIKE', "%$keyword%")
-            ;
+        return $this->hasMany(AjusDetalle::class, 'articulos_id', 'id');
     }
+
+
 
 }

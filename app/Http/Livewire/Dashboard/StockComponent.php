@@ -37,7 +37,7 @@ class StockComponent extends Component
     public $tipos_ajuste_id, $tipos_ajuste_codigo, $tipos_ajuste_nombre, $tipos_ajuste_tipo = 1, $keywordTiposAjuste;
     public $view = "stock";
     public $view_ajustes = 'show', $footer = false, $new_ajuste = false, $btn_nuevo = true, $btn_editar = false, $btn_cancelar = false;
-    public $ajuste_id, $ajuste_codigo, $ajuste_fecha, $ajuste_descripcion, $ajuste_contador = 1;
+    public $ajuste_id, $ajuste_codigo, $ajuste_fecha, $ajuste_descripcion, $ajuste_contador = 1, $listarDetalles;
     public $ajusteTipo = [], $classTipo = [],
             $ajusteArticulo = [], $classArticulo = [], $ajusteDescripcion = [], $ajusteUnidad = [], $selectUnidad = [],
             $ajusteAlmacen = [], $classAlmacen = [], $ajusteCantidad = [],
@@ -384,7 +384,11 @@ class StockComponent extends Component
     public function verAjustes()
     {
         if ($this->view == "stock"){
-            $this->limpiarAjustes();
+            if ($this->ajuste_id){
+                $this->showAjustes($this->ajuste_id);
+            }else{
+                $this->limpiarAjustes();
+            }
             $this->view = "ajustes";
         }else{
             $this->view = "stock";
@@ -398,7 +402,8 @@ class StockComponent extends Component
             'ajuste_contador', 'ajuste_codigo', 'ajuste_descripcion', 'ajuste_fecha',
             'ajusteTipo', 'classTipo', 'ajusteArticulo', 'classArticulo', 'ajusteDescripcion', 'ajusteUnidad',
             'selectUnidad', 'ajusteAlmacen', 'ajusteCantidad', 'ajusteListarArticulos', 'keywordAjustesArticulos', 'ajusteItem',
-            'ajuste_tipos_id', 'ajuste_articulos_id', 'ajuste_almacenes_id', 'tipos_ajuste_tipo', 'ajuste_almacenes_tipo'
+            'ajuste_tipos_id', 'ajuste_articulos_id', 'ajuste_almacenes_id', 'tipos_ajuste_tipo', 'ajuste_almacenes_tipo',
+            'listarDetalles'
         ]);
         $this->resetErrorBag();
     }
@@ -493,7 +498,7 @@ class StockComponent extends Component
         }
 
         if (empty($this->ajuste_fecha)){
-            $this->ajuste_fecha = date("Y-m-d H:i");
+            $this->ajuste_fecha = date("Y-m-d H:i:s");
         }
 
         $procecar = true;
@@ -687,6 +692,12 @@ class StockComponent extends Component
         $this->limpiarAjustes();
         $this->ajuste_id = $id;
         $this->btn_editar = true;
+        $this->footer = true;
+        $ajuste = Ajuste::find($this->ajuste_id);
+        $this->ajuste_codigo = $ajuste->codigo;
+        $this->ajuste_fecha = $ajuste->fecha;
+        $this->ajuste_descripcion = $ajuste->descripcion;
+        $this->listarDetalles = AjusDetalle::where('ajustes_id', $this->ajuste_id)->get();
     }
 
 }

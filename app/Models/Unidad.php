@@ -33,4 +33,9 @@ class Unidad extends Model
         return $this->hasMany(ArtUnid::class, 'unidades_id', 'id');
     }
 
+    public function ajusdetalltes(): HasMany
+    {
+        return $this->hasMany(AjusDetalle::class, 'unidades_id', 'id');
+    }
+
 }
