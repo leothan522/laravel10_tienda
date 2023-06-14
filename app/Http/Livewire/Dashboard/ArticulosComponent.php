@@ -36,7 +36,8 @@ class ArticulosComponent extends Component
         'limpiarTipos', 'confirmedTipos',
         'setSelectFormArticulos', 'tipoSeleccionado', 'categoriaSeleccionada', 'procedenciaSeleccionada',
         'tributoSeleccionado', 'setSelectFormUnidades', 'unidadSeleccionada', 'secundariaSeleccionada',
-        'buscar', 'confirmed', 'setSelectFormEmpresas', 'empresaSeleccionada'
+        'buscar', 'confirmed', 'setSelectFormEmpresas', 'empresaSeleccionada', 'setSelectFormEditar',
+        'setSelectFormEditUnd', 'setSelectPrecioEmpresas'
     ];
 
     public $categoria_id, $categoria_codigo, $categoria_nombre, $categoriaPhoto, $keywordCategorias;
@@ -688,7 +689,7 @@ class ArticulosComponent extends Component
             'articulo_referencia', 'articulo_adicional', 'articulo_decimales', 'articulo_estatus', 'articulo_fecha',
             'articulo_tipos_id', 'articulo_categorias_id', 'articulo_procedencias_id', 'articulo_tributarios_id',
             'articulo_unidades_id', 'articulo_categoria_code', 'articulo_procedencia_code',
-            'articulo_unidad_code', 'btn_nuevo', 'btn_cancelar', 'footer', 'new_articulo', 'keyword',
+            'articulo_unidad_code', 'btn_nuevo', 'btn_cancelar', 'footer', 'new_articulo',
             'artund_unidades_id', 'secundaria'
         ]);
     }
@@ -764,6 +765,7 @@ class ArticulosComponent extends Component
         $articulo->adicional = $this->articulo_adicional;
 
         $articulo->save();
+        $this->reset('keyword');
         $this->showArticulos($articulo->id);
         if ($unidad){
             $this->btnUnidad();
@@ -902,7 +904,7 @@ class ArticulosComponent extends Component
         $this->secundaria = false;
         $this->btn_und_form = true;
         $this->btn_und_editar = false;
-        $this->selectFormUnidades();
+        $this->selectFormUnidades(true);
     }
 
     public function saveUnidades()
@@ -1443,9 +1445,20 @@ class ArticulosComponent extends Component
         $precio->unidades_id = $this->precio_unidad;
         $precio->moneda = $this->precio_moneda;
         $precio->precio = $this->precio_precio;
-        $precio->save();
 
-        $this->btnPrecios();
+        $existe = Precio::where('articulos_id', $this->articulo_id)
+                            ->where('empresas_id', $this->precio_empresas_id)
+                            ->where('unidades_id', $this->precio_unidad)
+                            ->where('id', '!=', $this->precio_id)
+                            ->first();
+
+        if ($existe){
+            $type = 'warning';
+            $message = 'El precio para esa UND ya existe.';
+        }else{
+            $precio->save();
+            $this->btnPrecios();
+        }
 
         $this->alert(
             $type,
@@ -1464,6 +1477,15 @@ class ArticulosComponent extends Component
         $this->precio_precio = $precio->precio;
         $this->precio_unidad = $precio->unidades_id;
         $this->precio_form = true;
+        $this->emit('setSelectPrecioEmpresas', $this->precio_empresas_id);
+    }
+
+    public function borrarPrecio($id)
+    {
+        $precio = Precio::find($id);
+        $precio->delete();
+        $this->btnPrecios();
+        $this->alert('success', 'Precio Eliminado.');
     }
 
 
@@ -1484,19 +1506,26 @@ class ArticulosComponent extends Component
 
     // ************************* Extras ********************************************
 
-    public function selectFormArticulos()
+    public function selectFormArticulos($editar = false)
     {
         $categorias = dataSelect2(Categoria::orderBy('nombre', 'ASC')->get());
         $tipos = dataSelect2(TipoArticulo::get());
         $procedencias = dataSelect2(Procedencia::get());
         $tributarios = dataSelect2(Tributario::get());
         $this->emit('setSelectFormArticulos', $tipos, $categorias, $procedencias, $tributarios);
+        if ($editar){
+            $this->emit('setSelectFormEditar', $this->articulo_tipos_id, $this->articulo_categorias_id, $this->articulo_procedencias_id, $this->articulo_tributarios_id);
+        }
     }
 
-    public function selectFormUnidades()
+    public function selectFormUnidades($editar = false)
     {
         $unidades = dataSelect2(Unidad::get());
         $this->emit('setSelectFormUnidades', $unidades);
+        if ($editar){
+            $articulo = Articulo::find($this->articulo_id);
+            $this->emit('setSelectFormEditUnd', $articulo->unidades_id);
+        }
     }
 
     public function selectFormEmpresas()
@@ -1531,7 +1560,7 @@ class ArticulosComponent extends Component
         $this->btn_editar = false;
         $this->btn_cancelar = true;
         $this->footer = false;
-        $this->selectFormArticulos();
+        $this->selectFormArticulos(true);
     }
 
     public function btnActivoInactivo()
@@ -1558,12 +1587,27 @@ class ArticulosComponent extends Component
         //select categorias formulario articulos
     }
 
+    public function setSelectFormEditar($tipos, $categorias, $procedencias, $tributarios)
+    {
+        //select categorias formulario articulos
+    }
+
     public function setSelectFormUnidades($unidades)
     {
         //select categorias formulario articulos
     }
 
+    public function setSelectFormEditUnd($unidades)
+    {
+        //select categorias formulario articulos
+    }
+
     public function setSelectFormEmpresas($empresas)
+    {
+        //select empresas formulario precios
+    }
+
+    public function setSelectPrecioEmpresas($empresas)
     {
         //select empresas formulario precios
     }
@@ -1606,6 +1650,12 @@ class ArticulosComponent extends Component
     public function buscar($keyword)
     {
         $this->keyword = $keyword;
+    }
+
+    public function cerrarBusqueda()
+    {
+        $this->reset('keyword');
+        $this->limpiarArticulos();
     }
 
 

@@ -56,7 +56,7 @@
                                 @if(comprobarAccesoEmpresa($precio->empresa->permisos, auth()->id()))
                                 <tr>
                                     <th scope="row">
-                                        <span>{{ $i }}</span>
+                                        <span>{{ $precio->id }}</span>
                                     </th>
                                     <td>
                                         <span>{{ $precio->empresa->nombre }}</span>
@@ -72,8 +72,11 @@
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <button type="button" wire:click="editarPrecio({{ $precio->id }})" class="btn btn-primary btn-sm">
+                                            <button type="button" wire:click="editarPrecio({{ $precio->id }})" class="btn btn-primary btn-xs">
                                                 <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="button" wire:click="borrarPrecio({{ $precio->id }})" class="btn btn-primary btn-xs">
+                                                <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </div>
                                     </td>
@@ -82,7 +85,7 @@
                             @endforeach
 
                             <tr class="table-sm @if(!$precio_form) d-none @endif">
-                                <td colspan="5">&nbsp;</td>
+                                <td colspan="6">&nbsp;</td>
                             </tr>
 
                             <tr class="table-primary @if(!$precio_form) d-none @endif">
@@ -91,7 +94,8 @@
                                         @if($precio_id)
                                             {{ $precio_id }}
                                         @else
-                                            {{ $listarPrecios->count() + 1  }}
+                                            {{--{{ $listarPrecios->count() + 1  }}--}}
+                                            N.
                                         @endif
                                     </span>
                                     <input type="hidden" wire:model="precio_id" />

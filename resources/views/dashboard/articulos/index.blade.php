@@ -108,13 +108,36 @@
             select_2('select_articulos_tributarios', tributarios, 3);
         });
 
+        function selectEditar(id, valor)
+        {
+            $("#" + id).val(valor);
+            $("#" + id).trigger('change');
+        }
+
+        Livewire.on('setSelectFormEditar', (tipos, categorias, procedencias, tributarios) => {
+            selectEditar('select_articulos_tipos', tipos);
+            selectEditar('select_articulos_categorias', categorias);
+            selectEditar('select_articulos_procedencias', procedencias);
+            selectEditar('select_articulos_tributarios', tributarios);
+        });
+
         Livewire.on('setSelectFormUnidades', unidades =>{
             select_2('select_articulos_unidades', unidades, 4);
             select_2('select_unidades_artund', unidades, 5);
         });
 
+        Livewire.on('setSelectFormEditUnd', unidades =>{
+            $('#select_articulos_unidades').val(unidades);
+            $('#select_articulos_unidades').trigger('change');
+        });
+
         Livewire.on('setSelectFormEmpresas', empresas => {
             select_2('select_precios_empresas', empresas, 6)
+        });
+
+        Livewire.on('setSelectPrecioEmpresas', empresas => {
+            $('#select_precios_empresas').val(empresas);
+            $('#select_precios_empresas').trigger('change');
         });
 
         function imgPrincipal()
@@ -127,6 +150,18 @@
         {
             let input = document.getElementById('img_Galeria_' + i);
             input.click();
+        }
+
+        function search(){
+            let input = $("#navbarSearch");
+            let keyword  = input.val();
+            if (keyword.length > 0){
+                input.blur();
+                //alert('Falta vincular con el componente Livewire');
+                $('.cargar_buscar').removeClass('d-none');
+                Livewire.emit('buscar', keyword);
+            }
+            return false;
         }
 
         console.log('Hi!');

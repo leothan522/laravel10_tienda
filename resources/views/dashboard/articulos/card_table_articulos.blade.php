@@ -3,7 +3,7 @@
         <h3 class="card-title">
             @if($keyword)
                 Resultados de la Búsqueda { <b class="text-danger">{{ $keyword }}</b> }
-                <button class="btn btn-tool text-danger" wire:click="limpiarArticulos"><i class="fas fa-times-circle"></i>
+                <button class="btn btn-tool text-danger" wire:click="cerrarBusqueda"><i class="fas fa-times-circle"></i>
                 </button>
             @else
                 Artículos Registrados [ <b class="text-navy">{{ $rowsArticulos }}</b> ]
@@ -54,4 +54,22 @@
             </tbody>
         </table>
     </div>
+
+    <div class="overlay-wrapper" wire:loading
+         wire:target="cerrarBusqueda, saveArticulos, destroy, confirmed">
+        <div class="overlay">
+            <div class="spinner-border text-navy" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-wrapper d-none cargar_buscar">
+        <div class="overlay">
+            <div class="spinner-border text-navy" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+
 </div>

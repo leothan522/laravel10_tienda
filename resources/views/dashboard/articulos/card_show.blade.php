@@ -65,6 +65,25 @@
 
     </div>
 
-    {!! verSpinner() !!}
+    <div class="overlay-wrapper" wire:loading
+         wire:target="limpiarCategorias, limpiarUnidades, limpiarProcedencias, limpiarTributarios, limpiarTipos, limpiarArticulos,
+         create, saveArticulos, showArticulos, destroy, confirmed, btnUnidad, btnEditarUnidad, saveUnidades, btnEliminarUnidad, btnImagen
+         updatedPrincipalPhoto, saveImagen, btnBorrarImagen, btnBorrarGaleria, updatedPhoto1, updatedPhoto2, updatedPhoto3, updatedPhoto4,
+         updatedPhoto5, updatedPhoto6, btnIdentificadores, saveIdentificadores, editarIdentificador, borrarIdentificador, btnPrecios,
+         savePrecios, editarPrecio, btnExistencias, btnCancelar, btnEditar, btnActivoInactivo, borrarPrecio, cerrarBusqueda">
+        <div class="overlay">
+            <div class="spinner-border text-navy" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-wrapper d-none cargar_buscar">
+        <div class="overlay">
+            <div class="spinner-border text-navy" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
 
 </div>
