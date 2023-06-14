@@ -14,6 +14,7 @@ class Stock extends Model
         'empresas_id',
         'articulos_id',
         'almacenes_id',
+        'unidades_id',
         'actual',
         'comprometido',
         'disponible',
@@ -22,6 +23,12 @@ class Stock extends Model
         'almacen_principal',
         'auditoria'
     ];
+
+    /*public function scopeBuscar($query, $keyword)
+    {
+        return $query->where('id', "%$keyword%")
+            ;
+    }*/
 
     public function empresa(): BelongsTo
     {
@@ -33,13 +40,14 @@ class Stock extends Model
         return $this->belongsTo(Articulo::class, 'articulos_id', 'id');
     }
 
-
-
-    /*public function scopeBuscar($query, $keyword)
+    public function almacen(): BelongsTo
     {
-        return $query->where('id', "%$keyword%")
-            ;
-    }*/
+        return $this->belongsTo(Almacen::class, 'almacenes_id', 'id');
+    }
 
+    public function unidad(): BelongsTo
+    {
+        return $this->belongsTo(Unidad::class, 'unidades_id', 'id');
+    }
 
 }

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->bigInteger('empresas_id')->unsigned();
             $table->bigInteger('articulos_id')->unsigned();
             $table->bigInteger('almacenes_id')->unsigned();
+            $table->bigInteger('unidades_id')->unsigned();
             $table->decimal('actual', 12,3)->nullable();
             $table->decimal('comprometido', 12,3)->nullable();
             $table->decimal('disponible', 12,3)->nullable();
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->foreign('empresas_id')->references('id')->on('empresas')->cascadeOnDelete();
             $table->foreign('articulos_id')->references('id')->on('articulos')->cascadeOnDelete();
             $table->foreign('almacenes_id')->references('id')->on('almacenes')->cascadeOnDelete();
+            $table->foreign('unidades_id')->references('id')->on('unidades')->cascadeOnDelete();
             $table->timestamps();
         });
     }

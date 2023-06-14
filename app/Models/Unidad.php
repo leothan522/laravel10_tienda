@@ -38,4 +38,14 @@ class Unidad extends Model
         return $this->hasMany(AjusDetalle::class, 'unidades_id', 'id');
     }
 
+    public function stock(): HasMany
+    {
+        return $this->hasMany(Stock::class, 'unidades_id', 'id');
+    }
+
+    public function precios(): HasMany
+    {
+        return $this->hasMany(Precio::class, 'unidades_id', 'id');
+    }
+
 }

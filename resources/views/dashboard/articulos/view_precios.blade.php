@@ -42,7 +42,8 @@
                         <thead>
                                 <tr class="text-navy">
                                     <th style="width: 5%">ID</th>
-                                    <th style="width: 50%">Tienda</th>
+                                    <th style="width: 40%">Tienda</th>
+                                    <th style="width: 10%">Unidad</th>
                                     <th style="width: 15%">Moneda</th>
                                     <th style="width: 25%" class="text-right">Precio</th>
                                     <th style="width: 5%;">&nbsp;</th>
@@ -59,6 +60,9 @@
                                     </th>
                                     <td>
                                         <span>{{ $precio->empresa->nombre }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ $precio->unidad->codigo }}</span>
                                     </td>
                                     <td>
                                         <span>{{ $precio->moneda }}</span>
@@ -109,28 +113,43 @@
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <select class="custom-select" wire:model.defer="precio_moneda">
+                                        <select class="custom-select @error('precio_unidad') is-invalid @enderror " wire:model.defer="precio_unidad">
+                                            @foreach($listarPreciosUnd as $unidad)
+                                                <option value="{{ $unidad['id'] }}">{{ $unidad['codigo'] }}</option>
+                                            @endforeach
+                                        </select>
+                                        {{--@error('precio_unidad')
+                                        <span class="col-sm-12 text-sm text-bold text-danger">
+                                            <i class="icon fas fa-exclamation-triangle"></i>
+                                            {{ $message }}
+                                        </span>
+                                        @enderror--}}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <select class="custom-select @error('precio_moneda') is-invalid @enderror " wire:model.defer="precio_moneda">
                                             <option value="">Seleccione</option>
                                             <option value="Bolivares">Bolivares</option>
                                             <option value="Dolares">Dolares</option>
                                         </select>
-                                        @error('precio_moneda')
+                                        {{--@error('precio_moneda')
                                         <span class="col-sm-12 text-sm text-bold text-danger">
                                             <i class="icon fas fa-exclamation-triangle"></i>
                                             {{ $message }}
                                         </span>
-                                        @enderror
+                                        @enderror--}}
                                     </div>
                                 </td>
                                 <td class="text-right">
                                     <div class="form-group">
-                                    <input type="number" class="form-control" wire:model.defer="precio_precio" placeholder="Precio" min="0.01" step=".01">
-                                        @error('precio_precio')
+                                    <input type="number" class="form-control @error('precio_precio') is-invalid @enderror " wire:model.defer="precio_precio" placeholder="Precio" min="0.01" step=".01">
+                                        {{--@error('precio_precio')
                                         <span class="col-sm-12 text-sm text-bold text-danger">
                                             <i class="icon fas fa-exclamation-triangle"></i>
                                             {{ $message }}
                                         </span>
-                                        @enderror
+                                        @enderror--}}
                                     </div>
                                 </td>
                                 <td class="text-center">

@@ -453,6 +453,20 @@ class StockComponent extends Component
             $this->ajusteCantidad[$this->ajuste_contador] = null;
             $this->ajuste_contador++;
         }else{
+
+            for ($i = $opcion; $i < $this->ajuste_contador - 1; $i++){
+                $this->ajusteTipo[$i] = $this->ajusteTipo[$i + 1];
+                $this->classTipo[$i] = $this->classTipo[$i + 1];
+                $this->ajusteArticulo[$i] = $this->ajusteArticulo[$i + 1];
+                $this->classArticulo[$i] = $this->classArticulo[$i + 1];
+                $this->ajusteDescripcion[$i] = $this->ajusteDescripcion[$i + 1];
+                $this->selectUnidad[$i] = $this->selectUnidad[$i + 1];
+                $this->ajusteUnidad[$i] = $this->ajusteUnidad[$i + 1];
+                $this->ajusteAlmacen[$i] = $this->ajusteAlmacen[$i + 1];
+                $this->classAlmacen[$i] = $this->classAlmacen[$i + 1];
+                $this->ajusteCantidad[$i] = $this->ajusteCantidad[$i + 1];
+            }
+
             $this->ajuste_contador--;
             unset($this->ajusteTipo[$this->ajuste_contador]);
             unset($this->classTipo[$this->ajuste_contador]);
@@ -469,7 +483,7 @@ class StockComponent extends Component
 
     protected function rules(){
         return [
-            'ajuste_codigo'         =>  ['nullable', 'min:4', 'alpha_num:ascii', Rule::unique('ajustes', 'codigo')->ignore($this->ajuste_id)],
+            'ajuste_codigo'         =>  ['nullable', 'min:4', 'alpha_num:ascii', Rule::unique('ajustes', 'codigo')/*->ignore($this->ajuste_id)*/],
             'ajuste_fecha'          => 'nullable',
             'ajuste_descripcion'    => 'required|min:4',
             'ajusteTipo.*'          => ['required', Rule::exists('ajustes_tipos', 'codigo')],
@@ -500,7 +514,9 @@ class StockComponent extends Component
             if ($this->ajuste_tipos_tipo[$i] == 2){
                 $stock = Stock::where('empresas_id', $this->empresa_id)
                     ->where('articulos_id', $this->ajuste_articulos_id[$i])
-                    ->where('almacenes_id', $this->ajuste_almacenes_id[$i])->first();
+                    ->where('almacenes_id', $this->ajuste_almacenes_id[$i])
+                    ->where('unidades_id', $this->ajusteUnidad[$i])
+                    ->first();
                 if ($stock){
                     $disponible = $stock->disponible;
                     if ($this->ajusteCantidad[$i] > $disponible){
@@ -540,7 +556,9 @@ class StockComponent extends Component
                 $detalles->save();
                 $exite = Stock::where('empresas_id', $this->empresa_id)
                     ->where('articulos_id', $this->ajuste_articulos_id[$i])
-                    ->where('almacenes_id', $this->ajuste_almacenes_id[$i])->first();
+                    ->where('almacenes_id', $this->ajuste_almacenes_id[$i])
+                    ->where('unidades_id', $this->ajusteUnidad[$i])
+                    ->first();
                 if ($exite){
                     //edito
                     $stock = Stock::find($exite->id);
@@ -561,6 +579,7 @@ class StockComponent extends Component
                     $stock->empresas_id = $this->empresa_id;
                     $stock->articulos_id = $this->ajuste_articulos_id[$i];
                     $stock->almacenes_id = $this->ajuste_almacenes_id[$i];
+                    $stock->unidades_id = $this->ajusteUnidad[$i];
                     $stock->actual = $this->ajusteCantidad[$i];
                     $stock->comprometido = 0;
                     $stock->disponible = $this->ajusteCantidad[$i];

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Precio extends Model
 {
@@ -13,6 +14,7 @@ class Precio extends Model
     protected $fillable = [
         'articulos_id',
         'empresas_id',
+        'unidades_id',
         'moneda',
         'precio',
         'auditoria'
@@ -27,5 +29,12 @@ class Precio extends Model
     {
         return $this->belongsTo(Empresa::class, 'empresas_id', 'id');
     }
+
+    public function unidad(): BelongsTo
+    {
+        return $this->belongsTo(Unidad::class,'unidades_id', 'id');
+    }
+
+
 
 }

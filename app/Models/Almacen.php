@@ -35,4 +35,9 @@ class Almacen extends Model
         return $this->hasMany(AjusDetalle::class, 'almacenes_id', 'id');
     }
 
+    public function stock(): HasMany
+    {
+        return $this->hasMany(Stock::class, 'almacenes_id', 'id');
+    }
+
 }

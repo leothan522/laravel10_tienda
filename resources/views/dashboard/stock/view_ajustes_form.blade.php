@@ -45,10 +45,10 @@
                             <button type="button" wire:click="btnContador('add')" class="btn btn-default btn-sm">
                                 <i class="fas fa-plus"></i>
                             </button>
-                            <button type="button" wire:click="btnContador('remove')" class="btn btn-default btn-sm"
+                            {{--<button type="button" wire:click="btnContador('remove')" class="btn btn-default btn-sm"
                                     @if($ajuste_contador == 1) disabled @endif>
                                 <i class="fas fa-minus"></i>
-                            </button>
+                            </button>--}}
                         </div>
                     </div>
                 </ul>
@@ -64,7 +64,7 @@
                             <table class="table">
                                 <thead>
                                 <tr class="text-navy">
-                                    <th style="width: 5%">#</th>
+                                    <th class="text-center" style="width: 10%">#</th>
                                     <th>Tipo</th>
                                     <th>Articulo</th>
                                     <th>Descripción</th>
@@ -85,12 +85,6 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="col-md-8">
-                                    {{--@error('ajusteTipo.*')
-                                    <span class="col-sm-12 text-sm text-bold text-danger">
-                                        <i class="icon fas fa-exclamation-triangle"></i>
-                                        {{ $message }}
-                                    </span>
-                                    @enderror--}}
                                     @if($errors->has('ajusteTipo.*') || $errors->has('ajusteArticulo.*') || $errors->has('ajusteUnidad.*') || $errors->has('ajusteCantidad.*'))
                                         <span class="col-sm-12 text-sm text-bold text-danger">
                                             <i class="icon fas fa-exclamation-triangle"></i>

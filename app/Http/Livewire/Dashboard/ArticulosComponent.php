@@ -62,7 +62,7 @@ class ArticulosComponent extends Component
             $galeria_id1, $galeria_id2, $galeria_id3, $galeria_id4, $galeria_id5, $galeria_id6,
             $borrar_galeria1, $borrar_galeria2, $borrar_galeria3, $borrar_galeria4, $borrar_galeria5, $borrar_galeria6;
     public $listarIdentificadores, $identificador_id, $identificador_serial, $identificador_cantidad;
-    public $listarPrecios, $precio_id, $precio_empresas_id, $precio_moneda, $precio_precio, $precio_form = true;
+    public $listarPrecios, $listarPreciosUnd, $precio_id, $precio_empresas_id, $precio_unidad, $precio_moneda, $precio_precio, $precio_form = true;
     public $listarStock;
 
     public function mount()
@@ -874,7 +874,7 @@ class ArticulosComponent extends Component
         }
     }
 
-    // ************************* Unidades ********************************************
+    // ************************* Articulos Unidades ********************************************
 
 
     public function btnUnidad()
@@ -1386,11 +1386,27 @@ class ArticulosComponent extends Component
 
     public function btnPrecios()
     {
-        $this->reset('precio_id', 'precio_empresas_id', 'precio_moneda', 'precio_precio');
+        $this->resetErrorBag();
+        $this->reset('precio_id', 'precio_empresas_id', 'precio_moneda', 'precio_precio', 'precio_unidad');
         $this->view = "precios";
         $this->btn_editar = false;
         $this->btn_cancelar = true;
         $this->listarPrecios = Precio::where('articulos_id', $this->articulo_id)->orderBy('empresas_id', 'ASC')->get();
+        $array = array();
+        $articulo = Articulo::find($this->articulo_id);
+        $array[] = [
+            'id'        => $articulo->unidades_id,
+            'codigo'    => $articulo->unidad->codigo
+        ];
+        $unidades = ArtUnid::where('articulos_id', $articulo->id)->get();
+        foreach ($unidades as $unidad){
+            $array[] = [
+                'id'        => $unidad->unidades_id,
+                'codigo'    => $unidad->unidad->codigo
+            ];
+        }
+        $this->listarPreciosUnd = $array;
+        $this->precio_unidad = $articulo->unidades_id;
         $this->selectFormEmpresas();
     }
 
@@ -1402,12 +1418,14 @@ class ArticulosComponent extends Component
             'precio_empresas_id.required' => 'La tienda es obligatoria.',
             'precio_moneda.required' => 'La moneda es obligatoria.',
             'precio_precio.required' => 'El precio es obligatorio.',
+            'precio_unidad.required' => 'La unidad es obligatoria.',
         ];
 
         $this->validate([
             'precio_empresas_id' => 'required',
             'precio_moneda' => 'required',
             'precio_precio' => 'required',
+            'precio_unidad' => 'required',
         ], $messages);
 
         if ($this->precio_id){
@@ -1422,6 +1440,7 @@ class ArticulosComponent extends Component
 
         $precio->articulos_id = $this->articulo_id;
         $precio->empresas_id = $this->precio_empresas_id;
+        $precio->unidades_id = $this->precio_unidad;
         $precio->moneda = $this->precio_moneda;
         $precio->precio = $this->precio_precio;
         $precio->save();
@@ -1443,6 +1462,7 @@ class ArticulosComponent extends Component
         $this->precio_empresas_id = $precio->empresas_id;
         $this->precio_moneda = $precio->moneda;
         $this->precio_precio = $precio->precio;
+        $this->precio_unidad = $precio->unidades_id;
         $this->precio_form = true;
     }
 
@@ -1486,7 +1506,7 @@ class ArticulosComponent extends Component
         foreach ($empresas as $empresa){
             $acceso = comprobarAccesoEmpresa($empresa->permisos, Auth::id());
             $precio = Precio::where('empresas_id', $empresa->id)->where('articulos_id', $this->articulo_id)->first();
-            if ($acceso && !$precio){
+            if ($acceso /*&& !$precio*/){
                 array_push($array, $empresa);
             }
         }
