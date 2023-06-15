@@ -12,7 +12,9 @@ use App\Models\Empresa;
 use App\Models\Parametro;
 use App\Models\Precio;
 use App\Models\Stock;
+use App\Models\Unidad;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
@@ -32,7 +34,7 @@ class StockComponent extends Component
 
     public $modulo_activo = false, $modulo_empresa, $modulo_articulo;
     public $empresa_id, $listarEmpresas, $empresa;
-    public $listarStock, $getStock;
+    public $getStock = [];
     public $almacen_id, $almacen_codigo, $almacen_nombre, $keywordAlmacenes;
     public $tipos_ajuste_id, $tipos_ajuste_codigo, $tipos_ajuste_nombre, $tipos_ajuste_tipo = 1, $keywordTiposAjuste;
     public $view = "stock";
@@ -54,7 +56,68 @@ class StockComponent extends Component
     {
         if (numRowsPaginate() < 10){ $paginate = 10; }else{ $paginate = numRowsPaginate(); }
         $this->proximo_codigo = nextCodigoAjuste($this->empresa_id);
-        $this->show();
+
+        $empresa = Empresa::find($this->empresa_id);
+        $this->empresa = $empresa;
+
+        $stock = Stock::select(['empresas_id', 'articulos_id', 'unidades_id', 'estatus'])
+            ->groupBy('empresas_id', 'articulos_id', 'unidades_id', 'estatus')
+            ->having('empresas_id', $this->empresa_id)
+            ->orderBy('articulos_id', 'asc')
+            ->paginate(100);
+        $stock->each(function ($stock){
+
+            $articulo = Articulo::find($stock->articulos_id);
+            $unidad = Unidad::find($stock->unidades_id);
+
+            $stock->activo = $articulo->estatus;
+            $stock->codigo = $articulo->codigo;
+            $stock->articulo = $articulo->descripcion;
+            $stock->unidad = $unidad->codigo;
+
+            $resultado = calcularPrecios($stock->empresas_id, $stock->articulos_id, $articulo->tributarios_id, $stock->unidades_id);
+            $stock->moneda = $resultado['moneda_base'];
+            $stock->dolares = $resultado['precio_dolares'];
+            $stock->bolivares = $resultado['precio_bolivares'];
+            $stock->iva_dolares = $resultado['iva_dolares'];
+            $stock->iva_bolivares = $resultado['iva_bolivares'];
+            $stock->neto_dolares = $resultado['neto_dolares'];
+            $stock->neto_bolivares = $resultado['neto_bolivares'];
+
+            $existencias = Stock::where('empresas_id', $stock->empresas_id)
+                ->where('articulos_id', $articulo->id)
+                ->where('unidades_id', $unidad->id)
+                ->get();
+            $array = array();
+            $actual = 0;
+            $comprometido = 0;
+            $disponible = 0;
+            $vendido = 0;
+            foreach ($existencias as $existencia){
+                $array[] = [
+                    'id' => $existencia->id,
+                    'almacen' => $existencia->almacen->codigo,
+                    'actual' => $existencia->actual,
+                    'comprometido' => $existencia->comprometido,
+                    'disponible' => $existencia->disponible
+                ];
+                $actual = $actual + $existencia->actual;
+                $comprometido = $comprometido + $existencia->comprometido;
+                $disponible = $disponible + $existencia->disponible;
+                $vendido = $vendido + $existencia->vendido;
+            }
+
+            $stock->actual = $actual;
+            $stock->compometido = $comprometido;
+            $stock->disponible = $disponible;
+            $stock->existencias = $array;
+            $stock->vendido = $vendido;
+
+        });
+
+        //dd($stock);
+
+
         $this->getEmpresas();
         $almacenes = Almacen::buscar($this->keywordAlmacenes)->where('empresas_id', $this->empresa_id)->orderBy('codigo', 'ASC')->paginate($paginate);
         $rowsAlmacenes = Almacen::count();
@@ -66,7 +129,8 @@ class StockComponent extends Component
             ->with('rowsAlmacenes', $rowsAlmacenes)
             ->with('listarTiposAjuste', $tiposAjuste)
             ->with('rowsTiposAjuste', $rowsTiposAjuste)
-            ->with('listarAjustes', $ajustes);
+            ->with('listarAjustes', $ajustes)
+            ->with('listarStock', $stock);
     }
 
     public function getEmpresaDefault()
@@ -123,49 +187,49 @@ class StockComponent extends Component
 
     public function show()
     {
+        $this->reset([
+            'getStock'
+        ]);
+    }
+
+    public function setEstatus($existencias)
+    {
+        foreach (json_decode($existencias) as $existencia){
+            $stock = Stock::find($existencia->id);
+            if ($stock->estatus == 1){
+                $stock->estatus = 0;
+            }else{
+                $stock->estatus = 1;
+            }
+            $stock->update();
+        }
+    }
+
+    public function showModal($articulos_id, $unidades_id, $vendido, $estatus, $existencias, $dolares, $bolivares, $activo)
+    {
         $empresa = Empresa::find($this->empresa_id);
-        $this->empresa = $empresa;
-        $stock = Stock::where('empresas_id', $this->empresa_id)->orderBy('actual', 'ASC')->get();
-        $stock->each(function ($stock){
-            $stock->activo = $stock->articulo->estatus;
-            $resultado = calcularPrecios($stock->empresas_id, $stock->articulos_id, $stock->articulo->tributarios_id);
-            $stock->moneda = $resultado['moneda_base'];
-            $stock->dolares = $resultado['precio_dolares'];
-            $stock->bolivares = $resultado['precio_bolivares'];
-            $stock->iva_dolares = $resultado['iva_dolares'];
-            $stock->iva_bolivares = $resultado['iva_bolivares'];
-            $stock->neto_dolares = $resultado['neto_dolares'];
-            $stock->neto_bolivares = $resultado['neto_bolivares'];
-        });
-        $this->listarStock = $stock;
-    }
-
-    public function setEstatus($id, $modal = false)
-    {
-        $stock = Stock::find($id);
-        if ($stock->estatus == 1){
-            $stock->estatus = 0;
-        }else{
-            $stock->estatus = 1;
-        }
-        $stock->update();
-        if ($modal){
-            $this->showModal($id);
-        }
-    }
-
-    public function showModal($id)
-    {
-        $this->getStock = Stock::find($id);
-        $this->getStock->activo = $this->getStock->articulo->estatus;
-        $resultado = calcularPrecios($this->getStock->empresas_id, $this->getStock->articulos_id, $this->getStock->articulo->tributarios_id);
-        $this->getStock->moneda = $resultado['moneda_base'];
-        $this->getStock->dolares = $resultado['precio_dolares'];
-        $this->getStock->bolivares = $resultado['precio_bolivares'];
-        $this->getStock->iva_dolares = $resultado['iva_dolares'];
-        $this->getStock->iva_bolivares = $resultado['iva_bolivares'];
-        $this->getStock->neto_dolares = $resultado['neto_dolares'];
-        $this->getStock->neto_bolivares = $resultado['neto_bolivares'];
+        $articulo = Articulo::find($articulos_id);
+        $unidad = Unidad::find($unidades_id);
+        $this->getStock['empresa'] = $empresa->nombre;
+        $this->getStock['imagen'] = $articulo->detail;
+        $this->getStock['vendido'] = $vendido;
+        $this->getStock['unidad'] = $unidad->codigo;
+        $this->getStock['articulo'] = $articulo->descripcion;
+        $this->getStock['codigo'] = $articulo->codigo;
+        $this->getStock['categoria'] = $articulo->categoria->nombre;
+        $this->getStock['unidad_principal'] = $articulo->unidad->codigo;
+        $this->getStock['tipo'] = $articulo->tipo->nombre;
+        $this->getStock['procedencia'] = $articulo->procedencia->nombre;
+        $this->getStock['tributario'] = $articulo->tributario->codigo;
+        $this->getStock['taza'] = $articulo->tributario->taza;
+        $this->getStock['marca'] = $articulo->marca;
+        $this->getStock['modelo'] = $articulo->modelo;
+        $this->getStock['referencia'] = $articulo->referencia;
+        $this->getStock['estatus'] = $estatus;
+        $this->getStock['existencias'] = json_decode($existencias);
+        $this->getStock['dolares'] = $dolares;
+        $this->getStock['bolivares'] = $bolivares;
+        $this->getStock['activo'] = $activo;
     }
 
     // ************************* Almacenes ********************************************

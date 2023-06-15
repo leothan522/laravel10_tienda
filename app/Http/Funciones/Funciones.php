@@ -384,7 +384,7 @@ function dataSelect2($rows)
     return $data;
 }
 
-function calcularPrecios($empresa_id, $articulo_id, $tributarios_id)
+function calcularPrecios($empresa_id, $articulo_id, $tributarios_id, $unidades_id)
 {
     $resultado = array();
     $moneda_base = null;
@@ -415,7 +415,10 @@ function calcularPrecios($empresa_id, $articulo_id, $tributarios_id)
         }
     }
 
-    $precio = Precio::where('empresas_id', $empresa_id)->where('articulos_id', $articulo_id)->first();
+    $precio = Precio::where('empresas_id', $empresa_id)
+        ->where('articulos_id', $articulo_id)
+        ->where('unidades_id', $unidades_id)
+        ->first();
     if ($precio){
         if ($precio->moneda == "Dolares"){
             $precio_dolares = $precio->precio;

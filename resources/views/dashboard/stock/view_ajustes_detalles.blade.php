@@ -1,9 +1,14 @@
 <tr>
     <th scope="row">
-        <button type="button" wire:click="btnContador('{{ $i }}')" class="btn btn-default btn-xs"
-                @if($ajuste_contador == 1) disabled @endif>
-            <i class="fas fa-minus"></i>
-        </button>
+        @if($ajuste_contador == 1)
+            <span class="btn btn-default btn-xs disabled">
+                <i class="fas fa-minus"></i>
+            </span>
+        @else
+            <span wire:click="btnContador('{{ $i }}')" class="btn btn-default btn-xs">
+                <i class="fas fa-minus"></i>
+            </span>
+        @endif
         <span class="">{{ $i + 1 }}</span>
     </th>
     <td>
