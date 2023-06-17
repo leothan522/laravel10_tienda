@@ -1,4 +1,4 @@
-<form wire:submit.prevent="saveAjustes" xmlns:wire="http://www.w3.org/1999/xhtml">
+<form @if($new_ajuste) wire:submit.prevent="saveAjustes" @else wire:submit.prevent="updateAjustes" @endif xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="row col-12 mb-2">
         <div class="col-md-2">
             <label>Código:</label>

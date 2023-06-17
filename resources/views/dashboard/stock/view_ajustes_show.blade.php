@@ -10,7 +10,7 @@
             <label>Fecha:</label>
         </div>
         <div class="col-md-3">
-            <span class="border badge-pill">{{ verFecha($ajuste_fecha, 'd/m/Y h:i:s a') }}</span>
+            <span class="border badge-pill">{{ verFecha($ajuste_fecha, 'd/m/Y h:i a') }}</span>
         </div>
     </div>
 
