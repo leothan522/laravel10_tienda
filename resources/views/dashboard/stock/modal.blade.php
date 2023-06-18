@@ -119,6 +119,9 @@
                                     <tbody>
                                     @if($getStock)
                                         @foreach($getStock['existencias'] as $existencia)
+                                            @if($existencia->actual <= 0)
+                                                @continue
+                                            @endif
                                             <tr>
                                                 <td>{{ $existencia->almacen }}</td>
                                                 <td class="text-right">{{ formatoMillares($existencia->actual, 3) }}</td>

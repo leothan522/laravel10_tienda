@@ -20,6 +20,9 @@
         <tbody>
         @php($i = 0)
         @foreach($listarStock as $stock)
+            @if(!$stock->actual)
+                @continue
+            @endif
             @php($i++)
             <tr>
                 <td class="text-sm">{{ $stock->codigo }}</td>
