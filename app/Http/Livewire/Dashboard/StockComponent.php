@@ -873,13 +873,13 @@ class StockComponent extends Component
         }
 
         //***** Detalles ******
+        $itemEliminados = array();
         $procesar_detalles = array();
         $revisados = array();
         $error = array();
         $success = array();
 
         if (!empty($this->borraritems)){
-            $itemEliminados = array();
             foreach ($this->borraritems as $item){
                 $detalles = AjusDetalle::find($item['id']);
                 $db_articulo_id = $detalles->articulos_id;
@@ -898,11 +898,11 @@ class StockComponent extends Component
                     $db_disponible = $stock->disponible;
                     $db_comprometido = $stock->comprometido;
 
-                    /*$itemEliminados[] = [
+                    $itemEliminados[] = [
                         'id' => $stock->id,
                         'accion' => $db_accion,
                         'cantidad' => $db_cantidad
-                    ];*/
+                    ];
 
 
                     if ($db_accion == 1){
@@ -920,6 +920,7 @@ class StockComponent extends Component
                 }
             }
         }
+
 
         for ($i = 0; $i < $this->ajuste_contador; $i++) {
 
@@ -965,7 +966,7 @@ class StockComponent extends Component
                         $db_disponible = $stock->disponible;
                         $db_comprometido = $stock->comprometido;
 
-                        /*if (!empty($itemEliminados)){
+                        if (!empty($itemEliminados)){
                             foreach ($itemEliminados as $eliminado){
                                 if ($stock->id == $eliminado['id']){
                                     if ($eliminado['accion'] == 1){
@@ -977,7 +978,7 @@ class StockComponent extends Component
                                     }
                                 }
                             }
-                        }*/
+                        }
 
                         //stock diferente misma cantidad
                         if ($diferencias_stock){
@@ -991,7 +992,7 @@ class StockComponent extends Component
                                 }else{
                                     $revertido = null;
                                     $error[$i] = true;
-                                    $html .= '<span class="text-sm">Para <strong> - ' . formatoMillares($this->ajusteCantidad[$i], 3) . '</strong> del articulo <strong>' . $stock->articulo->codigo . '</strong>. el stock actual es <strong>' . formatoMillares($db_disponible, 3) . ' '. $db_unidad_codigo . '</strong></span><br>';
+                                    $html .= '<span class="text-sm">Para1 <strong> - ' . formatoMillares($this->ajusteCantidad[$i], 3) . '</strong> del articulo <strong>' . $stock->articulo->codigo . '</strong>. el stock actual es <strong>' . formatoMillares($db_disponible, 3) . ' '. $db_unidad_codigo . '</strong></span><br>';
                                     $this->addError('ajusteCantidad.' . $i, 'error');
                                 }
                             }else{
@@ -1056,12 +1057,12 @@ class StockComponent extends Component
                                         ];
                                     } else {
                                         $error[$i] = true;
-                                        $html .= 'Para <strong> - ' . formatoMillares($this->ajusteCantidad[$i], 3) . '</strong> del articulo <strong>' . $this->ajusteArticulo[$i] . '</strong>. el stock actual es <strong>' . formatoMillares($db_disponible, 3) . '</strong><br>';
+                                        $html .= 'Para <strong>2 - ' . formatoMillares($this->ajusteCantidad[$i], 3) . '</strong> del articulo <strong>' . $this->ajusteArticulo[$i] . '</strong>. el stock actual es <strong>' . formatoMillares($db_disponible, 3) . '</strong><br>';
                                         $this->addError('ajusteCantidad.' . $i, 'error');
                                     }
                                 } else {
                                     $error[$i] = true;
-                                    $html .= 'Para <strong> - ' . formatoMillares($this->ajusteCantidad[$i], 3) . '</strong> del articulo <strong>' . $this->ajusteArticulo[$i] . '</strong>. el stock actual es <strong>0,000</strong><br>';
+                                    $html .= 'Para <strong>3 - ' . formatoMillares($this->ajusteCantidad[$i], 3) . '</strong> del articulo <strong>' . $this->ajusteArticulo[$i] . '</strong>. el stock actual es <strong>0,000</strong><br>';
                                     $this->addError('ajusteCantidad.' . $i, 'error');
                                 }
                             }
@@ -1093,7 +1094,7 @@ class StockComponent extends Component
                                         $db_disponible = $db_disponible - $diferencia;
                                     }else{
                                         $error[$i] = true;
-                                        $html .= '<span class="text-sm">Para <strong> - ' . formatoMillares($diferencia, 3) . '</strong> del articulo <strong>' . $stock->articulo->codigo . '</strong>. el stock actual es <strong>' . formatoMillares($db_disponible, 3) . ' '. $db_unidad_codigo . '</strong></span><br>';
+                                        $html .= '<span class="text-sm">Para4 <strong> - ' . formatoMillares($diferencia, 3) . '</strong> del articulo <strong>' . $stock->articulo->codigo . '</strong>. el stock actual es <strong>' . formatoMillares($db_disponible, 3) . ' '. $db_unidad_codigo . '</strong></span><br>';
                                         $this->addError('ajusteCantidad.' . $i, 'error');
                                     }
                                 }
@@ -1119,7 +1120,7 @@ class StockComponent extends Component
                                         $db_disponible = $db_disponible - $diferencia;
                                     }else{
                                         $error[$i] = true;
-                                        $html .= '<span class="text-sm">Para <strong> - ' . formatoMillares($diferencia, 3) . '</strong> del articulo <strong>' . $stock->articulo->codigo . '</strong>. el stock actual es <strong>' . formatoMillares($db_disponible, 3) . ' '. $db_unidad_codigo . '</strong></span><br>';
+                                        $html .= '<span class="text-sm">Para5 <strong> - ' . formatoMillares($diferencia, 3) . '</strong> del articulo <strong>' . $stock->articulo->codigo . '</strong>. el stock actual es <strong>' . formatoMillares($db_disponible, 3) . ' '. $db_unidad_codigo . '</strong></span><br>';
                                         $this->addError('ajusteCantidad.' . $i, 'error');
                                     }
                                 }
@@ -1156,6 +1157,19 @@ class StockComponent extends Component
                     if ($stock) {
                         $db_comprometido = $stock->comprometido;
                         $db_disponible = $stock->disponible;
+                        if (!empty($itemEliminados)){
+                            foreach ($itemEliminados as $eliminado){
+                                if ($stock->id == $eliminado['id']){
+                                    if ($eliminado['accion'] == 1){
+                                        //retire la entrada
+                                        $db_disponible = $db_disponible - $eliminado['cantidad'];
+                                    }else{
+                                        //retiro la salida
+                                        $db_disponible = $db_disponible + $eliminado['cantidad'];
+                                    }
+                                }
+                            }
+                        }
                         $disponible = $db_disponible + $cantidad;
                         $actual = $disponible + $db_comprometido;
                         //edito
@@ -1185,6 +1199,19 @@ class StockComponent extends Component
                     if ($stock) {
                         $db_comprometido = $stock->comprometido;
                         $db_disponible = $stock->disponible;
+                        if (!empty($itemEliminados)){
+                            foreach ($itemEliminados as $eliminado){
+                                if ($stock->id == $eliminado['id']){
+                                    if ($eliminado['accion'] == 1){
+                                        //retire la entrada
+                                        $db_disponible = $db_disponible - $eliminado['cantidad'];
+                                    }else{
+                                        //retiro la salida
+                                        $db_disponible = $db_disponible + $eliminado['cantidad'];
+                                    }
+                                }
+                            }
+                        }
                         if ($db_disponible >= $cantidad) {
                             $disponible = $db_disponible - $cantidad;
                             $actual = $disponible + $db_comprometido;
@@ -1198,12 +1225,12 @@ class StockComponent extends Component
                             ];
                         } else {
                             $error[$i] = true;
-                            $html .= 'Para <strong>' . formatoMillares($this->ajusteCantidad[$i], 3) . '</strong> del articulo <strong>' . $this->ajusteArticulo[$i] . '</strong>. el stock actual es <strong>' . formatoMillares($db_disponible, 3) . '</strong><br>';
+                            $html .= 'Para6 <strong>' . formatoMillares($this->ajusteCantidad[$i], 3) . '</strong> del articulo <strong>' . $this->ajusteArticulo[$i] . '</strong>. el stock actual es <strong>' . formatoMillares($db_disponible, 3) . '</strong><br>';
                             $this->addError('ajusteCantidad.' . $i, 'error');
                         }
                     } else {
                         $error[$i] = true;
-                        $html .= 'Para <strong>' . formatoMillares($this->ajusteCantidad[$i], 3) . '</strong> del articulo <strong>' . $this->ajusteArticulo[$i] . '</strong>. el stock actual es <strong>0,000</strong><br>';
+                        $html .= 'Para7 <strong>' . formatoMillares($this->ajusteCantidad[$i], 3) . '</strong> del articulo <strong>' . $this->ajusteArticulo[$i] . '</strong>. el stock actual es <strong>0,000</strong><br>';
                         $this->addError('ajusteCantidad.' . $i, 'error');
                     }
                 }
@@ -1217,6 +1244,52 @@ class StockComponent extends Component
 
             if ($procesar_ajuste) {
                 $ajuste->save();
+            }
+
+            if (!empty($this->borraritems)){
+                foreach ($this->borraritems as $item){
+                    $detalles = AjusDetalle::find($item['id']);
+                    $db_articulo_id = $detalles->articulos_id;
+                    $db_almacen_id = $detalles->almacenes_id;
+                    $db_unidad_id = $detalles->unidades_id;
+                    $db_cantidad = $detalles->cantidad;
+                    $db_accion = $detalles->tipo->tipo;
+                    //me traigo el stock actual
+                    $stock = Stock::where('empresas_id', $this->empresa_id)
+                        ->where('articulos_id', $db_articulo_id)
+                        ->where('almacenes_id', $db_almacen_id)
+                        ->where('unidades_id', $db_unidad_id)
+                        ->first();
+                    if ($stock){
+                        //bien
+                        $db_id = $stock->id;
+                        $db_disponible = $stock->disponible;
+                        $db_comprometido = $stock->comprometido;
+
+                        if ($db_accion == 1){
+                            //revierto entrada
+                            if ($db_disponible >= $db_cantidad){
+                                $disponible = $db_disponible - $db_cantidad;
+                                $actual = $disponible + $db_comprometido;
+                                $stock = Stock::find($db_id);
+                                $stock->actual = $actual;
+                                $stock->disponible = $disponible;
+                                $stock->save();
+                                $detalles->delete();
+                            }
+                        }else{
+                            //revierto salida
+                            $disponible = $db_disponible + $db_cantidad;
+                            $actual = $disponible + $db_comprometido;
+                            $stock = Stock::find($db_id);
+                            $stock->actual = $actual;
+                            $stock->disponible = $disponible;
+                            $stock->save();
+                            $detalles->delete();
+                        }
+
+                    }
+                }
             }
 
             if (!empty($procesar_detalles)) {
@@ -1285,53 +1358,9 @@ class StockComponent extends Component
 
             }
 
-            if (!empty($this->borraritems)){
-                foreach ($this->borraritems as $item){
-                    $detalles = AjusDetalle::find($item['id']);
-                    $db_articulo_id = $detalles->articulos_id;
-                    $db_almacen_id = $detalles->almacenes_id;
-                    $db_unidad_id = $detalles->unidades_id;
-                    $db_cantidad = $detalles->cantidad;
-                    $db_accion = $detalles->tipo->tipo;
-                    //me traigo el stock actual
-                    $stock = Stock::where('empresas_id', $this->empresa_id)
-                        ->where('articulos_id', $db_articulo_id)
-                        ->where('almacenes_id', $db_almacen_id)
-                        ->where('unidades_id', $db_unidad_id)
-                        ->first();
-                    if ($stock){
-                        //bien
-                        $db_id = $stock->id;
-                        $db_disponible = $stock->disponible;
-                        $db_comprometido = $stock->comprometido;
-
-                        if ($db_accion == 1){
-                            //revierto entrada
-                            if ($db_disponible >= $db_cantidad){
-                                $disponible = $db_disponible - $db_cantidad;
-                                $actual = $disponible + $db_comprometido;
-                                $stock = Stock::find($db_id);
-                                $stock->actual = $actual;
-                                $stock->disponible = $disponible;
-                                $stock->save();
-                                $detalles->delete();
-                            }
-                        }else{
-                            //revierto salida
-                            $disponible = $db_disponible + $db_cantidad;
-                            $actual = $disponible + $db_comprometido;
-                            $stock = Stock::find($db_id);
-                            $stock->actual = $actual;
-                            $stock->disponible = $disponible;
-                            $stock->save();
-                            $detalles->delete();
-                        }
-
-                    }
-                }
-            }
             $this->alert('success', 'Ajuste Actualizado.');
             $this->showAjustes($this->ajuste_id);
+            
         } else {
 
             if (empty($success) || !empty($error)){
