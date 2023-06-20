@@ -33,11 +33,11 @@
                     @endif
                 </span>
 
-                @if(/*$keyword*/false)
+                @if(!empty($keywordStock) && $view == "stock")
                     <span class="btn">
-                    Resultados de la Búsqueda { <b class="text-danger">{{--{{ $keyword }}--}}hola</b> }
+                    Resultados de la Búsqueda { <b class="text-danger">{{ $keywordAjustes }}</b> }
                     </span>
-                    <button class="btn btn-tool text-danger"{{-- wire:click="limpiarArticulos"--}}><i class="fas fa-times-circle"></i>
+                    <button class="btn btn-tool text-danger" wire:click="show"><i class="fas fa-times-circle"></i>
                     </button>
                 @endif
 
@@ -66,6 +66,14 @@
         </div>
 
         <div class="overlay-wrapper" wire:loading wire:target="empresa_id, setEstatus, show, verAjustes">
+            <div class="overlay">
+                <div class="spinner-border text-navy" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="overlay-wrapper d-none cargar_buscar">
             <div class="overlay">
                 <div class="spinner-border text-navy" role="status">
                     <span class="sr-only">Loading...</span>

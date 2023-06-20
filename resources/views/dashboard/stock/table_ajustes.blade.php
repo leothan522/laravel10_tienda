@@ -1,9 +1,9 @@
 <div class="card card-outline card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="card-header">
         <h3 class="card-title">
-            @if(/*$keyword*/false)
-                Resultados de la Busqueda { <b class="text-danger">{{ $keyword }}</b> }
-                <button class="btn btn-tool text-danger" wire:click="limpiar"><i class="fas fa-times-circle"></i>
+            @if($keywordAjustes)
+                Resultados de la Busqueda { <b class="text-danger">{{ $keywordAjustes }}</b> }
+                <button class="btn btn-tool text-danger" wire:click="show"><i class="fas fa-times-circle"></i>
                 </button>
             @else
                 Ajustes de [Entrada|Salida]

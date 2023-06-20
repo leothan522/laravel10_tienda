@@ -31,17 +31,17 @@ class StockComponent extends Component
         'changeEmpresa',
         'limpiarAlmacenes', 'confirmedAlmacenes',
         'limpiarTiposAjuste', 'confirmedTiposAjuste',
-        'confirmedBorrarAjuste', 'verspinnerOculto'
+        'confirmedBorrarAjuste', 'verspinnerOculto', 'buscar'
     ];
 
     public $modulo_activo = false, $modulo_empresa, $modulo_articulo;
     public $empresa_id, $listarEmpresas, $empresa;
-    public $getStock = [];
+    public $getStock = [], $keywordStock = [];
     public $almacen_id, $almacen_codigo, $almacen_nombre, $keywordAlmacenes;
     public $tipos_ajuste_id, $tipos_ajuste_codigo, $tipos_ajuste_nombre, $tipos_ajuste_tipo = 1, $keywordTiposAjuste;
     public $view = "stock";
     public $view_ajustes = 'show', $footer = false, $new_ajuste = false, $btn_nuevo = true, $btn_editar = false, $btn_cancelar = false;
-    public $ajuste_id, $ajuste_codigo, $ajuste_fecha, $ajuste_descripcion, $ajuste_contador = 1, $listarDetalles, $opcionDestroy, $ajuste_estatus;
+    public $ajuste_id, $ajuste_codigo, $ajuste_fecha, $ajuste_descripcion, $ajuste_contador = 1, $listarDetalles, $opcionDestroy, $ajuste_estatus, $keywordAjustes;
     public $ajusteTipo = [], $classTipo = [],
         $ajusteArticulo = [], $classArticulo = [], $ajusteDescripcion = [], $ajusteUnidad = [], $selectUnidad = [],
         $ajusteAlmacen = [], $classAlmacen = [], $ajusteCantidad = [],
@@ -126,7 +126,7 @@ class StockComponent extends Component
         $rowsAlmacenes = Almacen::count();
         $tiposAjuste = AjusTipo::buscar($this->keywordTiposAjuste)->orderBy('codigo', 'ASC')->paginate($paginate);
         $rowsTiposAjuste = AjusTipo::count();
-        $ajustes = Ajuste::where('empresas_id', $this->empresa_id)->orderBy('codigo', 'desc')->paginate($paginate);
+        $ajustes = Ajuste::buscar($this->keywordAjustes)->where('empresas_id', $this->empresa_id)->orderBy('codigo', 'desc')->paginate($paginate);
         return view('livewire.dashboard.stock-component')
             ->with('listarAlmacenes', $almacenes)
             ->with('rowsAlmacenes', $rowsAlmacenes)
@@ -188,11 +188,17 @@ class StockComponent extends Component
 
     //************************************ STOCK **************************************************
 
-    public function show()
+    public function show($modal = false)
     {
-        $this->reset([
-            'getStock'
-        ]);
+        if (!$modal){
+            $this->reset([
+                'getStock', 'keywordStock', 'keywordAjustes'
+            ]);
+        }else{
+            $this->reset([
+                'getStock'
+            ]);
+        }
     }
 
     public function setEstatus($existencias)
@@ -1486,6 +1492,19 @@ class StockComponent extends Component
 
     public function verspinnerOculto($valor){
         //ver spinner oculto desde JS
+    }
+
+    public function buscar($keyword)
+    {
+        $this->reset('keywordStock');
+        $this->keywordAjustes = $keyword;
+        $articulos = Articulo::where('codigo', 'LIKE', "%$keyword%")
+            ->orWhere('descripcion', 'LIKE', "%$keyword%")->get();
+        foreach ($articulos as $articulo){
+            $this->keywordStock[] = [
+                'id' => $articulo->id
+            ];
+        }
     }
 
 

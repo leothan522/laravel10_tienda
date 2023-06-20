@@ -43,8 +43,9 @@
             let keyword  = input.val();
             if (keyword.length > 0){
                 input.blur();
-                alert('Falta vincular con el componente Livewire');
-                //Livewire.emit('increment', keyword);
+                //alert('Falta vincular con el componente Livewire');
+                $('.cargar_buscar').removeClass('d-none');
+                Livewire.emit('buscar', keyword);
             }
             return false;
         }

@@ -4,7 +4,7 @@
 
             <div class="modal-header">
                 <h4 class="modal-title">Tienda: <span class="text-bold">{{ $getStock['empresa'] ?? '' }}</span></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" wire:click="show">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" wire:click="show('true')">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -142,7 +142,7 @@
             </div>
             <div class="modal-footer justify-content-end">
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"
-                        wire:click="show">{{ __('Close') }}</button>
+                        wire:click="show('true')">{{ __('Close') }}</button>
             </div>
             {!! verSpinner() !!}
         </div>

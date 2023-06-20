@@ -20,6 +20,19 @@
         <tbody>
         @php($i = 0)
         @foreach($listarStock as $stock)
+
+            @if(!empty($keywordStock))
+                @php($busqueda = array())
+                @foreach($keywordStock as $articulo)
+                    @if($stock->articulos_id == $articulo['id'])
+                        @php($busqueda[] = true)
+                    @endif
+                @endforeach
+                @if(empty($busqueda))
+                    @continue
+                @endif
+            @endif
+
             @if(!$stock->actual)
                 @continue
             @endif
