@@ -62,6 +62,10 @@
             Livewire.emit('changeEmpresa');
         }
 
+        Livewire.on('verspinnerOculto', valor => {
+            $('.cargar_buscar').removeClass('d-none');
+        })
+
         console.log('Hi!');
     </script>
 @endsection

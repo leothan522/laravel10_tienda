@@ -37,6 +37,7 @@ Route::middleware([
     Route::get('empresas', [EmpresasController::class, 'index'])->name('empresas.index');
     Route::get('articulos', [ArticulosController::class, 'index'])->name('articulos.index');
     Route::get('stock', [StockController::class, 'index'])->name('stock.index');
+    Route::get('print/ajuste/{id?}', [StockController::class, 'printAjustes'])->name('ajustes.print');
 
 });
 

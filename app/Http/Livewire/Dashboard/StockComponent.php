@@ -30,7 +30,8 @@ class StockComponent extends Component
     protected $listeners = [
         'changeEmpresa',
         'limpiarAlmacenes', 'confirmedAlmacenes',
-        'limpiarTiposAjuste', 'confirmedTiposAjuste'
+        'limpiarTiposAjuste', 'confirmedTiposAjuste',
+        'confirmedBorrarAjuste', 'verspinnerOculto'
     ];
 
     public $modulo_activo = false, $modulo_empresa, $modulo_articulo;
@@ -40,7 +41,7 @@ class StockComponent extends Component
     public $tipos_ajuste_id, $tipos_ajuste_codigo, $tipos_ajuste_nombre, $tipos_ajuste_tipo = 1, $keywordTiposAjuste;
     public $view = "stock";
     public $view_ajustes = 'show', $footer = false, $new_ajuste = false, $btn_nuevo = true, $btn_editar = false, $btn_cancelar = false;
-    public $ajuste_id, $ajuste_codigo, $ajuste_fecha, $ajuste_descripcion, $ajuste_contador = 1, $listarDetalles;
+    public $ajuste_id, $ajuste_codigo, $ajuste_fecha, $ajuste_descripcion, $ajuste_contador = 1, $listarDetalles, $opcionDestroy, $ajuste_estatus;
     public $ajusteTipo = [], $classTipo = [],
         $ajusteArticulo = [], $classArticulo = [], $ajusteDescripcion = [], $ajusteUnidad = [], $selectUnidad = [],
         $ajusteAlmacen = [], $classAlmacen = [], $ajusteCantidad = [],
@@ -469,7 +470,7 @@ class StockComponent extends Component
             'ajusteTipo', 'classTipo', 'ajusteArticulo', 'classArticulo', 'ajusteDescripcion', 'ajusteUnidad',
             'selectUnidad', 'ajusteAlmacen', 'ajusteCantidad', 'ajusteListarArticulos', 'keywordAjustesArticulos', 'ajusteItem',
             'ajuste_tipos_id', 'ajuste_articulos_id', 'ajuste_almacenes_id', 'tipos_ajuste_tipo', 'ajuste_almacenes_tipo',
-            'listarDetalles', 'detallesItem', 'detalles_id', 'borraritems'
+            'listarDetalles', 'detallesItem', 'detalles_id', 'borraritems', 'ajuste_estatus'
         ]);
         $this->resetErrorBag();
     }
@@ -790,6 +791,7 @@ class StockComponent extends Component
         $this->ajuste_codigo = $ajuste->codigo;
         $this->ajuste_fecha = $ajuste->fecha;
         $this->ajuste_descripcion = $ajuste->descripcion;
+        $this->ajuste_estatus = $ajuste->estatus;
         $this->listarDetalles = AjusDetalle::where('ajustes_id', $this->ajuste_id)->get();
         $this->ajuste_contador = AjusDetalle::where('ajustes_id', $this->ajuste_id)->count();
     }
@@ -1360,7 +1362,7 @@ class StockComponent extends Component
 
             $this->alert('success', 'Ajuste Actualizado.');
             $this->showAjustes($this->ajuste_id);
-            
+
         } else {
 
             if (empty($success) || !empty($error)){
@@ -1381,5 +1383,111 @@ class StockComponent extends Component
 
 
     }
+
+    public function destroyAjustes($opcion = "delete")
+    {
+        $this->opcionDestroy = $opcion;
+        $this->emit('verspinnerOculto', 1);
+        $this->confirm('¿Estas seguro?', [
+            'toast' => false,
+            'position' => 'center',
+            'showConfirmButton' => true,
+            'confirmButtonText' => '¡Sí, bórralo!',
+            'text' => '¡No podrás revertir esto!',
+            'cancelButtonText' => 'No',
+            'onConfirmed' => 'confirmedBorrarAjuste',
+        ]);
+    }
+
+    public function confirmedBorrarAjuste()
+    {
+        $this->emit('verspinnerOculto', 1);
+        $ajuste = Ajuste::find($this->ajuste_id);
+
+        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+        $vinculado = false;
+
+        if ($vinculado) {
+            $this->alert('warning', '¡No se puede Borrar!', [
+                'position' => 'center',
+                'timer' => '',
+                'toast' => false,
+                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
+                'showConfirmButton' => true,
+                'onConfirmed' => '',
+                'confirmButtonText' => 'OK',
+            ]);
+        } else {
+
+            $listarDetalles = AjusDetalle::where('ajustes_id', $ajuste->id)->get();
+
+            foreach ($listarDetalles as $detalle){
+
+                $db_articulo_id = $detalle->articulos_id;
+                $db_almacen_id = $detalle->almacenes_id;
+                $db_unidad_id = $detalle->unidades_id;
+                $db_cantidad = $detalle->cantidad;
+                $db_accion = $detalle->tipo->tipo;
+
+                $stock = Stock::where('empresas_id', $this->empresa_id)
+                    ->where('articulos_id', $db_articulo_id)
+                    ->where('almacenes_id', $db_almacen_id)
+                    ->where('unidades_id', $db_unidad_id)
+                    ->first();
+
+                if ($stock){
+
+                    $db_id = $stock->id;
+                    $db_disponible = $stock->disponible;
+                    $db_comprometido = $stock->comprometido;
+
+                    if ($db_accion == 1){
+                        //revierto entrada
+                        if ($db_disponible >= $db_cantidad){
+                            $disponible = $db_disponible - $db_cantidad;
+                        }else{
+                            $disponible = 0;
+                        }
+                        $actual = $disponible + $db_comprometido;
+                    }else{
+                        //revierto salida
+                        $disponible = $db_disponible + $db_cantidad;
+                        $actual = $disponible + $db_comprometido;
+                    }
+                    //aplico los cambios
+                    $stock = Stock::find($db_id);
+                    $stock->actual = $actual;
+                    $stock->disponible = $disponible;
+                    $stock->save();
+                }
+
+            }
+
+
+            if ($this->opcionDestroy == "delete"){
+                $ajuste->delete();
+                $this->reset('ajuste_id');
+                $this->limpiarAjustes();
+                $message = "Ajuste Eliminado.";
+            }else{
+                $ajuste->estatus = 0;
+                $ajuste->save();
+                $this->showAjustes($ajuste->id);
+                $message = "Ajuste Anulado.";
+            }
+
+            $this->alert(
+                'success',
+                $message
+            );
+
+        }
+    }
+
+    public function verspinnerOculto($valor){
+        //ver spinner oculto desde JS
+    }
+
+
 
 }

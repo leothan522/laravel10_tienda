@@ -29,8 +29,13 @@
             @if($listarAjustes->isNotEmpty())
                 @foreach($listarAjustes as $ajuste)
                     <tr class="@if($ajuste_id == $ajuste->id) text-bold table-warning @endif">
-                        <td>{{ $ajuste->codigo }}</td>
-                        <td>{{ $ajuste->descripcion }}</td>
+                        <td @if(!$ajuste->estatus) class="text-muted text-sm" @endif>{{ $ajuste->codigo }}</td>
+                        <td @if(!$ajuste->estatus) class="text-muted text-sm" @endif>
+                            @if(!$ajuste->estatus)
+                                <span class="btn-xs"><i class="fas fa-ban"></i></span>
+                            @endif
+                            {{ $ajuste->descripcion }}
+                        </td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="showAjustes({{ $ajuste->id }})" class="btn btn-primary btn-sm">
@@ -54,7 +59,14 @@
             </tbody>
         </table>
     </div>
-    <div class="overlay-wrapper" wire:loading wire:target="empresa_id, show, verAjustes, saveAjustes">
+    <div class="overlay-wrapper" wire:loading wire:target="empresa_id, show, verAjustes, saveAjustes, destroyAjustes, confirmedBorrarAjuste">
+        <div class="overlay">
+            <div class="spinner-border text-navy" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <div class="overlay-wrapper d-none cargar_buscar">
         <div class="overlay">
             <div class="spinner-border text-navy" role="status">
                 <span class="sr-only">Loading...</span>
