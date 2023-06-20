@@ -85,20 +85,22 @@ class UsuariosComponent extends Component
 
     ];
 
-    public function accesoEmpresa($array, $id)
+    public function accesoEmpresa($array)
     {
         //acceso a aempresas
-        foreach ($array as $id){
-            $empresa = Empresa::find($id);
-            $permisos = json_decode($empresa->permisos, true);
-            if (!leerJson($empresa->permisos, $this->usuario_id)){
-                $permisos[$this->usuario_id] = true;
-            }else{
-                unset($permisos[$this->usuario_id]);
+        if (!empty($array)){
+            foreach ($array as $id){
+                $empresa = Empresa::find($id);
+                $permisos = json_decode($empresa->permisos, true);
+                if (!leerJson($empresa->permisos, $this->usuario_id)){
+                    $permisos[$this->usuario_id] = true;
+                }else{
+                    unset($permisos[$this->usuario_id]);
+                }
+                $permisos = json_encode($permisos);
+                $empresa->permisos = $permisos;
+                $empresa->update();
             }
-            $permisos = json_encode($permisos);
-            $empresa->permisos = $permisos;
-            $empresa->update();
         }
     }
 
@@ -127,7 +129,7 @@ class UsuariosComponent extends Component
             }
             $message = "Usuario Creado";
             $usuarios->save();
-            $this->accesoEmpresa($this->select_empresas, $usuarios->id);
+            $this->accesoEmpresa($this->select_empresas);
             $this->alert($type, $message);
             $this->limpiar();
         } else {
@@ -148,7 +150,7 @@ class UsuariosComponent extends Component
             }
             $message = "Usuario Actualizado";
             $usuarios->update();
-            $this->accesoEmpresa($this->select_empresas, $usuarios->id);
+            $this->accesoEmpresa($this->select_empresas);
             $this->alert($type, $message);
             $this->edit($this->usuario_id);
 
