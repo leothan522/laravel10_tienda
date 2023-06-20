@@ -34,12 +34,12 @@
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="editAlmacen({{ $almacen->id }})" class="btn btn-primary btn-sm"
-                                @if(!comprobarPermisos('almacen.edit')) disabled @endif >
+                                @if(!comprobarPermisos()) disabled @endif >
                                     <i class="fas fa-edit"></i>
                                 </button>
 
                                 <button wire:click="destroyAlmacen({{ $almacen->id }})" class="btn btn-primary btn-sm"
-                                @if(!comprobarPermisos('almacen.destroy') || $almacen->tipo == 1) disabled @endif >
+                                @if(!comprobarPermisos() || $almacen->tipo == 1) disabled @endif >
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>

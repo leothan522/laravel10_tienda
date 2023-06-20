@@ -80,11 +80,12 @@
                 <td>{{ $stock->unidad }}</td>
                 <td class="text-center">
                     @if($stock->estatus && ($stock->dolares || $stock->bolivares) && $stock->activo)
-                        <button type="button" class="btn btn-sm" wire:click="setEstatus('{{ json_encode($stock->existencias) }}')">
+                        <button type="button" class="btn btn-sm" wire:click="setEstatus('{{ json_encode($stock->existencias) }}')"
+                        @if(!comprobarPermisos('stock.estatus')) disabled @endif >
                             <i class="fas fa-globe text-success"></i>
                         </button>
                     @else
-                        <button type="button" class="btn btn-sm" @if(($stock->dolares || $stock->bolivares) && $stock->activo) wire:click="setEstatus('{{ json_encode($stock->existencias) }}')" @else disabled @endif>
+                        <button type="button" class="btn btn-sm" @if(($stock->dolares || $stock->bolivares) && $stock->activo && comprobarPermisos('stock.estatus')) wire:click="setEstatus('{{ json_encode($stock->existencias) }}')" @else disabled @endif>
                             <i class="fas fa-eraser text-muted"></i>
                         </button>
                     @endif

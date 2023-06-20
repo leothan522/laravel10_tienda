@@ -24,21 +24,21 @@
             <li class="nav-item">
                 <button type="button" class="btn btn-primary btn-sm btn-block m-1"
                         data-toggle="modal" data-target="#modal-procedencias" onclick="verProcedencias()"
-                        @if(!comprobarPermisos('procedencias.index')) disabled @endif >
+                        {{--@if(!comprobarPermisos('procedencias.index')) disabled @endif--}} >
                     Procedencias
                 </button>
             </li>
             <li class="nav-item">
                 <button type="button" class="btn btn-primary btn-sm btn-block m-1"
                         data-toggle="modal" data-target="#modal-tributarios" onclick="verTributarios()"
-                        @if(!comprobarPermisos('tributarios.index')) disabled @endif >
+                        {{--@if(!comprobarPermisos('tributarios.index')) disabled @endif--}} >
                     Tributarios
                 </button>
             </li>
             <li class="nav-item">
             <button type="button" class="btn btn-primary btn-sm btn-block m-1"
                     data-toggle="modal" data-target="#modal-tipos" onclick="verTipos()"
-                    @if(!comprobarPermisos('tipos.index')) disabled @endif >
+                    {{--@if(!comprobarPermisos('tipos.index')) disabled @endif--}} >
                 Tipos
             </button>
         </li>

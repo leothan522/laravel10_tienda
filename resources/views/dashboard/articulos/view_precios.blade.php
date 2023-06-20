@@ -72,10 +72,12 @@
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <button type="button" wire:click="editarPrecio({{ $precio->id }})" class="btn btn-primary btn-xs">
+                                            <button type="button" wire:click="editarPrecio({{ $precio->id }})" class="btn btn-primary btn-xs"
+                                                    @if(!comprobarPermisos('articulos.precios')) disabled @endif >
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <button type="button" wire:click="borrarPrecio({{ $precio->id }})" class="btn btn-primary btn-xs">
+                                            <button type="button" wire:click="borrarPrecio({{ $precio->id }})" class="btn btn-primary btn-xs"
+                                                    @if(!comprobarPermisos('articulos.precios')) disabled @endif >
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </div>
@@ -158,7 +160,8 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <button type="submit" class="btn btn-success btn-sm">
+                                        <button type="submit" class="btn btn-success btn-sm"
+                                                @if(!comprobarPermisos('articulos.precios')) disabled @endif >
                                             <i class="fas fa-save"></i>
                                         </button>
                                     </div>

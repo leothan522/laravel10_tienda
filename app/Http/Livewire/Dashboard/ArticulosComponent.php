@@ -683,6 +683,7 @@ class ArticulosComponent extends Component
 
     public function limpiarArticulos()
     {
+        $this->resetErrorBag();
         $this->reset([
             'view', 'articulo_codigo', 'articulo_descripcion', 'articulo_tipo', 'articulo_categoria',
             'articulo_procedencia', 'articulo_tributario', 'articulo_unidad', 'articulo_marca', 'articulo_modelo',

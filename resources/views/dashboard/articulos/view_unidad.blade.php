@@ -50,7 +50,8 @@
                                 </td>
                                 <td style="width: 5%;">
                                     @if($btn_und_editar)
-                                        <button type="button"  class="btn btn-sm  btn-primary" wire:click="btnEditarUnidad">
+                                        <button type="button"  class="btn btn-xs btn-primary" wire:click="btnEditarUnidad"
+                                        @if(!comprobarPermisos('articulos.unidades')) disabled @endif >
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     @endif
@@ -70,8 +71,9 @@
                                         <span class="">{{ $artund->unidad->nombre }}</span>
                                     </td>
                                     <td style="width: 5%;">
-                                        <button type="button"  class="btn btn-sm  btn-danger"
-                                                wire:click="btnEliminarUnidad({{ $artund->id }})">
+                                        <button type="button"  class="btn btn-xs btn-primary"
+                                                wire:click="btnEliminarUnidad({{ $artund->id }})"
+                                                @if(!comprobarPermisos('articulos.unidades')) disabled @endif >
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </td>
@@ -102,7 +104,8 @@
                                     </div>
                                 </td>
                                 <td style="width: 5%;">
-                                    <button type="submit"  class="btn btn-success">
+                                    <button type="submit"  class="btn btn-success  btn-sm"
+                                            @if(!comprobarPermisos('articulos.unidades')) disabled @endif >
                                         <i class="fas fa-save"></i>
                                     </button>
                                 </td>
@@ -133,7 +136,8 @@
                                     </div>
                                 </td>
                                 <td style="width: 5%;">
-                                    <button type="submit"  class="btn btn-success">
+                                    <button type="submit"  class="btn btn-success  btn-sm"
+                                            @if(!comprobarPermisos('articulos.unidades')) disabled @endif >
                                         <i class="fas fa-save"></i>
                                     </button>
                                 </td>

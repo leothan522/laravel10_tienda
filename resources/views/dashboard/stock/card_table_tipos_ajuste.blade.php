@@ -42,12 +42,12 @@
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="editTiposAjuste({{ $tipo->id }})" class="btn btn-primary btn-sm"
-                                @if(!comprobarPermisos('tipos_ajuste.edit')) disabled @endif >
+                                @if(!comprobarPermisos()) disabled @endif >
                                     <i class="fas fa-edit"></i>
                                 </button>
 
                                 <button wire:click="destroyTiposAjuste({{ $tipo->id }})" class="btn btn-primary btn-sm"
-                                @if(!comprobarPermisos('tipos_ajuste.destroy')) disabled @endif >
+                                @if(!comprobarPermisos()) disabled @endif >
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>

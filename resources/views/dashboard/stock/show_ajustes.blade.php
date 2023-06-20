@@ -8,8 +8,8 @@
         </h3>
         <div class="card-tools">
             {{--<span class="btn btn-tool"><i class="fas fa-list"></i></span>--}}
-            @if($btn_nuevo) <button class="btn btn-tool" wire:click="createAjuste"><i class="fas fa-file"></i> Nuevo</button> @endif
-            @if($btn_editar) <button class="btn btn-tool" wire:click="btnEditar" @if(!$ajuste_estatus) disabled @endif ><i class="fas fa-edit"></i> Editar</button> @endif
+            @if($btn_nuevo) <button class="btn btn-tool" wire:click="createAjuste" @if(!comprobarPermisos('ajustes.create')) disabled @endif ><i class="fas fa-file"></i> Nuevo</button> @endif
+            @if($btn_editar) <button class="btn btn-tool" wire:click="btnEditar" @if(!$ajuste_estatus || !comprobarPermisos('ajustes.edit')) disabled @endif ><i class="fas fa-edit"></i> Editar</button> @endif
             @if($btn_cancelar) <button class="btn btn-tool" wire:click="btnCancelar"><i class="fas fa-ban"></i> Cancelar</button> @endif
         </div>
     </div>
@@ -24,13 +24,13 @@
 
     <div class="card-footer text-center @if(!$footer) d-none @endif">
 
-        <a href="{{ route('ajustes.print', $ajuste_id) }}" class="btn btn-default btn-sm" target="_blank" {{--wire:click="btnUnidad"--}}
-                @if(!comprobarPermisos('ajustes.print') || !$ajuste_estatus) disabled @endif>
+        <a href="{{ route('ajustes.print', $ajuste_id) }}" target="_blank"
+           class="btn btn-default btn-sm @if(!comprobarPermisos('ajustes.print') || !$ajuste_estatus) disabled @endif ">
             <i class="fas fa-print"></i> Imprimir
         </a>
 
         <button type="button" class="btn btn-default btn-sm" wire:click="destroyAjustes('anular')"
-                @if(!comprobarPermisos('ajustes.destroy') || !$ajuste_estatus) disabled @endif>
+                @if(!comprobarPermisos('ajustes.anular') || !$ajuste_estatus) disabled @endif>
             @if(!$ajuste_estatus)
                 <i class="fas fa-ban"></i> Anulado
             @else

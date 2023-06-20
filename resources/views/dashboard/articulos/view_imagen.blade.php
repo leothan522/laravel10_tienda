@@ -52,16 +52,16 @@
 
                                 <div class="row col-12 justify-content-center mb-3 mt-3">
                                     <div class="col-8">
-                                        <img class="img-thumbnail" style="cursor: pointer;"
+                                        <img class="img-thumbnail" @if(comprobarPermisos('articulos.imagenes')) style="cursor: pointer;" @endif
                                              @if ($principalPhoto)
                                                 src="{{ $principalPhoto->temporaryUrl() }}"
                                              @else
                                                 src="{{ asset(verImagen($img_ver)) }}"
                                              @endif
-                                             {{--width="101" height="100"--}}  alt="Imagen Pincipal Articulo" onclick="imgPrincipal()"/>
+                                             {{--width="101" height="100"--}}  alt="Imagen Pincipal Articulo"@if(comprobarPermisos('articulos.imagenes')) onclick="imgPrincipal()" @endif />
                                         @if($img_ver)
                                             <button type="button" class="btn badge text-danger position-absolute float-right"
-                                                wire:click="btnBorrarImagen">
+                                                wire:click="btnBorrarImagen" @if(!comprobarPermisos('articulos.imagenes')) disabled @endif >
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         @endif
@@ -113,9 +113,10 @@
                                     @if($i == 6) @php($photo = $photo6) @php($ver = $ver_galeria6) @endif
                                     <div class="col-4 mb-3">
                                         <div class="text-center">
-                                            <img class="img-thumbnail"
+                                            <img class="img-thumbnail" @if(comprobarPermisos('articulos.imaganes')) style="cursor:pointer;" @endif
                                                  @if ($photo) src="{{ $photo->temporaryUrl() }}" @else src="{{ asset(verImagen($ver)) }}" @endif
-                                                 {{--width="101" height="100"--}}  alt="Imagen Categoria" onclick="imgGaleria({{ $i }})"/>
+                                                 {{--width="101" height="100"--}}  alt="Imagen Categoria"
+                                                @if(comprobarPermisos('articulos.imagenes')) onclick="imgGaleria({{ $i }})" @endif />
                                             <input type="file" wire:model="photo{{ $i }}"  id="img_Galeria_{{ $i }}"
                                                    lang="es" accept="image/jpeg, image/png" class="d-none"
                                                 {{--@if(!comprobarPermisos('categorias.create') || ($categoria_id && !comprobarPermisos('categorias.edit')))
@@ -141,9 +142,10 @@
                                     @if($i == 6) @php($photo = $photo6) @endif
                                     <div class="col-4 mb-3">
                                         <div class="text-center">
-                                            <img class="img-thumbnail"
+                                            <img class="img-thumbnail" @if(comprobarPermisos('articulos.imaganes')) style="cursor:pointer;" @endif
                                                  @if ($photo) src="{{ $photo->temporaryUrl() }}" @else src="{{ asset(verImagen(null)) }}" @endif
-                                                 {{--width="101" height="100"--}}  alt="Imagen Categoria" onclick="imgGaleria({{ $i }})"/>
+                                                 {{--width="101" height="100"--}}  alt="Imagen Categoria"
+                                                @if(comprobarPermisos('articulos.imagenes')) onclick="imgGaleria({{ $i }})" @endif />
                                             <input type="file" wire:model="photo{{ $i }}"  id="img_Galeria_{{ $i }}"
                                                    lang="es" accept="image/jpeg, image/png" class="d-none"
                                                 {{--@if(!comprobarPermisos('categorias.create') || ($categoria_id && !comprobarPermisos('categorias.edit')))
@@ -210,7 +212,8 @@
 
                         <div class="col-md-12">
                             <div class="col-md-4 float-right">
-                                <button type="submit" class="btn btn-block btn-success">
+                                <button type="submit" class="btn btn-block btn-success"
+                                        @if(!comprobarPermisos('articulos.imagenes')) disabled @endif >
                                     <i class="fas fa-save"></i> Guardar
                                 </button>
                             </div>

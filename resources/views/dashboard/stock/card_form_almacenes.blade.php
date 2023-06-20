@@ -57,8 +57,7 @@
             <div class="form-group mt-3">
                 {{--<input type="submit" class="btn btn-block btn-success" value="Guardar">--}}
                 <button type="submit" class="btn btn-block btn-success"
-                @if(!comprobarPermisos('almacen.create') || ($almacen_id && !comprobarPermisos('almacen.edit')))
-                disabled @endif >
+                @if(!comprobarPermisos() || ($almacen_id && !comprobarPermisos())) disabled @endif >
                     <i class="fas fa-save"></i> Guardar @if($almacen_id) Cambios @endif
                 </button>
             </div>

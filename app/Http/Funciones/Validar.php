@@ -49,20 +49,26 @@ function allPermisos()
         ],
         'Stock' => [
             'route' => 'stock.index',
-            /*'submenu' => [
-                'Crear Articulos' => 'articulos.create',
-                'Editar Articulos' => 'articulos.edit',
-                'Borrar Articulos' => 'articulos.destroy'
+            'submenu' => [
+                'Cambiar Estatus' => 'stock.estatus',
+                'Ver Ajustes' => 'ajustes.index',
+                'Imprimir Ajustes' => 'ajustes.print',
+                'Crear Ajustes' => 'ajustes.create',
+                'Editar Ajustes' => 'ajustes.edit',
+                'Anular Ajustes' => 'ajustes.anular',
 
-            ]*/
+            ]
         ],
         'Articulos' => [
             'route' => 'articulos.index',
             'submenu' => [
                 'Crear Articulos' => 'articulos.create',
                 'Editar Articulos' => 'articulos.edit',
-                'Borrar Articulos' => 'articulos.destroy'
-
+                'Cambiar Estatus' => 'articulos.estatus',
+                'Cambiar Unidades' => 'articulos.unidades',
+                'Cambiar Precios' => 'articulos.precios',
+                'Cambiar Identificadores' => 'articulos.identificadores',
+                'Cambiar Imagenes' => 'articulos.imagenes'
             ]
         ],
         'Categorias' => [

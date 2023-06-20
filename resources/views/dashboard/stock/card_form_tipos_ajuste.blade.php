@@ -69,8 +69,7 @@
             <div class="form-group mt-3">
                 {{--<input type="submit" class="btn btn-block btn-success" value="Guardar">--}}
                 <button type="submit" class="btn btn-block btn-success"
-                @if(!comprobarPermisos('tipos_ajuste.create') || ($tipos_ajuste_id && !comprobarPermisos('tipos_ajuste.edit')))
-                disabled @endif >
+                @if(!comprobarPermisos() || ($tipos_ajuste_id && !comprobarPermisos())) disabled @endif >
                     <i class="fas fa-save"></i> Guardar @if($tipos_ajuste_id) Cambios @endif
                 </button>
             </div>
