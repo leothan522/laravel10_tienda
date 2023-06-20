@@ -232,6 +232,10 @@ class ArticulosComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+        $articulo = Articulo::where('categorias_id', $categoria->id)->first();
+        if ($articulo){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [
@@ -343,6 +347,10 @@ class ArticulosComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+        $articulo = Articulo::where('unidades_id', $unidad->id)->first();
+        if ($articulo){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [
@@ -446,6 +454,10 @@ class ArticulosComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+        $articulo = Articulo::where('procedencias_id', $procedencia->id)->first();
+        if ($articulo){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [
@@ -551,6 +563,10 @@ class ArticulosComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+        $articulo = Articulo::where('tributarios_id', $tributario->id)->first();
+        if ($articulo){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [
@@ -651,6 +667,10 @@ class ArticulosComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+        $articulo = Articulo::where('tipos_id', $tipo->id)->first();
+        if ($articulo){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [
@@ -666,7 +686,7 @@ class ArticulosComponent extends Component
             $tipo->delete();
             $this->alert(
                 'success',
-                'Taza Eliminada.'
+                'Tipo Eliminado.'
             );
             $this->limpiarTipos();
             $this->limpiarArticulos();
@@ -855,6 +875,10 @@ class ArticulosComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+        $stock = Stock::where('articulos_id', $articulo->id)->first();
+        if ($stock){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [
@@ -969,12 +993,34 @@ class ArticulosComponent extends Component
     public function btnEliminarUnidad($id)
     {
         $artund = ArtUnid::find($id);
-        $artund->delete();
-        $this->btnUnidad();
-        $this->alert(
-            'success',
-            'Unidad Eliminada.'
-        );
+
+        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+        $vinculado = false;
+        $articulo_id = $artund->articulos_id;
+        $unidad_id = $artund->unidades_id;
+        $stock = Stock::where('articulos_id', $articulo_id)->where('unidades_id', $unidad_id)->first();
+        if ($stock){
+            $vinculado = true;
+        }
+
+        if ($vinculado) {
+            $this->alert('warning', '¡No se puede Borrar!', [
+                'position' => 'center',
+                'timer' => '',
+                'toast' => false,
+                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
+                'showConfirmButton' => true,
+                'onConfirmed' => '',
+                'confirmButtonText' => 'OK',
+            ]);
+        } else {
+            $artund->delete();
+            $this->btnUnidad();
+            $this->alert(
+                'success',
+                'Unidad Eliminada.'
+            );
+        }
     }
 
 
@@ -1484,9 +1530,35 @@ class ArticulosComponent extends Component
     public function borrarPrecio($id)
     {
         $precio = Precio::find($id);
-        $precio->delete();
-        $this->btnPrecios();
-        $this->alert('success', 'Precio Eliminado.');
+
+        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+        $vinculado = false;
+        $articulo_id = $precio->articulos_id;
+        $unidad_id = $precio->unidades_id;
+        $empresa_id = $precio->empresas_id;
+        $stock = Stock::where('articulos_id', $articulo_id)
+            ->where('unidades_id', $unidad_id)
+            ->where('empresas_id', $empresa_id)
+            ->first();
+        if ($stock){
+            $vinculado = true;
+        }
+
+        if ($vinculado) {
+            $this->alert('warning', '¡No se puede Borrar!', [
+                'position' => 'center',
+                'timer' => '',
+                'toast' => false,
+                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
+                'showConfirmButton' => true,
+                'onConfirmed' => '',
+                'confirmButtonText' => 'OK',
+            ]);
+        } else {
+            $precio->delete();
+            $this->btnPrecios();
+            $this->alert('success', 'Precio Eliminado.');
+        }
     }
 
 

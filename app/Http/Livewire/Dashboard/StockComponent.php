@@ -320,6 +320,15 @@ class StockComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+        $detalles = AjusDetalle::where('almacenes_id', $almacen->id)->first();
+        if ($detalles){
+            $vinculado = true;
+        }
+        $stock = Stock::where('almacenes_id', $almacen->id)->first();
+        if ($stock){
+            $vinculado = true;
+        }
+
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [
@@ -426,6 +435,10 @@ class StockComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+        $detalles = AjusDetalle::where('tipos_id', $tipo->id)->first();
+        if ($detalles){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [

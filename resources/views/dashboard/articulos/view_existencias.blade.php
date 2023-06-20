@@ -42,6 +42,7 @@
                                 <tr class="text-navy">
                                     <th style="width: 5%">#</th>
                                     <th>Tienda</th>
+                                    <th style="width: 10%">Unidad</th>
                                     <th style="width: 10%" class="text-right">Actual</th>
                                     <th style="width: 10%" class="text-right">Comprom.</th>
                                     <th style="width: 10%" class="text-right">Disponible</th>
@@ -54,6 +55,7 @@
                                 <tr>
                                     <td>{{ $i }}</td>
                                     <td>{{ $stock->empresa->nombre }}</td>
+                                    <td>{{ $stock->unidad->codigo }}</td>
                                     <td class="text-right">{{ formatoMillares($stock->actual, 3) }}</td>
                                     <td class="text-right">{{ formatoMillares($stock->comprometido, 3) }}</td>
                                     <td class="text-right">{{ formatoMillares($stock->disponible, 3) }}</td>
@@ -61,6 +63,7 @@
                             @endforeach
                             @if($listarStock->count() >=2)
                                 <tr class="text-navy">
+                                    <th>&nbsp;</th>
                                     <th>&nbsp;</th>
                                     <th>TOTALES</th>
                                     <th class="text-right">{{ formatoMillares($listarStock->sum('actual'), 3) }}</th>
