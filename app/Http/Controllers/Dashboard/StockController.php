@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Exports\AjustesExport;
+use App\Exports\StockExport;
 use App\Http\Controllers\Controller;
 use App\Models\AjusDetalle;
 use App\Models\Ajuste;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StockController extends Controller
 {
@@ -28,5 +31,17 @@ class StockController extends Controller
             ->with('ajuste_fecha', $ajuste->fecha)
             ->with('ajuste_descripcion', $ajuste->descripcion)
             ->with('listarDetalles', $listarDetalles);
+    }
+
+    public function reporteStock(Request $request)
+    {
+        //return $request->all();
+        return Excel::download(new StockExport(), 'Stock.xlsx');
+    }
+
+    public function reporteAjustes(Request $request)
+    {
+        //return $request->all();
+        return Excel::download(new AjustesExport(), 'Ajustes.xlsx');
     }
 }

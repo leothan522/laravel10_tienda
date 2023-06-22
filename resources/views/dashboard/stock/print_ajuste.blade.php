@@ -9,7 +9,7 @@
 
         <div class="card-header">
             <h3 class="card-title">
-                Ajustes de [Entrada|Salida]
+                Ajustes de Entrada y Salida
             </h3>
             <div class="card-tools">
                 Tienda: {{ $empresa }}

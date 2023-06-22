@@ -36,8 +36,11 @@ Route::middleware([
     Route::get('export/usuarios/{buscar?}', [UsuariosController::class, 'export'])->name('usuarios.excel');
     Route::get('empresas', [EmpresasController::class, 'index'])->name('empresas.index');
     Route::get('articulos', [ArticulosController::class, 'index'])->name('articulos.index');
+    Route::post('export/articulos', [ArticulosController::class, 'reporteArticulos'])->name('articulos.reportes');
     Route::get('stock', [StockController::class, 'index'])->name('stock.index');
     Route::get('print/ajuste/{id?}', [StockController::class, 'printAjustes'])->name('ajustes.print');
+    Route::post('export/stock', [StockController::class, 'reporteStock'])->name('stock.reportes');
+    Route::post('export/ajustes', [StockController::class, 'reporteAjustes'])->name('ajustes.reportes');
 
 });
 

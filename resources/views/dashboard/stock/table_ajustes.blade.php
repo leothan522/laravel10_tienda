@@ -6,7 +6,7 @@
                 <button class="btn btn-tool text-danger" wire:click="show"><i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Ajustes de [Entrada|Salida]
+                Ajustes [Entrada|Salida]
             @endif
         </h3>
 

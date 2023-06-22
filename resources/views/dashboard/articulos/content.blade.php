@@ -15,3 +15,4 @@
 @include('dashboard.articulos.modal_procedencias')
 @include('dashboard.articulos.modal_tributarios')
 @include('dashboard.articulos.modal_tipos')
+@include('dashboard.articulos.modal_reportes_articulos')
