@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('plugins.Select2', true)
+
 @section('title', 'Dashboard')
 
 @section('content_header')
@@ -65,7 +67,11 @@
 
         Livewire.on('verspinnerOculto', valor => {
             $('.cargar_buscar').removeClass('d-none');
-        })
+        });
+
+        $('#reportes_articulos').select2({
+            theme: 'bootstrap4',
+        });
 
         console.log('Hi!');
     </script>

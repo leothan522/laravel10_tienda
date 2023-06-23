@@ -12,7 +12,7 @@
 
                 <div class="row justify-content-center">
                     <div class="col-md-8">
-                        <form method="post" action="{{ route('stock.reportes') }}">
+                        <form method="post" action="{{ route('stock.reportes') }}" target="_blank">
                             @csrf
                             <div class="form-group form-group-sm">
                                 <div class="input-group input-group-sm">
@@ -21,7 +21,7 @@
                                             Nivel de Stock
                                         </span>
                                     </div>
-                                    <select class="form-control form-control-sm" name="stock">
+                                    <select class="form-control form-control-sm" name="nivel">
                                         <option value="all"></option>
                                         <option value="diferente">Diferente a 0</option>
                                         <option value="igual">Igual a 0</option>
@@ -67,10 +67,9 @@
                                     </div>
                                     <select class="form-control form-group-sm" name="unidad">
                                         <option value="all"></option>
-                                        <option value="1">UND</option>
-                                        <option value="2">KG</option>
-                                        <option value="3">CAJA</option>
-                                        <option value="4">BULTO</option>
+                                        @foreach($listarUnidades as $key => $valor)
+                                            <option value="{{ $key }}">{{ $valor }}</option>
+                                        @endforeach
                                     </select>
                                     @error('unidad')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -89,8 +88,9 @@
                                     </div>
                                     <select class="form-control form-control-sm" name="almacen">
                                         <option value="all"></option>
-                                        <option value="1">ALMP</option>
-                                        <option value="2">HOLA</option>
+                                        @foreach($listarAlmacenes as $almacen)
+                                            <option value="{{ $almacen->id }}">{{ $almacen->codigo }}</option>
+                                        @endforeach
                                     </select>
                                     @error('almacen')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -101,6 +101,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <input type="hidden" name="empresa_id" value="{{ $empresa_id }}">
                                 <button type="submit" class="btn btn-block btn-primary"
                                         @if(!comprobarPermisos('stock.reportes')) disabled @endif >
                                     <i class="fas fa-file-excel"></i> Generar Reporte

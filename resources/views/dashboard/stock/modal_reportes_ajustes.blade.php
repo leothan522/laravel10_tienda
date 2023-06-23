@@ -12,7 +12,7 @@
 
                 <div class="row justify-content-center">
                     <div class="col-md-8">
-                        <form method="post" action="{{ route('ajustes.reportes') }}">
+                        <form method="post" action="{{ route('ajustes.reportes') }}" target="_blank">
                             @csrf
                             <div class="form-group form-group-sm">
                                 <div class="input-group input-group-sm">
@@ -57,8 +57,12 @@
                                     </div>
                                     <select class="form-control form-control-sm" name="tipo">
                                         <option value="all"></option>
-                                        <option value="actual">Entrada</option>
-                                        <option value="disponible">Salida</option>
+                                        @if($listarTiposAjuste->isNotEmpty())
+                                            @foreach($listarTiposAjuste as $tipo)
+                                                <option value="{{ $tipo->id }}">{{ $tipo->codigo }} {{ $tipo->descripcion }}</option>
+                                            @endforeach
+                                        @endif
+
                                     </select>
                                     @error('tipo')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -75,10 +79,13 @@
                                             Articulo
                                         </span>
                                     </div>
-                                    <select class="form-control form-control-sm" name="articulo">
-                                        <option value="all"></option>
-                                        <option value="actual">ALMP</option>
-                                        <option value="disponible">HOLA</option>
+                                    <select class="form-control form-control-sm" name="articulo" id="reportes_articulos">
+                                        <option value="all">&nbsp;</option>
+                                        @if($listarArticulos->isNotEmpty())
+                                            @foreach($listarArticulos as $articulo)
+                                                <option value="{{ $articulo->id }}">{{ $articulo->codigo }} {{ $articulo->descripcion }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                     @error('articulo')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -97,8 +104,11 @@
                                     </div>
                                     <select class="form-control form-control-sm" name="almacen">
                                         <option value="all"></option>
-                                        <option value="actual">ALMP</option>
-                                        <option value="disponible">HOLA</option>
+                                        @if($listarAlmacenes->isNotEmpty())
+                                            @foreach($listarAlmacenes as $almacen)
+                                                <option value="{{ $almacen->id }}">{{ $almacen->codigo }} {{ $almacen->nombre }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                     @error('almacen')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -129,6 +139,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <input type="hidden" name="empresa_id" value="{{ $empresa_id }}">
                                 <button type="submit" class="btn btn-block btn-primary"
                                         @if(!comprobarPermisos('ajustes.reportes')) disabled @endif >
                                     <i class="fas fa-file-excel"></i> Generar Reporte

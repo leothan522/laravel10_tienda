@@ -114,7 +114,7 @@ class StockComponent extends Component
             }
 
             $stock->actual = $actual;
-            $stock->compometido = $comprometido;
+            $stock->comprometido = $comprometido;
             $stock->disponible = $disponible;
             $stock->existencias = $array;
             $stock->vendido = $vendido;
@@ -127,13 +127,17 @@ class StockComponent extends Component
         $tiposAjuste = AjusTipo::buscar($this->keywordTiposAjuste)->orderBy('codigo', 'ASC')->paginate($paginate);
         $rowsTiposAjuste = AjusTipo::count();
         $ajustes = Ajuste::buscar($this->keywordAjustes)->where('empresas_id', $this->empresa_id)->orderBy('codigo', 'desc')->paginate($paginate);
+        $unidades = Unidad::orderBy('codigo', 'ASC')->pluck('codigo', 'id');
+        $articulos = Articulo::where('estatus', 1)->orderBy('codigo', 'asc')->get();
         return view('livewire.dashboard.stock-component')
             ->with('listarAlmacenes', $almacenes)
             ->with('rowsAlmacenes', $rowsAlmacenes)
             ->with('listarTiposAjuste', $tiposAjuste)
             ->with('rowsTiposAjuste', $rowsTiposAjuste)
             ->with('listarAjustes', $ajustes)
-            ->with('listarStock', $stock);
+            ->with('listarStock', $stock)
+            ->with('listarUnidades', $unidades)
+            ->with('listarArticulos', $articulos);
     }
 
     public function getEmpresaDefault()
