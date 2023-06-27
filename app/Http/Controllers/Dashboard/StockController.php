@@ -187,10 +187,38 @@ class StockController extends Controller
 
         $empresa_id = $request->empresa_id;
         $empresa = Empresa::find($empresa_id);
-        $ajustes = Ajuste::where('empresas_id', $empresa_id)->orderBy('codigo', 'asc')->get();
-        $ajustes->each(function ($ajuste){
-            $ajuste->detalles = AjusDetalle::where('ajustes_id', $ajuste->id)->get();
-        });
+
+        if ($reporte == "numero"){
+            $ajustes = Ajuste::where('empresas_id', $empresa_id)->orderBy('codigo', 'asc')->get();
+            $ajustes->each(function ($ajuste){
+                $ajuste->detalles = AjusDetalle::where('ajustes_id', $ajuste->id)->get();
+            });
+        }else{
+            //ajustes por articulo
+            $ajustes = Articulo::where('estatus', 1)->get();
+            foreach ($ajustes as $ajuste){
+                $contador = 0;
+                $total = 0;
+                $detalles = AjusDetalle::where('articulos_id', $ajuste->id)->get();
+                foreach ($detalles as $detalle){
+                    if ($empresa_id == $detalle->ajustes->empresas_id){
+                        $contador++;
+                        if ($detalle->tipo->tipo == 1){
+                            $total = $total + $detalle->cantidad;
+                        }else{
+                            $total = $total - $detalle->cantidad;
+                        }
+
+                    }
+                }
+                if ($contador){
+                    $ajuste->contador = true;
+                }
+                $ajuste->detalles = $detalles;
+                $ajuste->total = $total;
+            }
+        }
+
 
         if ($tipo != "all"){
             $tipo = AjusTipo::find($tipo);
@@ -202,7 +230,7 @@ class StockController extends Controller
             $almacen = Almacen::find($almacen);
         }
 
-        return view('dashboard.stock.excel_ajustes')
+        /*return view('dashboard.stock.excel_ajustes')
             ->with('reporte', $reporte)
             ->with('empresa', $empresa)
             ->with('hoy', $hoy)
@@ -213,8 +241,8 @@ class StockController extends Controller
             ->with('tipo', $tipo)
             ->with('articulo', $articulo)
             ->with('almacen', $almacen)
-            ;
-        
-        //return Excel::download(new AjustesExport($reporte, $empresa, $hoy, $desde, $hasta, $ajustes, $anulado, $tipo, $articulo, $almacen), 'Ajuste '.$label.'.xlsx');
+            ;*/
+
+        return Excel::download(new AjustesExport($reporte, $empresa, $hoy, $desde, $hasta, $ajustes, $anulado, $tipo, $articulo, $almacen), 'Ajuste '.$label.'.xlsx');
     }
 }
