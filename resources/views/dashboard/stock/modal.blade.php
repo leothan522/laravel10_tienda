@@ -45,7 +45,7 @@
                             <div class="col-md-6">
 
                                 <h3 class="col-12 my-3">{{ $getStock['articulo'] ?? '' }}</h3>
-                                
+
                                 @if(!empty($getStock) && !$getStock['articulo_estatus'])
                                     <label class="col-12 text-center">
                                         <span class="text-danger"><i class="fas fa-ban"></i></span>
