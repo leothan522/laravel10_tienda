@@ -238,6 +238,7 @@ class StockComponent extends Component
         $this->getStock['marca'] = $articulo->marca;
         $this->getStock['modelo'] = $articulo->modelo;
         $this->getStock['referencia'] = $articulo->referencia;
+        $this->getStock['articulo_estatus'] = $articulo->estatus;
         $this->getStock['estatus'] = $estatus;
         $this->getStock['existencias'] = json_decode($existencias);
         $this->getStock['dolares'] = $dolares;
