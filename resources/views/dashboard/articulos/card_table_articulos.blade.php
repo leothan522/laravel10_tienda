@@ -29,8 +29,13 @@
             @if($listarArticulos->isNotEmpty())
                 @foreach($listarArticulos as $articulo)
                     <tr class="@if($articulo_id == $articulo->id) text-bold table-warning @endif">
-                        <td>{{ $articulo->codigo }}</td>
-                        <td>{{ $articulo->descripcion }}</td>
+                        <td @if(!$articulo->estatus) class="text-muted text-sm" @endif>{{ $articulo->codigo }}</td>
+                        <td @if(!$articulo->estatus) class="text-muted text-sm" @endif>
+                            @if(!$articulo->estatus)
+                                <span class="btn-xs"><i class="fas fa-ban"></i></span>
+                            @endif
+                            {{ $articulo->descripcion }}
+                        </td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="showArticulos({{ $articulo->id }})" class="btn btn-primary btn-sm">

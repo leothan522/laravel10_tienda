@@ -140,8 +140,18 @@
             @endif
         @endif
         <tr>
-            <td style="{{ $border }}">{{ $stock->codigo }}</td>
-            <td style="{{ $border }}">{{ $stock->articulo }}</td>
+            <td style="{{ $border }}">
+                @if(!$stock->activo)
+                    *
+                @endif
+                {{ $stock->codigo }}
+            </td>
+            <td style="{{ $border }}">
+                {{ $stock->articulo }}
+                @if(!$stock->activo)
+                    (* Inactivo)
+                @endif
+            </td>
             <td style="{{ $border }}">{{ $stock->unidad }}</td>
             @if($tipo == "all" || $tipo == "actual")
                 <td style="{{ $border }}">{{ $stock->actual }}</td>
