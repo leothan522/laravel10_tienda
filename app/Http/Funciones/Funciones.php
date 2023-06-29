@@ -397,6 +397,8 @@ function calcularPrecios($empresa_id, $articulo_id, $tributarios_id, $unidades_i
     $dolar = 1;
     $iva = 0;
 
+    $moneda = null;
+
     $parametro = Parametro::where('nombre', 'precio_dolar')->first();
     if ($parametro){
         $dolar = $parametro->valor;
@@ -420,6 +422,9 @@ function calcularPrecios($empresa_id, $articulo_id, $tributarios_id, $unidades_i
         ->where('unidades_id', $unidades_id)
         ->first();
     if ($precio){
+
+        $moneda = $precio->moneda;
+
         if ($precio->moneda == "Dolares"){
             $precio_dolares = $precio->precio;
             $precio_bolivares = $precio->precio * $dolar;
@@ -444,6 +449,8 @@ function calcularPrecios($empresa_id, $articulo_id, $tributarios_id, $unidades_i
     $resultado['iva_bolivares'] = $iva_bolivares;
     $resultado['neto_dolares'] = $neto_dolares;
     $resultado['neto_bolivares'] = $neto_bolivares;
+    //reportes excel
+    $resultado['moneda'] = $moneda;
 
     //$resultado = ( $monto_total * ( $valor_iva / 100 ) );
     //En caso de que quieras redondear a dos decimales, te recomiendo usar la función number_format

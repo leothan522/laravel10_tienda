@@ -12,8 +12,28 @@
 
                 <div class="row justify-content-center">
                     <div class="col-md-8">
-                        <form method="post" action="{{ route('articulos.reportes') }}">
+                        <form method="post" action="{{ route('articulos.reportes') }}" target="_blank">
                             @csrf
+                            <div class="form-group form-group-sm">
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            Tienda
+                                        </span>
+                                    </div>
+                                    <select class="custom-select" name="empresa_id">
+                                        @foreach($listarEmpresas as $empresa)
+                                            <option value="{{ $empresa['id'] }}">{{ $empresa['text'] }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('empresa_id')
+                                    <span class="col-sm-12 text-sm text-bold text-danger">
+                                        <i class="icon fas fa-exclamation-triangle"></i>
+                                        {{ $message }}
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
                             <div class="form-group form-group-sm">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
@@ -24,7 +44,7 @@
                                     <select class="form-control form-group-sm" name="reporte">
                                         <option value="unidades">Articulos con sus Unidades</option>
                                         <option value="precios">Articulos con sus Precios</option>
-                                        <option value="identificadores">Articulos con sus Identificadores</option>
+                                        {{--<option value="identificadores">Articulos con sus Identificadores</option>--}}
                                     </select>
                                     @error('reporte')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -43,7 +63,9 @@
                                     </div>
                                     <select class="form-control form-control-sm" name="categoria">
                                         <option value="all"></option>
-                                        <option value="1">Cate001</option>
+                                        @foreach($selectCategorias as $categoria)
+                                            <option value="{{ $categoria->id }}">{{ $categoria->codigo }}</option>
+                                        @endforeach
                                     </select>
                                     @error('categoria')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -62,8 +84,9 @@
                                     </div>
                                     <select class="form-control form-control-sm" name="unidad">
                                         <option value="all"></option>
-                                        <option value="1">UND</option>
-                                        <option value="2">KG</option>
+                                        @foreach($selectUnidades as $unidad)
+                                            <option value="{{ $unidad->id }}">{{ $unidad->codigo }}</option>
+                                        @endforeach
                                     </select>
                                     @error('unidad')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -82,8 +105,9 @@
                                     </div>
                                     <select class="form-control form-control-sm" name="procedencia">
                                         <option value="all"></option>
-                                        <option value="1">NACIONAL</option>
-                                        <option value="2">IMPORTADO</option>
+                                        @foreach($selectProcedencia as $procedencia)
+                                            <option value="{{ $procedencia->id }}">{{ $procedencia->nombre }}</option>
+                                        @endforeach
                                     </select>
                                     @error('procedencia')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -97,13 +121,14 @@
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
-                                            Tributarios
+                                            Tributario
                                         </span>
                                     </div>
                                     <select class="form-control form-control-sm" name="tributario">
                                         <option value="all"></option>
-                                        <option value="1">GENERAL</option>
-                                        <option value="2">EXENTO</option>
+                                        @foreach($selectTributario as $tributario)
+                                            <option value="{{ $tributario->id }}">{{ $tributario->codigo }}</option>
+                                        @endforeach
                                     </select>
                                     @error('tributario')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -122,8 +147,9 @@
                                     </div>
                                     <select class="form-control form-control-sm" name="tipo">
                                         <option value="all"></option>
-                                        <option value="1">VENTA</option>
-                                        <option value="2">SERVICIO</option>
+                                        @foreach($selectTipo as $tipo)
+                                            <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                                        @endforeach
                                     </select>
                                     @error('tipo')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -140,7 +166,7 @@
                                             Estatus
                                         </span>
                                     </div>
-                                    <select class="form-control form-control-sm" name="anulado">
+                                    <select class="form-control form-control-sm" name="estatus">
                                         <option value="all"></option>
                                         <option value="1">Activo</option>
                                         <option value="0">Inactivo</option>

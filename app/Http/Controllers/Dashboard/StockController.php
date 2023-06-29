@@ -243,6 +243,6 @@ class StockController extends Controller
             ->with('almacen', $almacen)
             ;*/
 
-        return Excel::download(new AjustesExport($reporte, $empresa, $hoy, $desde, $hasta, $ajustes, $anulado, $tipo, $articulo, $almacen), 'Ajuste '.$label.'.xlsx');
+        return Excel::download(new AjustesExport($reporte, $empresa, $hoy, $desde, $hasta, $ajustes, $anulado, $tipo, $articulo, $almacen), 'Ajustes '.$label.'.xlsx');
     }
 }

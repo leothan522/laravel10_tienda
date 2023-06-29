@@ -45,7 +45,7 @@ class ArticulosComponent extends Component
     public $procedencia_id, $procedencia_codigo, $procedencia_nombre, $keywordProcedencias;
     public $tributario_id, $tributario_codigo, $tributario_nombre, $keywordTributarios;
     public $tipo_id, $tipo_nombre, $keywordTipos;
-    public $verMini;
+    public $verMini, $listarEmpresas;
     public $articulo_id, $articulo_codigo, $articulo_descripcion, $articulo_tipo, $articulo_categoria,
             $articulo_procedencia, $articulo_tributario, $articulo_unidad, $articulo_marca, $articulo_modelo,
             $articulo_referencia, $articulo_adicional, $articulo_decimales, $articulo_estatus, $articulo_fecha,
@@ -91,6 +91,13 @@ class ArticulosComponent extends Component
         $rowsTipos = TipoArticulo::count();
         $articulos = Articulo::buscar($this->keyword)->orderBy('codigo', 'ASC')->paginate(numRowsPaginate());
         $rowsArticulos = Articulo::count();
+        $listarCategorias = Categoria::orderBy('codigo', 'ASC')->get();
+        $listarUnidades = Unidad::orderBy('codigo', 'ASC')->get();
+        $listarProcedencia = Procedencia::orderBy('codigo', 'ASC')->get();
+        $listarTributatio = Tributario::orderBy('codigo', 'ASC')->get();
+        $listarTipo = TipoArticulo::get();
+
+        $this->getEmpresas();
 
         return view('livewire.dashboard.articulos-component')
             ->with('listarCategorias', $categorias)
@@ -105,7 +112,25 @@ class ArticulosComponent extends Component
             ->with('rowsTipos', $rowsTipos)
             ->with('listarArticulos', $articulos)
             ->with('rowsArticulos', $rowsArticulos)
+            ->with('selectCategorias', $listarCategorias)
+            ->with('selectUnidades', $listarUnidades)
+            ->with('selectProcedencia', $listarProcedencia)
+            ->with('selectTributario', $listarTributatio)
+            ->with('selectTipo', $listarTipo)
             ;
+    }
+
+    public function getEmpresas()
+    {
+        $empresas = Empresa::get();
+        $array = array();
+        foreach ($empresas as $empresa) {
+            $acceso = comprobarAccesoEmpresa($empresa->permisos, Auth::id());
+            if ($acceso) {
+                array_push($array, $empresa);
+            }
+        }
+        $this->listarEmpresas = dataSelect2($array);
     }
 
     // ************************* Categorias ********************************************
