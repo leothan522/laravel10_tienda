@@ -20,7 +20,7 @@ class UserAdmin
             return $next($request);
         }else{
             verSweetAlert2('No tienes permisos suficientes', 'toast', 'error');
-            return redirect()->route('welcome');
+            return redirect()->route('web.index');
         }
     }
 }

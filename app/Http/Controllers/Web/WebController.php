@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Hash;
 
 class WebController extends Controller
 {
+
+    public function index()
+    {
+        return view('web.index');
+    }
     public function recuperar($token, $email)
     {
         return view('web.reset-password')

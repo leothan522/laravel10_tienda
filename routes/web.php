@@ -15,16 +15,17 @@ use App\Http\Controllers\Web\WebController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('web.index');
+/*Route::get('/', function () {
+    return view('web.index');
+})->name('web.index');*/
+
+Route::get('/', [WebController::class, 'index'])->name('web.index');
+Route::get('/recuperar/{token}/{email}', [WebController::class, 'recuperar'])->name('web.recuperar');
+Route::post('/reset', [WebController::class, 'reset'])->name('web.reset');
 
 Route::get('/perfil', function (){
     return view('profile.show_default');
 })->name('web.perfil')->middleware('auth');
-
-Route::get('/recuperar/{token}/{email}', [WebController::class, 'recuperar'])->name('web.recuperar');
-Route::post('/reset', [WebController::class, 'reset'])->name('web.reset');
 
 Route::middleware([
     'auth:sanctum',
