@@ -517,6 +517,17 @@ function cerosIzquierda($cantidad, $cantCeros = 2)
     return str_pad($cantidad, $cantCeros, "0", STR_PAD_LEFT);
 }
 
+function telefonoSoporte()
+{
+    $parametro = Parametro::where('nombre', 'telefono_soporte')->first();
+    if ($parametro){
+        $telefono = strtoupper($parametro->valor);
+    }else{
+        $telefono = "0212.999.99.99";
+    }
+    return $telefono;
+}
+
 //***********************************************************************************
 
 
@@ -640,17 +651,6 @@ function verIconoMetodosPago($metodo)
         'movil' => '<i class="fas fa-mobile-alt"></i>'
     ];
     return $status[$metodo];
-}
-
-function telefonoSoporte()
-{
-    $parametro = Parametro::where('nombre', 'telefono_soporte')->first();
-    if ($parametro){
-        $telefono = strtoupper($parametro->valor);
-    }else{
-        $telefono = "0212.999.99.99";
-    }
-    return $telefono;
 }
 
 function verTipoCategoria($categoria)

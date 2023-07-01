@@ -14,8 +14,34 @@ class WebController extends Controller
 
     public function index()
     {
-        return view('web.index');
+        return view('web.multishop.index');
     }
+
+    public function shop()
+    {
+        return view('web.multishop.shop.index');
+    }
+
+    public function detail()
+    {
+        return view('web.multishop.detail.index');
+    }
+
+    public function cart()
+    {
+        return view('web.multishop.cart.index');
+    }
+
+    public function checkout()
+    {
+        return view('web.multishop.checkout.index');
+    }
+
+    public function contact()
+    {
+        return view('web.multishop.contact.index');
+    }
+
     public function recuperar($token, $email)
     {
         return view('web.reset-password')

@@ -10,8 +10,8 @@
             <li>formato_codigo_ajutes[empresa_id|formato]</li>
             <li>editable_codigo_ajutes[empresa_id|1/-0]</li>
             <li>editable_fecha_ajutes[empresa_id|1/-0]</li>
-            {{--<li>telefono_soporte</li>
-            <li>codigo_pedido</li>--}}
+            <li>telefono_soporte[null|telefono]</li>
+            {{--<li>codigo_pedido</li>--}}
         </ul>
     </div>
 

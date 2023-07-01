@@ -20,6 +20,11 @@ use App\Http\Controllers\Web\WebController;
 })->name('web.index');*/
 
 Route::get('/', [WebController::class, 'index'])->name('web.index');
+Route::get('/shop', [WebController::class, 'shop'])->name('web.shop');
+Route::get('/detail', [WebController::class, 'detail'])->name('web.detail');
+Route::get('/cart', [WebController::class, 'cart'])->name('web.cart');
+Route::get('/checkout', [WebController::class, 'checkout'])->name('web.checkout');
+Route::get('/contact', [WebController::class, 'contact'])->name('web.contact');
 Route::get('/recuperar/{token}/{email}', [WebController::class, 'recuperar'])->name('web.recuperar');
 Route::post('/reset', [WebController::class, 'reset'])->name('web.reset');
 

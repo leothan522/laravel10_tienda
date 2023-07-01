@@ -2,10 +2,15 @@
     <div class="row bg-secondary py-1 px-xl-5">
         <div class="col-lg-6 d-none d-lg-block">
             <div class="d-inline-flex align-items-center h-100">
-                <a class="text-body mr-3" href="">About</a>
-                <a class="text-body mr-3" href="">Contact</a>
-                <a class="text-body mr-3" href="">Help</a>
-                <a class="text-body mr-3" href="">FAQs</a>
+                {{--<a class="text-body mr-3" href="">About</a>--}}
+                <a class="text-body mr-3" href="{{ route('web.contact') }}">Contacto</a>
+                {{--<a class="text-body mr-3" href="">Help</a>
+                <a class="text-body mr-3" href="">FAQs</a>--}}
+                @auth
+                    @if(auth()->user()->role > 0)
+                        <a class="text-body mr-3" href="{{ route('dashboard') }}">Dashboard</a>
+                    @endif
+                @endauth
             </div>
         </div>
         <div class="col-lg-6 text-center text-lg-right">
@@ -71,7 +76,15 @@
         </div>
         <div class="col-lg-4 col-6 text-right">
             <p class="m-0">Servicio al Cliente</p>
-            <h5 class="m-0">+012 345 6789</h5>
+            <h5 class="m-0">{{ telefonoSoporte() }}</h5>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid d-block d-lg-none">
+    <div class="row align-items-center bg-light py-3 px-xl-5">
+        <div class="col-lg-4 text-left">
+            @include('vendor.multishop.partials.topbar.form_buscar')
         </div>
     </div>
 </div>
