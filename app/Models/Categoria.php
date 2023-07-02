@@ -34,4 +34,9 @@ class Categoria extends Model
         return $this->hasMany(Articulo::class, 'categorias_id', 'id');
     }
 
+    public function oferta(): HasMany
+    {
+        return $this->hasMany(Oferta::class, 'categorias_id', 'id');
+    }
+
 }

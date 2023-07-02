@@ -332,20 +332,20 @@ return [
         [
             'text'      => 'E-commerce',
             'icon'      => 'fas fa-fw fa-store ',
-            'can'       => ['empresas'],
+            'can'       => ['empresas', 'ofertas'],
             'submenu' => [
+                [
+                    'text' => 'Ofertas',
+                    'icon' => 'fas fa-fw fa-gifts',
+                    'route' => 'ofertas.index',
+                    'can' => 'ofertas',
+                ],
                 [
                     'text' => 'Tiendas',
                     'icon' => 'fas fa-fw fa-store-alt',
                     'route'  => 'empresas.index',
                     'can'  => 'empresas',
-                ],
-                /*[
-                    'text' => 'Parametros',
-                    'icon' => 'fas fa-fw fa-list',
-                    'route' => 'parametros.index',
-                    'can' => 'parametros',
-                ]*/
+                ]
             ],
         ],
         [
@@ -528,6 +528,11 @@ return [
                     'asset' => true,
                     /*'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',*/
                     'location' => 'vendor/select2/js/select2.full.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/select2/js/i18n/es.js',
                 ],
                 [
                     'type' => 'css',

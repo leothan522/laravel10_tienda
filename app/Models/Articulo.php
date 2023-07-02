@@ -95,6 +95,11 @@ class Articulo extends Model
         return $this->hasMany(AjusDetalle::class, 'articulos_id', 'id');
     }
 
+    public function oferta(): HasMany
+    {
+        return $this->hasMany(Oferta::class, 'articulos_id', 'id');
+    }
+
 
 
 }

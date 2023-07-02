@@ -54,4 +54,9 @@ class Empresa extends Model
         return $this->hasMany(Ajuste::class, 'empresas_id', 'id');
     }
 
+    public function oferta(): HasMany
+    {
+        return $this->hasMany(Oferta::class, 'empresas_id', 'id');
+    }
+
 }

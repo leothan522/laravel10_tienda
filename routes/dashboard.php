@@ -8,6 +8,7 @@ use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Dashboard\EmpresasController;
 use App\Http\Controllers\Dashboard\ArticulosController;
 use App\Http\Controllers\Dashboard\StockController;
+use App\Http\Controllers\Dashboard\OfertasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,7 @@ Route::middleware([
     Route::get('print/ajuste/{id?}', [StockController::class, 'printAjustes'])->name('ajustes.print');
     Route::post('export/stock', [StockController::class, 'reporteStock'])->name('stock.reportes');
     Route::post('export/ajustes', [StockController::class, 'reporteAjustes'])->name('ajustes.reportes');
+    Route::get('ofertas', [OfertasController::class, 'index'])->name('ofertas.index');
 
 });
 
