@@ -9,6 +9,7 @@ use App\Models\Tributario;
 use App\Models\Precio;
 use App\Models\Articulo;
 use App\Models\Empresa;
+use App\Models\Oferta;
 
 function hola(){
     return "Funciones Personalidas bien creada";
@@ -384,6 +385,18 @@ function dataSelect2($rows)
     return $data;
 }
 
+function array_sort_by($arrIni, $col, $order = SORT_ASC)
+{
+    $arrAux = array();
+    foreach ($arrIni as $key=> $row)
+    {
+        $arrAux[$key] = is_object($row) ? $arrAux[$key] = $row->$col : $row[$col];
+        $arrAux[$key] = strtolower($arrAux[$key]);
+    }
+    array_multisort($arrAux, $order, $arrIni);
+    return $arrIni;
+}
+
 function calcularPrecios($empresa_id, $articulo_id, $tributarios_id, $unidades_id)
 {
     $resultado = array();
@@ -396,6 +409,9 @@ function calcularPrecios($empresa_id, $articulo_id, $tributarios_id, $unidades_i
     $neto_bolivares = 0;
     $dolar = 1;
     $iva = 0;
+    $oferta_dolares = 0;
+    $oferta_bolivares = 0;
+    $porcentaje = 0;
 
     $moneda = null;
 
@@ -430,16 +446,59 @@ function calcularPrecios($empresa_id, $articulo_id, $tributarios_id, $unidades_i
             $precio_bolivares = $precio->precio * $dolar;
         }else{
             $precio_bolivares = $precio->precio;
-            $precio_dolares = $precio->precio / $dolar;
+            $precio_dolares = round($precio->precio / $dolar, 2);
         }
 
         if ($iva){
-            $iva_dolares = ( $precio_dolares * ( $iva / 100 ) );
-            $iva_bolivares = ( $precio_bolivares * ( $iva / 100 ) );
+            $iva_dolares = round($precio_dolares * ( $iva / 100), 2);
+            $iva_bolivares = round($precio_bolivares * ( $iva / 100 ), 2);
         }
 
-        $neto_dolares = $precio_dolares + $iva_dolares;
-        $neto_bolivares = $precio_bolivares + $iva_bolivares;
+        $neto_dolares = round($precio_dolares + $iva_dolares, 2);
+        $neto_bolivares = round($precio_bolivares + $iva_bolivares, 2);
+
+
+        $hoy = date("Y-m-d H:i:s");
+        $ofertas = Oferta::where('empresas_id', $empresa_id)
+            ->where('desde', '<=', $hoy)
+            ->where('hasta', '>=', $hoy)
+            ->get();
+        if ($ofertas->isNotEmpty()){
+            $encontrados = array();
+
+            foreach ($ofertas as $oferta){
+                $aplicar = false;
+                $afectados = $oferta->afectados;
+                $categoria = $oferta->categorias_id;
+                $articulo = $oferta->articulos_id;
+
+                $articulos = Articulo::find($articulo_id);
+
+                if ($afectados == 0) { $aplicar = true; }
+                if ($afectados == 1 && $categoria == $articulos->categorias_id){ $aplicar = true; }
+                if ($afectados == 2 && $articulo == $articulo_id){ $aplicar = true; }
+
+                if ($aplicar){
+                    $encontrados[] = [
+                        'afectados' => $afectados,
+                        'descuento' => $oferta->descuento
+                    ];
+                }
+            }
+
+            if (!empty($encontrados)){
+                $encontrados = array_sort_by($encontrados, 'afectados', SORT_DESC);
+                //dd($encontrados[0]['descuento']);
+                $porcentaje = $encontrados[0]['descuento'];
+                $procesar = round($encontrados[0]['descuento'] / 100, 2);
+                $descuento_dolares = round($neto_dolares * $procesar, 2);
+                $descuento_bolivares = round($neto_bolivares * $procesar, 2);
+                $oferta_dolares = $neto_dolares - $descuento_dolares;
+                $oferta_bolivares = $neto_bolivares - $descuento_bolivares;
+            }
+        }
+
+
     }
 
     $resultado['moneda_base'] = $moneda_base;
@@ -449,6 +508,9 @@ function calcularPrecios($empresa_id, $articulo_id, $tributarios_id, $unidades_i
     $resultado['iva_bolivares'] = $iva_bolivares;
     $resultado['neto_dolares'] = $neto_dolares;
     $resultado['neto_bolivares'] = $neto_bolivares;
+    $resultado['oferta_dolares'] = $oferta_dolares;
+    $resultado['oferta_bolivares'] = $oferta_bolivares;
+    $resultado['porcentaje'] = $porcentaje;
     //reportes excel
     $resultado['moneda'] = $moneda;
 
@@ -574,61 +636,7 @@ function obtenerPorcentaje($cantidad, $total)
 
 /*
 
-function calcularPrecio($id, $pvp, $iva = false, $label = false)
-{
-    $resultado = 0;
-    //puedes después cambiarlo a 16% si así lo requieres
-    $valor_iva = 16;
-    $monto_total = $pvp;
-    $precio_dolar = 1;
 
-    $dolar = Parametro::where('nombre', 'precio_dolar')->first();
-    if ($dolar){
-        if ($dolar->valor > 0){
-            $precio_dolar = $dolar->valor;
-        }
-    }
-
-    $parametro = Parametro::where('nombre', 'iva')->first();
-    if ($parametro){
-        $valor_iva = $parametro->valor;
-    }
-    if ($label){
-        return $valor_iva;
-    }
-
-    $stock = Stock::find($id);
-    $moneda_empresa = $stock->empresa->moneda;
-    $moneda_stock = $stock->moneda;
-
-    $producto = Producto::find($stock->productos_id);
-    //dd($id);
-    if ($producto && $producto->impuesto == 1){
-        if ($iva){
-            $resultado = ( $monto_total * ( $valor_iva / 100 ) );
-            if ($moneda_stock == 'Bs.'){
-                $resultado = $resultado / $precio_dolar;
-            }
-        }else{
-            $resultado = ( $monto_total ) + ( $monto_total * ( $valor_iva / 100 ) );
-            if ($moneda_stock == 'Bs.'){
-                $resultado = $resultado / $precio_dolar;
-            }
-        }
-    }else{
-        if ($iva){
-            $resultado = 0;
-        }else{
-            $resultado = $monto_total;
-        }
-    }
-
-
-
-    //En caso de que quieras redondear a dos decimales, te recomiendo usar la función number_format
-    $resultado = number_format($resultado, 2, '.', false);
-    return $resultado;
-}
 
 function verIconoEstatusPedico($estatus)
 {

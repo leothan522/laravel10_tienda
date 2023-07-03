@@ -42,6 +42,10 @@
                 <td>
                     @if(!$stock->activo)
                         <span class="btn-sm text-danger"><i class="fas fa-ban"></i></span>
+                    @else
+                        @if($stock->porcentaje > 0)
+                            <i class="fas fa-gifts text-primary"></i>
+                        @endif
                     @endif
                     <span class="text-sm">{{ $stock->articulo }}</span>
                 </td>
@@ -52,7 +56,7 @@
                         @endif
                         <span class="text-bold">$</span>
                         {{ formatoMillares($stock->dolares, 2) }}
-                        @else
+                    @else
                         @if(!$stock->bolivares)
                             <span class="btn-sm text-danger"><i class="fas fa-times"></i></span>
                         @endif
@@ -93,12 +97,15 @@
                 <td>{{ $stock->unidad }}</td>
                 <td class="text-center">
                     @if($stock->estatus && ($stock->dolares || $stock->bolivares) && $stock->activo)
-                        <button type="button" class="btn btn-sm" wire:click="setEstatus('{{ json_encode($stock->existencias) }}')"
-                        @if(!comprobarPermisos('stock.estatus')) disabled @endif >
+                        <button type="button" class="btn btn-sm"
+                                wire:click="setEstatus('{{ json_encode($stock->existencias) }}')"
+                                @if(!comprobarPermisos('stock.estatus')) disabled @endif >
                             <i class="fas fa-globe text-success"></i>
                         </button>
                     @else
-                        <button type="button" class="btn btn-sm" @if(($stock->dolares || $stock->bolivares) && $stock->activo && comprobarPermisos('stock.estatus')) wire:click="setEstatus('{{ json_encode($stock->existencias) }}')" @else disabled @endif>
+                        <button type="button" class="btn btn-sm"
+                                @if(($stock->dolares || $stock->bolivares) && $stock->activo && comprobarPermisos('stock.estatus')) wire:click="setEstatus('{{ json_encode($stock->existencias) }}')"
+                                @else disabled @endif>
                             <i class="fas fa-eraser text-muted"></i>
                         </button>
                     @endif
@@ -106,8 +113,9 @@
                 <td class="text-center">
                     <div class="btn-group">
 
-                        <button type="button" class="btn btn-info btn-sm" wire:click="showModal('{{ $stock->articulos_id }}', '{{ $stock->unidades_id }}', '{{ $stock->vendido }}', '{{ $stock->estatus }}', '{{ json_encode($stock->existencias) }}', '{{ $stock->dolares }}', '{{ $stock->bolivares }}', '{{ $stock->activo }}', '{{ $i }}')"
-                        data-toggle="modal" data-target="#modal-lg-stock" id="ver_modal_{{ $i }}">
+                        <button type="button" class="btn btn-info btn-sm"
+                                wire:click="showModal('{{ $stock->articulos_id }}', '{{ $stock->unidades_id }}', '{{ $stock->vendido }}', '{{ $stock->estatus }}', '{{ json_encode($stock->existencias) }}', '{{ $stock->dolares }}', '{{ $stock->bolivares }}', '{{ $stock->activo }}', '{{ $stock->porcentaje }}', '{{ $stock->oferta_dolares }}', '{{ $stock->oferta_bolivares }}')"
+                                data-toggle="modal" data-target="#modal-lg-stock" id="ver_modal_{{ $i }}">
                             <i class="fas fa-eye"></i>
                         </button>
 

@@ -36,7 +36,7 @@
                                     <div class="col-12">
                                         <div class="callout callout-success">
                                             <label class="col-12"><span class="text-muted">Vendidos:</span><span
-                                                        class="float-right text-bold">{{ formatoMillares($getStock['vendido'] ?? 0, 3) }} {{ $getStock['unidad'] ?? '' }}</span></label>
+                                                    class="float-right text-bold">{{ formatoMillares($getStock['vendido'] ?? 0, 3) }} {{ $getStock['unidad'] ?? '' }}</span></label>
                                         </div>
                                     </div>
                                 </div>
@@ -54,22 +54,22 @@
                                 @endif
 
                                 <label class="col-12"><span
-                                            class="text-muted">Codigo:</span>&nbsp;&nbsp;{{ $getStock['codigo'] ?? '' }}
+                                        class="text-muted">Codigo:</span>&nbsp;&nbsp;{{ $getStock['codigo'] ?? '' }}
                                 </label>
                                 <label class="col-12"><span
-                                            class="text-muted">Categoria:</span>&nbsp;&nbsp;{{ $getStock['categoria'] ?? '' }}
+                                        class="text-muted">Categoria:</span>&nbsp;&nbsp;{{ $getStock['categoria'] ?? '' }}
                                 </label>
                                 <label class="col-12"><span
-                                            class="text-muted">Unidad Primaria:</span>&nbsp;&nbsp;{{ $getStock['unidad_principal'] ?? '' }}
+                                        class="text-muted">Unidad Primaria:</span>&nbsp;&nbsp;{{ $getStock['unidad_principal'] ?? '' }}
                                 </label>
 
                                 <hr>
 
                                 <label class="col-md-12"><span
-                                            class="text-muted">Tipo:</span>&nbsp;&nbsp;{{ $getStock['tipo'] ?? '' }}
+                                        class="text-muted">Tipo:</span>&nbsp;&nbsp;{{ $getStock['tipo'] ?? '' }}
                                 </label>
                                 <label class="col-md-12"><span
-                                            class="text-muted">Procedencia:</span>&nbsp;&nbsp;{{ $getStock['procedencia'] ?? '' }}
+                                        class="text-muted">Procedencia:</span>&nbsp;&nbsp;{{ $getStock['procedencia'] ?? '' }}
                                 </label>
                                 <label class="col-md-12">
                                     <span class="text-muted">I.V.A.:</span>&nbsp;&nbsp;
@@ -81,7 +81,7 @@
                                     @if($getStock)
                                         @if($getStock['estatus'] && ($getStock['dolares'] || $getStock['bolivares']) && $getStock['activo'])
                                             <button type="button" class="btn" style="cursor: default;"
-                                                    {{--wire:click="setEstatus('{{ json_encode($getStock['existencias']) }}')"--}}>
+                                                {{--wire:click="setEstatus('{{ json_encode($getStock['existencias']) }}')"--}}>
                                                 <i class="fas fa-globe text-success"></i> Publicado
                                             </button>
                                         @else
@@ -94,16 +94,29 @@
                                     @endif
                                 </label>
 
+                                @if($getStock && $getStock['porcentaje'] > 0 && $getStock['articulo_estatus'])
+                                    <label class="col-md-12">
+                                        <i class="fas fa-gifts text-primary"></i>
+                                        <span
+                                            class="text-primary">Oferta:</span>&nbsp;&nbsp;Descuento {{ $getStock['porcentaje'] ?? '' }}%
+                                    </label>
+                                    <label class="col-md-6"><span
+                                            class="text-muted">Dolares:</span>&nbsp;&nbsp;${{ formatoMillares($getStock['oferta_dolares'], 2) }}
+                                    </label>
+                                    <label class="col-md-6"><span
+                                            class="text-muted">Bolivares:</span>&nbsp;&nbsp;{{ formatoMillares($getStock['oferta_bolivares'], 2) }} Bs.
+                                    </label>
+                                @endif
                                 <hr>
 
                                 <label class="col-md-12"><span
-                                            class="text-muted">Marca:</span>&nbsp;&nbsp;{{ $getStock['marca'] ?? '' }}
+                                        class="text-muted">Marca:</span>&nbsp;&nbsp;{{ $getStock['marca'] ?? '' }}
                                 </label>
                                 <label class="col-md-12"><span
-                                            class="text-muted">Modelo:</span>&nbsp;&nbsp;{{ $getStock['modelo'] ?? '' }}
+                                        class="text-muted">Modelo:</span>&nbsp;&nbsp;{{ $getStock['modelo'] ?? '' }}
                                 </label>
                                 <label class="col-md-12"><span
-                                            class="text-muted">Referencia:</span>&nbsp;&nbsp;{{ $getStock['referencia'] ?? '' }}
+                                        class="text-muted">Referencia:</span>&nbsp;&nbsp;{{ $getStock['referencia'] ?? '' }}
                                 </label>
 
                             </div>

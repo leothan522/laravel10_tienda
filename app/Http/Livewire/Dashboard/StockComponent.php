@@ -89,6 +89,9 @@ class StockComponent extends Component
             $stock->iva_bolivares = $resultado['iva_bolivares'];
             $stock->neto_dolares = $resultado['neto_dolares'];
             $stock->neto_bolivares = $resultado['neto_bolivares'];
+            $stock->oferta_dolares = $resultado['oferta_dolares'];
+            $stock->oferta_bolivares = $resultado['oferta_bolivares'];
+            $stock->porcentaje = $resultado['porcentaje'];
 
             $existencias = Stock::where('empresas_id', $stock->empresas_id)
                 ->where('articulos_id', $articulo->id)
@@ -218,7 +221,7 @@ class StockComponent extends Component
         }
     }
 
-    public function showModal($articulos_id, $unidades_id, $vendido, $estatus, $existencias, $dolares, $bolivares, $activo)
+    public function showModal($articulos_id, $unidades_id, $vendido, $estatus, $existencias, $dolares, $bolivares, $activo, $porcentaje, $oferta_dolares, $oferta_bolivares)
     {
         $empresa = Empresa::find($this->empresa_id);
         $articulo = Articulo::find($articulos_id);
@@ -244,6 +247,9 @@ class StockComponent extends Component
         $this->getStock['dolares'] = $dolares;
         $this->getStock['bolivares'] = $bolivares;
         $this->getStock['activo'] = $activo;
+        $this->getStock['porcentaje'] = $porcentaje;
+        $this->getStock['oferta_dolares'] = $oferta_dolares;
+        $this->getStock['oferta_bolivares'] = $oferta_bolivares;
     }
 
     // ************************* Almacenes ********************************************
