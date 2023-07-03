@@ -21,7 +21,7 @@
                         </div>
                     </div>
                     <div class="carousel-item position-relative" style="height: 430px;">
-                        <img class="position-absolute w-100 h-100" src="{{ asset('img/carousel/carousel_15.png') }}" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100" src="{{ asset('img/carousel/carousel_2.png') }}" style="object-fit: cover;">
                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                             <div class="p-3" style="max-width: 700px;">
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Compras desde tu Móvil</h1>
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="carousel-item position-relative" style="height: 430px;">
-                        <img class="position-absolute w-100 h-100" src="{{ asset('img/carousel/carousel_4.png') }}" style="object-fit: cover;">
+                        <img class="position-absolute w-100 h-100" src="{{ asset('img/carousel/carousel_1.png') }}" style="object-fit: cover;">
                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                             <div class="p-3" style="max-width: 700px;">
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Acceso Personalizado</h1>
