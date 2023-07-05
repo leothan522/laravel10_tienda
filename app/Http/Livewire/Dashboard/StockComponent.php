@@ -66,8 +66,8 @@ class StockComponent extends Component
         $empresa = Empresa::find($this->empresa_id);
         $this->empresa = $empresa;
 
-        $stock = Stock::select(['empresas_id', 'articulos_id', 'unidades_id', 'estatus'])
-            ->groupBy('empresas_id', 'articulos_id', 'unidades_id', 'estatus')
+        $stock = Stock::select(['empresas_id', 'articulos_id', 'unidades_id'])
+            ->groupBy('empresas_id', 'articulos_id', 'unidades_id')
             ->having('empresas_id', $this->empresa_id)
             ->orderBy('articulos_id', 'asc')
             ->paginate(100);
@@ -102,6 +102,7 @@ class StockComponent extends Component
             $comprometido = 0;
             $disponible = 0;
             $vendido = 0;
+            $estatus = array();
             foreach ($existencias as $existencia) {
                 $array[] = [
                     'id' => $existencia->id,
@@ -114,6 +115,13 @@ class StockComponent extends Component
                 $comprometido = $comprometido + $existencia->comprometido;
                 $disponible = $disponible + $existencia->disponible;
                 $vendido = $vendido + $existencia->vendido;
+
+                if ($existencia->almacen_principal){
+                    if ($existencia->estatus){
+                        $estatus[] = true;
+                    }
+                }
+
             }
 
             $stock->actual = $actual;
@@ -121,6 +129,12 @@ class StockComponent extends Component
             $stock->disponible = $disponible;
             $stock->existencias = $array;
             $stock->vendido = $vendido;
+
+            if (!empty($estatus)){
+                $stock->estatus = 1;
+            }else{
+                $stock->estatus = 0;
+            }
 
         });
 
@@ -212,12 +226,14 @@ class StockComponent extends Component
     {
         foreach (json_decode($existencias) as $existencia) {
             $stock = Stock::find($existencia->id);
-            if ($stock->estatus == 1) {
-                $stock->estatus = 0;
-            } else {
-                $stock->estatus = 1;
+            if ($stock->almacen_principal){
+                if ($stock->estatus == 1) {
+                    $stock->estatus = 0;
+                } else {
+                    $stock->estatus = 1;
+                }
+                $stock->update();
             }
-            $stock->update();
         }
     }
 
