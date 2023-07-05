@@ -41,7 +41,8 @@
 
         <div class="min-h-screen bg-gray-100">
 
-            @if(\Illuminate\Support\Facades\Route::currentRouteName() != 'usuarios.perfil')
+            @if(\Illuminate\Support\Facades\Route::currentRouteName() != 'usuarios.perfil' &&
+                \Illuminate\Support\Facades\Route::currentRouteName() != 'web.perfil' )
                 @livewire('navigation-menu')
             @endif
 

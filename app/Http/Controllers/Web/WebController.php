@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RecuperarRequest;
+use App\Models\Categoria;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,7 +15,14 @@ class WebController extends Controller
 
     public function index()
     {
-        return view('web.multishop.index');
+        $categorias = Categoria::get();
+        return view('web.multishop.index')
+            ->with('listarCategorias', $categorias);
+    }
+
+    public function perfil()
+    {
+        return view('web.multishop.perfil.index');
     }
 
     public function shop()

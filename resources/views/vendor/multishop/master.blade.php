@@ -96,6 +96,7 @@
 <x-livewire-alert::scripts />
 
 {{-- JS Personalizado--}}
+<script src="{{ asset('js/sweetalert-app.js') }}"></script>
 <script src="{{ asset('js/web-app.js') }}"></script>
 @yield('js')
 </body>

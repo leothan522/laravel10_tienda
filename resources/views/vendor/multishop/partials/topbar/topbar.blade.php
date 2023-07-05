@@ -17,40 +17,30 @@
             <div class="d-inline-flex align-items-center">
                 <div class="btn-group">
                     @auth
-                        <a href="{{ route('profile.show') }}" class="btn btn-sm text-dark"><i class="fas fa-user"></i> {{ Auth::user()->name }}</a>
-                        <button href="#" class="btn btn-sm text-dark d-none d-lg-block" onclick="cerrarSesion()"><i class="fas fa-power-off"></i> Cerrar</button>
+                        <a href="{{ route('web.perfil') }}" class="btn btn-sm text-dark"><i class="fas fa-user"></i> {{ Auth::user()->name }}</a>
+                        <button class="btn btn-sm text-dark d-none d-lg-block" onclick="cerrarSesion()"><i class="fas fa-power-off"></i> Cerrar</button>
                         <form class="d-none" action="{{ route('logout') }}" method="post">
                             @csrf
                             <input type="submit" value="enviar" id="btn_cerrar_sesion">
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-sm text-dark"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a>
-                        <a href="{{ route('register') }}" class="btn btn-sm text-dark"><i class="fas fa-user-plus"></i>  Registrarse</a>
+
+                        <div id="topbar_botones_derecha">
+                            <a href="{{ route('login') }}" class="btn btn-sm text-dark"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a>
+                            <a href="{{ route('register') }}" class="btn btn-sm text-dark"><i class="fas fa-user-plus"></i>  Registrarse</a>
+                        </div>
+
+                        <div class="row mr-1 d-none" id="topbar_datos_usuario">
+                            <a href="{{ route('profile.show') }}" class="btn btn-sm text-dark"><i class="fas fa-user"></i> <span id="topbar_nombre_usuario">Nombre Usuario</span></a>
+                            <button class="btn btn-sm text-dark d-none d-lg-block" onclick="cerrarSesion()"><i class="fas fa-power-off"></i> Cerrar</button>
+                            <form class="d-none" action="{{ route('logout') }}" method="post">
+                                @csrf
+                                <input type="submit" value="enviar" id="btn_cerrar_sesion">
+                            </form>
+                        </div>
+
                     @endauth
                 </div>
-                {{--<div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">Sign in</button>
-                        <button class="dropdown-item" type="button">Sign up</button>
-                    </div>
-                </div>--}}
-                {{--<div class="btn-group mx-2">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">EUR</button>
-                        <button class="dropdown-item" type="button">GBP</button>
-                        <button class="dropdown-item" type="button">CAD</button>
-                    </div>
-                </div>--}}
-                {{--<div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">EN</button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">FR</button>
-                        <button class="dropdown-item" type="button">AR</button>
-                        <button class="dropdown-item" type="button">RU</button>
-                    </div>
-                </div>--}}
             </div>
             <div class="d-inline-flex align-items-center d-block d-lg-none">
                 <a href="" class="btn px-0 ml-2">

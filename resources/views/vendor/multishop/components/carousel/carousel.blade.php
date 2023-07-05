@@ -1,5 +1,5 @@
-<div class="container-fluid mb-3">
-    <div class="row px-xl-5">
+<div class="container-fluid mb-3" xmlns:wire="http://www.w3.org/1999/xhtml">
+    <div class="row px-xl-5 justify-content-center">
         <div class="col-lg-8 d-none d-lg-block">
             <div id="header-carousel" class="carousel slide carousel-fade mb-30 mb-lg-0" data-ride="carousel">
                 <ol class="carousel-indicators">
@@ -47,23 +47,27 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
-            <div class="product-offer mb-30" style="height: 200px;">
-                <img class="img-fluid" src="{{ asset('vendor/multishop/img/offer-1.jpg') }}" alt="">
-                <div class="offer-text">
-                    <h6 class="text-white text-uppercase">Ahorre 20%</h6>
-                    <h3 class="text-white mb-3">Oferta Especial</h3>
-                    <a href="" class="btn btn-primary">Compra ahora</a>
-                </div>
+        @if($listarOfertas)
+            <div class="col-lg-4">
+                @foreach($listarOfertas as $oferta)
+                    <div class="product-offer mb-30" style="height: 200px;">
+                        <img class="img-fluid" src="{{ verImagen($oferta->imagen) }}" alt="">
+                        <div class="offer-text">
+                            <h6 class="text-white text-uppercase">Ahorre {{ $oferta->descuento }}%</h6>
+                            <h3 class="text-white mb-3">{{ $oferta->titulo }}</h3>
+                            <a href="" class="btn btn-primary" onclick="verCargando()">{{ $oferta->boton }}</a>
+                        </div>
+                    </div>
+                @endforeach
+                {{--<div class="product-offer mb-30" style="height: 200px;">
+                    <img class="img-fluid" src="{{ asset('vendor/multishop/img/offer-2.jpg') }}" alt="">
+                    <div class="offer-text">
+                        <h6 class="text-white text-uppercase">Ahorre 20%</h6>
+                        <h3 class="text-white mb-3">Oferta Especial</h3>
+                        <a href="" class="btn btn-primary">Compra ahora</a>
+                    </div>
+                </div>--}}
             </div>
-            <div class="product-offer mb-30" style="height: 200px;">
-                <img class="img-fluid" src="{{ asset('vendor/multishop/img/offer-2.jpg') }}" alt="">
-                <div class="offer-text">
-                    <h6 class="text-white text-uppercase">Ahorre 20%</h6>
-                    <h3 class="text-white mb-3">Oferta Especial</h3>
-                    <a href="" class="btn btn-primary">Compra ahora</a>
-                </div>
-            </div>
-        </div>
+        @endif
     </div>
 </div>

@@ -1,0 +1,8 @@
+@include('vendor.multishop.components.carousel.carousel')
+@include('vendor.multishop.components.featured.featured')
+@include('vendor.multishop.components.categories.categories')
+@include('vendor.multishop.components.products.products', ['products_title' => 'Productos Destacados', 'products_lista' => $listarStock ])
+@include('vendor.multishop.components.offer.offer')
+@include('vendor.multishop.components.products.products', ['products_title' => 'Productos recientes', 'products_lista' => $listarStock ])
+@include('vendor.multishop.components.vendor.vendor')
+@include('web.multishop.index.modal_login')

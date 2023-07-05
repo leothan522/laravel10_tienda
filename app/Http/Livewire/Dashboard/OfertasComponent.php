@@ -154,7 +154,7 @@ class OfertasComponent extends Component
         $oferta->descuento = $this->descuento;
         $oferta->save();
 
-        $this->edit($oferta->id);
+        $this->limpiar();
 
         $this->alert(
             'success',
