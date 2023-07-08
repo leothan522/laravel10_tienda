@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\Web;
 
+use App\Models\Articulo;
 use App\Models\Categoria;
 use App\Models\Empresa;
 use App\Models\Oferta;
 use App\Models\Stock;
+use App\Models\Unidad;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -26,19 +28,28 @@ class HomeComponent extends Component
         $ofertas = $this->listarOfertas();
         $categorias = Categoria::orderBy('nombre', 'asc')->get();
         $empresas = Empresa::get();
-        $stock = Stock::get();
+
+        $destacados = Stock::where('almacen_principal', 1)
+            ->where('estatus', 1)
+            ->orderBy('vendido', 'desc')
+            ->get();
+
+        $recientes = Stock::where('almacen_principal', 1)
+            ->where('estatus', 1)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+
+        $this->recorrerStock($destacados);
+        $this->recorrerStock($recientes);
 
         return view('livewire.web.home-component')
             ->with('listarOfertas', $ofertas)
             ->with('listarCategorias', $categorias)
             ->with('listarEmpresas', $empresas)
-            ->with('listarStock', $stock)
+            ->with('listarDestacados', $destacados)
+            ->with('listarRecientes', $recientes)
             ;
-    }
-
-    public function prueba()
-    {
-        $this->alert('success', 'Hola');
     }
 
     public function login()
@@ -111,6 +122,47 @@ class HomeComponent extends Component
             }
         }
         return $resultado;
+    }
+
+    private function recorrerStock($stock)
+    {
+        $stock->each(function ($stock) {
+
+            $articulo = Articulo::find($stock->articulos_id);
+            $unidad = Unidad::find($stock->unidades_id);
+
+            $stock->nombre = $articulo->descripcion;
+            $stock->imagen = $articulo->mini;
+            $stock->unidad = $unidad->codigo;
+            $stock->mostrar = true;
+
+            if (!$articulo->estatus){
+                $stock->mostrar = false;
+            }
+
+            $resultado = calcularPrecios($stock->empresas_id, $stock->articulos_id, $articulo->tributarios_id, $stock->unidades_id);
+            $stock->moneda = $resultado['moneda_base'];
+            $stock->dolares = $resultado['precio_dolares'];
+            $stock->bolivares = $resultado['precio_bolivares'];
+            $stock->iva_dolares = $resultado['iva_dolares'];
+            $stock->iva_bolivares = $resultado['iva_bolivares'];
+            $stock->neto_dolares = $resultado['neto_dolares'];
+            $stock->neto_bolivares = $resultado['neto_bolivares'];
+            $stock->oferta_dolares = $resultado['oferta_dolares'];
+            $stock->oferta_bolivares = $resultado['oferta_bolivares'];
+            $stock->porcentaje = $resultado['porcentaje'];
+
+            if ($stock->moneda == "Dolares" && !$stock->dolares){
+                $stock->mostrar = false;
+            }
+
+            if ($stock->moneda == "Bolivares" && !$stock->bolivares){
+                $stock->mostrar = false;
+            }
+
+
+
+        });
     }
 
 }

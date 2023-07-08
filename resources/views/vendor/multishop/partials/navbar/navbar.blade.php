@@ -17,7 +17,7 @@
         </div>
         <div class="col-lg-9">
             <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
-                <a href="" class="text-decoration-none d-block d-lg-none">
+                <a href="{{ route('web.index') }}" class="text-decoration-none d-block d-lg-none">
                     <span class="h1 text-uppercase text-dark bg-light px-2">Sportec</span>
                     <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Tienda</span>
                 </a>
@@ -26,9 +26,11 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto py-0">
-                        <a href="{{ route('web.index') }}" class="nav-item nav-link active">Inicio</a>
+                        <a href="{{ route('web.index') }}" class="nav-item nav-link @if(isset($view) && $view == 'inicio') active @endif">Inicio</a>
+                        @if(isset($view) && $view == 'detail')
+                            <a href="{{ route('web.detail', $stock_id) }}" class="nav-item nav-link active">Detalles del Producto</a>
+                        @endif
                         <a href="{{ route('web.shop') }}" class="nav-item nav-link">Shop</a>
-                        <a href="{{ route('web.detail') }}" class="nav-item nav-link">Shop Detail</a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                             <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
@@ -37,6 +39,7 @@
                             </div>
                         </div>
                         <a href="#" class="nav-item nav-link">Mis Pedidos</a>
+                        <a href="{{ route('web.contact') }}" class="nav-item nav-link d-lg-none">Contacto</a>
                         <a href="#" class="nav-item nav-link d-none d-lg-block"><i class="bx bxl-android"></i> Descargar APK</a>
                     </div>
                     <div class="navbar-nav ml-auto py-0 d-none d-lg-block">

@@ -17,7 +17,9 @@ class WebController extends Controller
     {
         $categorias = Categoria::get();
         return view('web.multishop.index')
-            ->with('listarCategorias', $categorias);
+            ->with('listarCategorias', $categorias)
+            ->with('view', 'inicio')
+            ;
     }
 
     public function perfil()
@@ -30,9 +32,12 @@ class WebController extends Controller
         return view('web.multishop.shop.index');
     }
 
-    public function detail()
+    public function detail($id)
     {
-        return view('web.multishop.detail.index');
+        return view('web.multishop.detail.index')
+            ->with('view', 'detail')
+            ->with('stock_id', $id)
+            ;
     }
 
     public function cart()

@@ -73,8 +73,10 @@
                 </div>
                 <div class="modal-footer">
                     <div class="col-12 p-0">
-                        <a href="{{ route('register') }}" class="btn btn-link" onclick="verCargando()">Registrarse</a>
-
+                        <a href="{{ route('register') }}" class="btn btn-link" onclick="verCargando()">
+                            <span class="d-none d-lg-inline-flex">Registrarse</span>
+                            <i class="fas fa-user-plus d-lg-none"></i>
+                        </a>
                         <button class="btn btn-primary float-right" type="button" wire:loading disabled>
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             CARGANDO...

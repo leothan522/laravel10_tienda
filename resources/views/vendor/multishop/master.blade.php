@@ -49,6 +49,7 @@
 
     {{-- boxicons --}}
     <link rel="stylesheet" href="{{ asset('vendor/boxicons/css/boxicons.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/web-style.css') }}">
     @livewireStyles
     @yield('css')
 </head>
