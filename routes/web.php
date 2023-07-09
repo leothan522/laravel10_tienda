@@ -21,6 +21,7 @@ use App\Http\Controllers\Web\WebController;
 
 Route::get('/', [WebController::class, 'index'])->name('web.index');
 Route::get('producto/{id}/detalles', [WebController::class, 'detail'])->name('web.detail');
+Route::get('categoria/{id}/productos', [WebController::class, 'categoria'])->name('web.categoria');
 
 Route::get('/shop', [WebController::class, 'shop'])->name('web.shop');
 Route::get('/cart', [WebController::class, 'cart'])->name('web.cart');

@@ -1,15 +1,18 @@
 <div class="container-fluid bg-dark mb-30">
     <div class="row px-xl-5">
         <div class="col-lg-3 d-none d-lg-block">
-            <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
+            <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse"
+               href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
                 <h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>Categorias</h6>
                 <i class="fa fa-angle-down text-dark"></i>
             </a>
-            <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
+            <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light"
+                 id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
                 <div class="navbar-nav w-100">
                     @if(isset($listarCategorias))
                         @foreach($listarCategorias as $categoria)
-                            <a href="#" class="nav-item nav-link">{{ ucwords($categoria->nombre) }}</a>
+                            <a href="{{ route('web.categoria', $categoria->id) }}"
+                               class="nav-item nav-link">{{ ucwords($categoria->nombre) }}</a>
                         @endforeach
                     @endif
                 </div>
@@ -26,11 +29,14 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto py-0">
-                        <a href="{{ route('web.index') }}" class="nav-item nav-link @if(isset($view) && $view == 'inicio') active @endif">Inicio</a>
+                        <a href="{{ route('web.index') }}"
+                           class="nav-item nav-link @if(isset($view) && $view == 'inicio') active @endif">Inicio</a>
                         @if(isset($view) && $view == 'detail')
                             <a href="{{ route('web.detail', $stock_id) }}" class="nav-item nav-link active">Detalles del Producto</a>
                         @endif
-                        <a href="{{ route('web.shop') }}" class="nav-item nav-link">Shop</a>
+                        @if(isset($view) && $view == 'categoria')
+                            <a href="{{ route('web.categoria', 1) }}" class="nav-item nav-link active">Ver Categoria</a>
+                        @endif
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                             <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">

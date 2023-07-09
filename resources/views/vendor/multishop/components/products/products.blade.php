@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="text-center py-4">
-                            <a class="h6 text-decoration-none text-truncate" href="">{{ $stock->nombre }}</a>
+                            <a class="h6 text-decoration-none text-truncate" href="{{ route('web.detail', $stock->id) }}" onclick="verCargando()">{{ $stock->nombre }}</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
                                 @if($stock->moneda == "Dolares")
                                     @if($stock->porcentaje > 0)

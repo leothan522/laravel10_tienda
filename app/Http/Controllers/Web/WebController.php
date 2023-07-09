@@ -43,12 +43,21 @@ class WebController extends Controller
             ;
     }
 
+    public function categoria($id)
+    {
+        $categoria = Categoria::findOrFail($id);
+
+        return view('web.multishop.shop.index')
+            ->with('listarCategorias', $this->getCategorias())
+            ->with('view', 'categoria')
+            ->with('shop_id', $id)
+            ;
+    }
+
     public function shop()
     {
         return view('web.multishop.shop.index');
     }
-
-
 
     public function cart()
     {

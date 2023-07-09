@@ -1,5 +1,28 @@
+<!-- Shop Sidebar Start -->
 <div class="col-lg-3 col-md-4 d-none d-lg-block">
+
+
     <!-- Price Start -->
+    @if(!empty($listarFiltros))
+        @foreach($listarFiltros as $filtro)
+            <h5 class="section-title position-relative text-uppercase mb-3">
+                <span class="bg-secondary pr-3">Filtrar por {{ $filtro['label'] }}</span>
+            </h5>
+            <div class="bg-light p-4 mb-30">
+                <form>
+                    @foreach($filtro['array'] as $filter)
+                        <a class="text-muted d-flex align-items-center justify-content-between mb-3"
+                           style="cursor: pointer;">
+                            {{ $filter['nombre'] }} <span class="badge border font-weight-normal">{{ $filter['value'] }}</span>
+                        </a>
+                    @endforeach
+                </form>
+            </div>
+        @endforeach
+    @endif
+    <!-- Price End -->
+
+    {{--<!-- Price Start -->
     <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h5>
     <div class="bg-light p-4 mb-30">
         <form>
@@ -111,5 +134,6 @@
             </div>
         </form>
     </div>
-    <!-- Size End -->
+    <!-- Size End -->--}}
 </div>
+<!-- Shop Sidebar End -->
