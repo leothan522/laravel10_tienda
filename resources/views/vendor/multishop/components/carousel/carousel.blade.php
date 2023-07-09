@@ -50,12 +50,13 @@
         @if($listarOfertas)
             <div class="col-lg-4">
                 @foreach($listarOfertas as $oferta)
+                    @if(!$oferta->mostrar) @continue @endif
                     <div class="product-offer mb-30" style="height: 200px;">
                         <img class="img-fluid" src="{{ verImagen($oferta->imagen) }}" alt="">
                         <div class="offer-text">
                             <h6 class="text-white text-uppercase">Ahorre {{ $oferta->descuento }}%</h6>
                             <h3 class="text-white mb-3">{{ $oferta->titulo }}</h3>
-                            <a href="" class="btn btn-primary" onclick="verCargando()">{{ $oferta->boton }}</a>
+                            <a href="{{ $oferta->url }}" class="btn btn-primary" onclick="verCargando()">{{ $oferta->boton }}</a>
                         </div>
                     </div>
                 @endforeach

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RecuperarRequest;
 use App\Models\Categoria;
+use App\Models\Stock;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,11 +14,15 @@ use Illuminate\Support\Facades\Hash;
 class WebController extends Controller
 {
 
+    private function getCategorias()
+    {
+        return Categoria::get();
+    }
+
     public function index()
     {
-        $categorias = Categoria::get();
         return view('web.multishop.index')
-            ->with('listarCategorias', $categorias)
+            ->with('listarCategorias', $this->getCategorias())
             ->with('view', 'inicio')
             ;
     }
@@ -27,18 +32,23 @@ class WebController extends Controller
         return view('web.multishop.perfil.index');
     }
 
+    public function detail($id)
+    {
+        $stock = Stock::findOrFail($id);
+
+        return view('web.multishop.detail.index')
+            ->with('listarCategorias', $this->getCategorias())
+            ->with('view', 'detail')
+            ->with('stock_id', $id)
+            ;
+    }
+
     public function shop()
     {
         return view('web.multishop.shop.index');
     }
 
-    public function detail($id)
-    {
-        return view('web.multishop.detail.index')
-            ->with('view', 'detail')
-            ->with('stock_id', $id)
-            ;
-    }
+
 
     public function cart()
     {

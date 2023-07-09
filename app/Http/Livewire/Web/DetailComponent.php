@@ -3,9 +3,7 @@
 namespace App\Http\Livewire\Web;
 
 use App\Models\Articulo;
-use App\Models\Categoria;
-use App\Models\Empresa;
-use App\Models\Oferta;
+use App\Models\ArtImg;
 use App\Models\Stock;
 use App\Models\Unidad;
 use Illuminate\Support\Facades\Auth;
@@ -13,7 +11,7 @@ use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
-class HomeComponent extends Component
+class DetailComponent extends Component
 {
     use LivewireAlert;
 
@@ -22,34 +20,29 @@ class HomeComponent extends Component
     ];
 
     public $login_email, $login_password;
+    public $stock_id;
+
+    public function mount($stock_id)
+    {
+        $this->stock_id = $stock_id;
+    }
 
     public function render()
     {
-        $ofertas = $this->listarOfertas();
-        $categorias = Categoria::orderBy('nombre', 'asc')->get();
-        $empresas = Empresa::get();
+        $stock = Stock::find($this->stock_id);
+        $this->detallesStock($stock);
 
         $destacados = Stock::where('almacen_principal', 1)
             ->where('estatus', 1)
+            ->where('id', '!=', $this->stock_id)
+            ->where('empresas_id', $stock->empresas_id)
             ->orderBy('vendido', 'desc')
             ->get();
-
-        $recientes = Stock::where('almacen_principal', 1)
-            ->where('estatus', 1)
-            ->orderBy('created_at', 'asc')
-            ->get();
-
-
         $this->recorrerStock($destacados);
-        $this->recorrerStock($recientes);
 
-        return view('livewire.web.home-component')
-            ->with('listarOfertas', $ofertas)
-            ->with('listarCategorias', $categorias)
-            ->with('listarEmpresas', $empresas)
-            ->with('listarDestacados', $destacados)
-            ->with('listarRecientes', $recientes)
-            ;
+        return view('livewire.web.detail-component')
+            ->with('stock', $stock)
+            ->with('listarStock', $destacados);
     }
 
     public function login()
@@ -86,56 +79,30 @@ class HomeComponent extends Component
         //cerrar con JS el modal
     }
 
-
-
-    private function listarOfertas()
+    private function detallesStock($stock)
     {
-        $hoy = date("Y-m-d H:i:s");
-        $resultado = null;
-        $ofertas = Oferta::where('desde', '<=', $hoy)
-            ->where('hasta', '>=', $hoy)
-            ->get();
-        if ($ofertas->isNotEmpty()){
+        $stock->nombre = $stock->articulo->descripcion;
+        $stock->codigo = $stock->articulo->codigo;
+        $stock->imagen = $stock->articulo->mini;
+        $stock->unidad = $stock->unidad->codigo;
+        $stock->categoria = $stock->articulo->categoria->nombre;
+        $stock->marca = $stock->articulo->marca;
+        $stock->modelo = $stock->articulo->modelo;
+        $stock->referencia = $stock->articulo->referencia;
+        $stock->adicional = $stock->articulo->adicional;
+        $stock->galeria = ArtImg::where('articulos_id', $stock->articulos_id)->get();
 
-            $ofertas->each(function ($oferta){
-                $oferta->mostrar = true;
-                if ($oferta->afectados == 0){
-                    $oferta->titulo = $oferta->empresa->nombre;
-                    $oferta->imagen = $oferta->empresa->mini;
-                    $oferta->boton = "Ver Tienda";
-                    $oferta->url = "#";
-                }
-                if ($oferta->afectados == 1){
-                    $oferta->titulo = $oferta->categoria->nombre;
-                    $oferta->imagen = $oferta->categoria->mini;
-                    $oferta->boton = "Ver Categoria";
-                    $oferta->url = "#";
-                }
-                if ($oferta->afectados == 2){
-                    $oferta->titulo = $oferta->articulo->descripcion;
-                    $oferta->imagen = $oferta->articulo->mini;
-                    $oferta->boton = 'Ver Producto';
-
-                    $stock = Stock::where('empresas_id', $oferta->empresas_id)
-                        ->where('almacen_principal', 1)
-                        ->where('articulos_id', $oferta->articulos_id)
-                        ->first();
-                    if ($stock && $stock->articulo->estatus){
-                        $oferta->url = route('web.detail', $stock->id);
-                    }else{
-                        $oferta->mostrar = false;
-                    }
-
-                }
-            });
-
-            if($ofertas->count() >= 2){
-                $resultado = $ofertas->random(2);
-            }else{
-                $resultado = $ofertas;
-            }
-        }
-        return $resultado;
+        $resultado = calcularPrecios($stock->empresas_id, $stock->articulos_id, $stock->articulo->tributarios_id, $stock->unidades_id);
+        $stock->moneda = $resultado['moneda_base'];
+        $stock->dolares = $resultado['precio_dolares'];
+        $stock->bolivares = $resultado['precio_bolivares'];
+        $stock->iva_dolares = $resultado['iva_dolares'];
+        $stock->iva_bolivares = $resultado['iva_bolivares'];
+        $stock->neto_dolares = $resultado['neto_dolares'];
+        $stock->neto_bolivares = $resultado['neto_bolivares'];
+        $stock->oferta_dolares = $resultado['oferta_dolares'];
+        $stock->oferta_bolivares = $resultado['oferta_bolivares'];
+        $stock->porcentaje = $resultado['porcentaje'];
     }
 
     private function recorrerStock($stock)
@@ -150,7 +117,7 @@ class HomeComponent extends Component
             $stock->unidad = $unidad->codigo;
             $stock->mostrar = true;
 
-            if (!$articulo->estatus){
+            if (!$articulo->estatus) {
                 $stock->mostrar = false;
             }
 
@@ -166,17 +133,16 @@ class HomeComponent extends Component
             $stock->oferta_bolivares = $resultado['oferta_bolivares'];
             $stock->porcentaje = $resultado['porcentaje'];
 
-            if ($stock->moneda == "Dolares" && !$stock->dolares){
+            if ($stock->moneda == "Dolares" && !$stock->dolares) {
                 $stock->mostrar = false;
             }
 
-            if ($stock->moneda == "Bolivares" && !$stock->bolivares){
+            if ($stock->moneda == "Bolivares" && !$stock->bolivares) {
                 $stock->mostrar = false;
             }
-
-
 
         });
     }
+
 
 }

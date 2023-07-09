@@ -1,10 +1,13 @@
+<!-- Products Start -->
 @if(!empty($products_lista))
     <div class="container-fluid pt-5 pb-3">
         <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span
                 class="bg-secondary pr-3">{{ $products_title }}</span></h2>
         <div class="row px-xl-5">
             @foreach($products_lista as $stock)
-                @if(!$stock->mostrar) @continue @endif
+                @if(!$stock->mostrar)
+                    @continue
+                @endif
                 <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                     <div class="product-item bg-light mb-4">
                         <div class="product-img position-relative overflow-hidden">
@@ -16,19 +19,25 @@
                                 @if($stock->porcentaje > 0)
                                     <div class="porcentaje-descuento">-{{ $stock->porcentaje }}%</div>
                                 @endif
-                            @auth
-                                    <a class="btn btn-outline-dark btn-square" onclick="verCargando()"><i class="fa fa-shopping-cart"></i></a>
-                                    <a class="btn btn-outline-dark btn-square" onclick="verCargando()"><i class="far fa-heart"></i></a>
+                                @auth
+                                    <a class="btn btn-outline-dark btn-square" onclick="verCargando()"><i
+                                            class="fa fa-shopping-cart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" onclick="verCargando()"><i
+                                            class="far fa-heart"></i></a>
                                 @else
-                                    <a class="btn btn-outline-dark btn-square" data-toggle="modal" data-target="#modal_login">
+                                    <a class="btn btn-outline-dark btn-square" data-toggle="modal"
+                                       data-target="#modal_login">
                                         <i class="fa fa-shopping-cart"></i>
                                     </a>
-                                    <a class="btn btn-outline-dark btn-square" data-toggle="modal" data-target="#modal_login">
+                                    <a class="btn btn-outline-dark btn-square" data-toggle="modal"
+                                       data-target="#modal_login">
                                         <i class="far fa-heart"></i>
                                     </a>
                                 @endauth
                                 {{--<a class="btn btn-outline-dark btn-square"><i class="fa fa-sync-alt"></i></a>--}}
-                                <a class="btn btn-outline-dark btn-square" href="{{ route('web.detail', $stock->id) }}"><i class="fa fa-search"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href="{{ route('web.detail', $stock->id) }}" onclick="verCargando()">
+                                    <i class="fa fa-search"></i>
+                                </a>
                             </div>
                         </div>
                         <div class="text-center py-4">
@@ -73,3 +82,4 @@
         </div>
     </div>
 @endif
+<!-- Products End -->
