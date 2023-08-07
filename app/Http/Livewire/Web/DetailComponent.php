@@ -86,6 +86,7 @@ class DetailComponent extends Component
         $stock->imagen = $stock->articulo->mini;
         $stock->unidad = $stock->unidad->codigo;
         $stock->categoria = $stock->articulo->categoria->nombre;
+        $stock->categorias_id = $stock->articulo->categorias_id;
         $stock->marca = $stock->articulo->marca;
         $stock->modelo = $stock->articulo->modelo;
         $stock->referencia = $stock->articulo->referencia;

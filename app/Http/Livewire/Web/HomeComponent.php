@@ -31,17 +31,19 @@ class HomeComponent extends Component
 
         $destacados = Stock::where('almacen_principal', 1)
             ->where('estatus', 1)
+            ->whereRelation('articulo', 'estatus', 1)
             ->orderBy('vendido', 'desc')
             ->get();
 
         $recientes = Stock::where('almacen_principal', 1)
             ->where('estatus', 1)
+            ->whereRelation('articulo', 'estatus', 1)
             ->orderBy('created_at', 'asc')
             ->get();
 
-
-        $this->recorrerStock($destacados);
-        $this->recorrerStock($recientes);
+        recorrerCategorias($categorias);
+        recorrerStock($destacados);
+        recorrerStock($recientes);
 
         return view('livewire.web.home-component')
             ->with('listarOfertas', $ofertas)
@@ -80,13 +82,6 @@ class HomeComponent extends Component
         }
 
     }
-
-    public function cerrarModalLogin($nombre)
-    {
-        //cerrar con JS el modal
-    }
-
-
 
     private function listarOfertas()
     {
@@ -138,45 +133,21 @@ class HomeComponent extends Component
         return $resultado;
     }
 
-    private function recorrerStock($stock)
+    public function noCategoriaStock()
     {
-        $stock->each(function ($stock) {
-
-            $articulo = Articulo::find($stock->articulos_id);
-            $unidad = Unidad::find($stock->unidades_id);
-
-            $stock->nombre = $articulo->descripcion;
-            $stock->imagen = $articulo->mini;
-            $stock->unidad = $unidad->codigo;
-            $stock->mostrar = true;
-
-            if (!$articulo->estatus){
-                $stock->mostrar = false;
-            }
-
-            $resultado = calcularPrecios($stock->empresas_id, $stock->articulos_id, $articulo->tributarios_id, $stock->unidades_id);
-            $stock->moneda = $resultado['moneda_base'];
-            $stock->dolares = $resultado['precio_dolares'];
-            $stock->bolivares = $resultado['precio_bolivares'];
-            $stock->iva_dolares = $resultado['iva_dolares'];
-            $stock->iva_bolivares = $resultado['iva_bolivares'];
-            $stock->neto_dolares = $resultado['neto_dolares'];
-            $stock->neto_bolivares = $resultado['neto_bolivares'];
-            $stock->oferta_dolares = $resultado['oferta_dolares'];
-            $stock->oferta_bolivares = $resultado['oferta_bolivares'];
-            $stock->porcentaje = $resultado['porcentaje'];
-
-            if ($stock->moneda == "Dolares" && !$stock->dolares){
-                $stock->mostrar = false;
-            }
-
-            if ($stock->moneda == "Bolivares" && !$stock->bolivares){
-                $stock->mostrar = false;
-            }
-
-
-
-        });
+        $this->confirm('Stock NO disponible', [
+            'toast' => false,
+            'position' => 'center',
+            'showConfirmButton' => false,
+            'text' => '¡Pronto tendremos Productos en esta categoria!',
+            'cancelButtonText' => 'OK',
+        ]);
     }
+
+    public function cerrarModalLogin($nombre)
+    {
+        //cerrar con JS el modal
+    }
+
 
 }

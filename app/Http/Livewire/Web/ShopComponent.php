@@ -46,6 +46,7 @@ class ShopComponent extends Component
             ->paginate(12);
 
         $this->recorrerStock($destacados);
+        recorrerCategorias($categorias);
 
         return view('livewire.web.shop-component')
             ->with('view', $this->shop_view)
@@ -74,7 +75,15 @@ class ShopComponent extends Component
                     ->having('almacen_principal', 1)
                     ->get();
                 foreach ($stock as $valor){
-                    if ($valor->articulo->categorias_id == $this->shop_id){
+                    $resultado = calcularPrecios($valor->empresas_id, $valor->articulos_id, $valor->articulo->tributarios_id, $valor->unidades_id);
+                    $moneda = $resultado['moneda_base'];
+                    $dolares = $resultado['precio_dolares'];
+                    $bolivares = $resultado['precio_bolivares'];
+                    if ($valor->articulo->estatus == 1 &&
+                        $valor->articulo->categorias_id == $this->shop_id &&
+                        $dolares &&
+                        $bolivares
+                    ){
                         $contador++;
                     }
                 }

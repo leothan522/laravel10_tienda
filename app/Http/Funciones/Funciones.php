@@ -2,6 +2,8 @@
 //Funciones Personalizadas para el Proyecto
 
 use App\Models\Parametro;
+use App\Models\Stock;
+use App\Models\Unidad;
 use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -541,7 +543,7 @@ function nextCodigoAjuste($empresa_id){
     if ($parametro) {
         $codigo['formato'] = $parametro->valor;
     }else{
-        $codigo['formato'] = null;
+        $codigo['formato'] = $empresa_id.'-';
     }
 
     $parametro = Parametro::where("nombre", "editable_codigo_ajutes")->where('tabla_id', $empresa_id)->first();
@@ -588,6 +590,76 @@ function telefonoSoporte()
         $telefono = "0212.999.99.99";
     }
     return $telefono;
+}
+
+//Calculo de precios en STOCK vista WEB
+function recorrerStock($stock)
+{
+    $stock->each(function ($stock) {
+
+        $articulo = Articulo::find($stock->articulos_id);
+        $unidad = Unidad::find($stock->unidades_id);
+
+        $stock->nombre = $articulo->descripcion;
+        $stock->imagen = $articulo->mini;
+        $stock->unidad = $unidad->codigo;
+        $stock->mostrar = true;
+
+        $resultado = calcularPrecios($stock->empresas_id, $stock->articulos_id, $articulo->tributarios_id, $stock->unidades_id);
+        $stock->moneda = $resultado['moneda_base'];
+        $stock->dolares = $resultado['precio_dolares'];
+        $stock->bolivares = $resultado['precio_bolivares'];
+        $stock->iva_dolares = $resultado['iva_dolares'];
+        $stock->iva_bolivares = $resultado['iva_bolivares'];
+        $stock->neto_dolares = $resultado['neto_dolares'];
+        $stock->neto_bolivares = $resultado['neto_bolivares'];
+        $stock->oferta_dolares = $resultado['oferta_dolares'];
+        $stock->oferta_bolivares = $resultado['oferta_bolivares'];
+        $stock->porcentaje = $resultado['porcentaje'];
+
+        if ($stock->moneda == "Dolares" && !$stock->dolares){
+            $stock->mostrar = false;
+        }
+
+        if ($stock->moneda == "Bolivares" && !$stock->bolivares){
+            $stock->mostrar = false;
+        }
+
+    });
+}
+
+//calculo de Articulos disponibles con stock por categoria Vista WEB
+function recorrerCategorias($categorias)
+{
+    $categorias->each(function ($categoria){
+        $listarStock = Stock::where('almacen_principal', 1)
+            ->where('estatus', 1)
+            ->whereRelation('articulo', 'estatus', 1)
+            ->whereRelation('articulo', 'categorias_id', $categoria->id)
+            ->get();
+        $contador = 0;
+        foreach ($listarStock as $stock){
+            $mostrar = true;
+            $resultado = calcularPrecios($stock->empresas_id, $stock->articulos_id, $stock->articulo->tributarios_id, $stock->unidades_id);
+            $stock->moneda = $resultado['moneda_base'];
+            $stock->dolares = $resultado['precio_dolares'];
+            $stock->bolivares = $resultado['precio_bolivares'];
+
+            if ($stock->moneda == "Dolares" && !$stock->dolares){
+                $mostrar = false;
+            }
+
+            if ($stock->moneda == "Bolivares" && !$stock->bolivares){
+                $mostrar = false;
+            }
+            if ($mostrar){
+                $contador++;
+            }
+        }
+
+        $categoria->stock = $contador;
+
+    });
 }
 
 //***********************************************************************************
