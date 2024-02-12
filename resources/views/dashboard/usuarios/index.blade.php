@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('plugins.Select2', true)
+
 @section('title', 'Usuarios')
 
 @section('content_header')
@@ -84,6 +86,30 @@
 
         $('#button_permisos_modal_cerrar').click(function (e) {
             $('#div_ver_spinner_usuarios').removeClass('d-none');
+        });
+
+        //acceso a empresas ******************************************************
+
+        function selectEmpresas(id, data)
+        {
+
+            $('#' + id).select2({
+                theme: 'bootstrap4',
+                data: data
+            });
+
+            $('#'  + id).val(null).trigger('change');
+        }
+
+        Livewire.on('selectEmpresas', data => {
+            selectEmpresas('select_acceso_empresas', data);
+        });
+
+        $("#select_acceso_empresas").on('change', function() {
+            var val = $(this).val();
+            Livewire.emit('empresasSeleccionadas', val);
+            // te muestra un array de todos los seleccionados
+            //console.log(val);
         });
 
         console.log('Hi!');

@@ -168,6 +168,18 @@
 
                                         @endif
 
+                                        <div class="form-group" >
+                                            <label>Acceso a Empresas</label>
+                                            <p class="col-md-12 text-sm text-bold text-primary">
+                                                {!! $ver_empresas !!}
+                                            </p>
+                                            <div wire:ignore>
+                                                <select class="form-control" multiple="multiple" {{--wire:model="select_empresas"--}}
+                                                data-placeholder="Seleccione las Empresas" id="select_acceso_empresas">
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group text-right">
                                             <input type="submit" class="btn btn-block btn-primary" value="Guardar Cambios">
                                         </div>

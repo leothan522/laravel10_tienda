@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard;
 
+use App\Models\Empresa;
 use App\Models\Parametro;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -18,13 +19,15 @@ class UsuariosComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $listeners = [
-        'buscar', 'confirmedUser', 'cerrarModal', 'limpiar'
+        'buscar', 'confirmedUser', 'cerrarModal', 'limpiar',
+        'selectEmpresas', 'empresasSeleccionadas'
     ];
 
     public $view = "create", $keyword;
     public $name, $email, $password, $role, $usuarios_id;
     public $edit_name, $edit_email, $edit_password, $edit_role = 0, $edit_roles_id = 0, $created_at, $estatus = 1, $photo, $empresas_id;
     public $rol_nombre, $tabla = 'usuarios', $getPermisos, $cambios = false;
+    public $select_empresas, $ver_empresas; // acceso a empresas
 
     public function render()
     {
@@ -86,6 +89,8 @@ class UsuariosComponent extends Component
     {
         $this->validate($this->rules($this->usuarios_id));
 
+        $this->accesoEmpresa($this->select_empresas); // acceso a empresas
+
         if (is_null($this->usuarios_id)) {
             //nuevo
             $usuarios = new User();
@@ -143,9 +148,27 @@ class UsuariosComponent extends Component
         $this->estatus = $usuario->estatus;
         $this->created_at = $usuario->created_at;
         $this->photo = $usuario->profile_photo_path;
-        /*$this->empresas_id = $usuario->empresas_id;*/
         $this->rol_nombre = verRole($usuario->role, $usuario->roles_id);
         $this->getPermisos = $usuario->permisos;
+
+        //acceso a empresas
+
+        $getEmpresas = Empresa::orderBy('nombre', 'ASC')->get();
+        $data = array();
+        $placeholder = '';
+        foreach ($getEmpresas as $empresa){
+            $option = [
+                'id' => $empresa->id,
+                'text' => $empresa->nombre
+            ];
+            if (leerJson($empresa->permisos, $this->usuarios_id)){
+                $placeholder .= '['.$empresa->nombre.'] <br>';
+            }
+            array_push($data, $option);
+        }
+        $this->ver_empresas = $placeholder;
+        $this->emit('selectEmpresas', $data, $placeholder);
+
     }
 
     public function cambiarEstatus($id)
@@ -266,6 +289,37 @@ class UsuariosComponent extends Component
     {
         $this->reset('getPermisos');
         $this->cambios = true;
+    }
+
+    //acceso a empresas **********************************************************************
+
+    public function accesoEmpresa($array)
+    {
+        //acceso a aempresas
+        if (!empty($array)){
+            foreach ($array as $id){
+                $empresa = Empresa::find($id);
+                $permisos = json_decode($empresa->permisos, true);
+                if (!leerJson($empresa->permisos, $this->usuarios_id)){
+                    $permisos[$this->usuarios_id] = true;
+                }else{
+                    unset($permisos[$this->usuarios_id]);
+                }
+                $permisos = json_encode($permisos);
+                $empresa->permisos = $permisos;
+                $empresa->update();
+            }
+        }
+    }
+
+    public function empresasSeleccionadas($data)
+    {
+        $this->select_empresas = $data;
+    }
+
+    public function selectEmpresas($data)
+    {
+        //select acceso a empresas // JS
     }
 
 }
