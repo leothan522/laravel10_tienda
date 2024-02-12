@@ -1,6 +1,6 @@
 <div wire:ignore.self class="modal fade" id="modal-user-edit" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content fondo">
             <div class="modal-header">
                 {{--<h4 class="modal-title">Large Modal</h4>--}}
                 <button type="button" wire:click="limpiar()" class="close" data-dismiss="modal" aria-label="Close">
@@ -66,13 +66,13 @@
                                                     @php($clase = "btn-success")
                                                     @php($texto = "Reactivar Usuario")
                                                 @endif
-                                                <button type="button" wire:click="cambiarEstatus({{ $usuario_id }})" class="btn {{ $clase }} btn-block"
+                                                <button type="button" wire:click="cambiarEstatus({{ $usuarios_id }})" class="btn {{ $clase }} btn-block"
                                                         @if(!comprobarPermisos('usuarios.estatus')) disabled @endif>
                                                     <b>{{ $texto }}</b>
                                                 </button>
                                             </div>
                                             <div class="col-md-6">
-                                                <button type="button" wire:click="restablecerClave({{ $usuario_id }})" class="btn btn-block btn-secondary"
+                                                <button type="button" wire:click="restablecerClave({{ $usuarios_id }})" class="btn btn-block btn-secondary"
                                                         @if(!comprobarPermisos('usuarios.password')) disabled @endif>
                                                     <b>Restablecer Contraseña</b>
                                                 </button>
@@ -91,7 +91,7 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Editar Usuario</h3>
                                     <div class="card-tools">
-                                        <button class="btn btn-tool text-bold" wire:click="edit({{ $usuario_id }})">
+                                        <button class="btn btn-tool text-bold" wire:click="edit({{ $usuarios_id }})">
                                             <i class="fas fa-redo"></i> Restablecer
                                         </button>
                                         {{--<span class="btn btn-tool"><i class="fas fa-user-edit"></i></span>--}}
@@ -149,7 +149,7 @@
                                                     </div>
                                                     <select class="custom-select" wire:model.defer="edit_role">
                                                         <option value="0">Estandar</option>
-                                                        @foreach($roles as $role)
+                                                        @foreach($listarRoles as $role)
                                                             <option
                                                                 value="{{ $role->id }}">{{ ucwords($role->nombre) }}</option>
                                                         @endforeach
@@ -159,34 +159,17 @@
                                                     </select>
                                                     @error('edit_role')
                                                     <span class="col-sm-12 text-sm text-bold text-danger">
-                                                        <i class="icon fas fa-exclamation-triangle"></i>
-                                                        {{ $message }}
-                                                    </span>
+                                                    <i class="icon fas fa-exclamation-triangle"></i>
+                                                    {{ $message }}
+                                                </span>
                                                     @enderror
                                                 </div>
                                             </div>
 
                                         @endif
 
-                                        <div class="form-group" >
-                                            <label>Acceso a Tiendas</label>
-                                            <p class="col-md-12 text-sm text-bold text-primary">
-                                                {!! $ver_empresas !!}
-                                            </p>
-                                            <div wire:ignore>
-                                                <select class="form-control" multiple="multiple" {{--wire:model="select_empresas"--}}
-                                                data-placeholder="Seleccione las Tiendas" id="select_acceso_empresas">
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group text-right mb-4">
-                                            {{--<input type="submit" class="btn btn-block btn-success" value="Guardar">--}}
-                                            @if($edit_role != 100)
-                                                <button type="submit" class="btn btn-block btn-success">
-                                                    <i class="fas fa-save"></i> Guardar
-                                                </button>
-                                            @endif
+                                        <div class="form-group text-right">
+                                            <input type="submit" class="btn btn-block btn-primary" value="Guardar Cambios">
                                         </div>
 
                                     </form>
@@ -201,8 +184,14 @@
 
             {!! verSpinner() !!}
 
-            <div class="modal-footer justify-content-end">
-                <button type="button" wire:click="limpiar()" class="btn btn-default btn-sm" data-dismiss="modal">{{ __('Close') }}</button>
+            <div class="modal-footer row col-12 justify-content-between">
+                <button type="button" class="btn btn-danger btn-sm" wire:click="destroy({{ $usuarios_id }})"
+                        @if(!comprobarPermisos('usuarios.destroy') || !($edit_role != 1 || ($edit_role == 1 && comprobarPermisos())) || ($usuarios_id == auth()->id())) disabled @endif >
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" wire:click="limpiar" id="button_edit_modal_cerrar">
+                    {{ __('Close') }}
+                </button>
             </div>
 
         </div>

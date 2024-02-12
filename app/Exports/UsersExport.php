@@ -25,7 +25,7 @@ class UsersExport implements FromView, WithTitle, WithProperties, ShouldAutoSize
     {
         // TODO: Implement view() method.
         $usuarios = User::buscar($this->keyword)->orderBy('created_at', 'ASC')->get();
-        return view('dashboard.usuarios.export_excel')
+        return view('dashboard._export.export_excel_usuarios')
             ->with('users', $usuarios);
     }
 

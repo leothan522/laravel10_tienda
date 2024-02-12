@@ -12,12 +12,12 @@
 
         <div class="card-tools">
             @if(comprobarPermisos('usuarios.excel'))
-                <a href="{{ route('usuarios.excel', [$keyword]) }}" class="btn btn-tool text-success swalDefaultInfo">
+                <a href="{{ route('usuarios.excel', $keyword) }}" class="btn btn-tool text-success swalDefaultInfo">
                     <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
                 </a>
             @endif
             <ul class="pagination pagination-sm float-right m-1">
-                {{ $users->links() }}
+                {{ $listarUsers->links() }}
             </ul>
         </div>
     </div>
@@ -30,13 +30,13 @@
                 <th>Email</th>
                 <th class="text-center">Rol</th>
                 <th class="text-center">Estatus</th>
-                <th class="text-right">Update_at</th>
+                <th class="text-right">Creado</th>
                 <th style="width: 5%;">&nbsp;</th>
             </tr>
             </thead>
             <tbody>
-            @if($users->isNotEmpty())
-                @foreach($users as $user)
+            @if($listarUsers->isNotEmpty())
+                @foreach($listarUsers as $user)
                     @if($user->role == 100 && auth()->user()->role != 100) @continue @endif
                     <tr>
                         <td class="text-center">{!! iconoPlataforma($user->plataforma) !!}</td>
@@ -45,9 +45,9 @@
                         <td class="text-center">{{ verRole($user->role, $user->roles_id) }}</td>
                         <td class="text-center">
                             {!! verEstatusUsuario($user->estatus, true) !!}
-                            <span class="text-sm"> ID: {{ $user->id }}</span>
+                            {{--<span class="text-sm"> ID: {{ $user->id }}</span>--}}
                         </td>
-                        <td class="text-right">{{ haceCuanto($user->updated_at)  }}</td>
+                        <td class="text-right">{{ haceCuanto($user->created_at)  }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $user->id }})" class="btn btn-primary btn-sm"
@@ -55,14 +55,14 @@
                                         @if(!comprobarPermisos('usuarios.edit') || !($user->role != 1 || ($user->role ==1 && comprobarPermisos())) || ($user->id == auth()->id() && auth()->user()->role != 100)) disabled @endif>
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button wire:click="verPermisos('usuarios', {{ $user->id }})" class="btn btn-primary btn-sm"
+                                <button wire:click="edit({{ $user->id }})" class="btn btn-primary btn-sm"
                                         data-toggle="modal" data-target="#modal-user-permisos" @if(!comprobarPermisos() || ($user->role == 1 && auth()->user()->role != 100)) disabled @endif>
                                     <i class="fas fa-user-cog"></i>
                                 </button>
-                                <button wire:click="destroyUser({{ $user->id }})" class="btn btn-primary btn-sm"
-                                        @if(!comprobarPermisos('usuarios.destroy') || !($user->role != 1 || ($user->role ==1 && comprobarPermisos())) || ($user->id == auth()->id())) disabled @endif>
+                                {{--<button wire:click="destroy({{ $user->id }})" class="btn btn-primary btn-sm"
+                                        @if(!comprobarPermisos('usuarios.destroy') || !($user->role != 1 || ($user->role == 1 && comprobarPermisos())) || ($user->id == auth()->id())) disabled @endif >
                                     <i class="fas fa-trash-alt"></i>
-                                </button>
+                                </button>--}}
                             </div>
                         </td>
                     </tr>

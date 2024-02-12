@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Dashboard;
 
-use App\Models\Empresa;
 use App\Models\Parametro;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -19,15 +18,13 @@ class UsuariosComponent extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $listeners = [
-        'buscar', 'confirmedUser', 'verPermisos',
-        'saveRol', 'addRolList', 'setRolList', 'confirmedRol', 'removeRolList',
-        'selectEmpresas', 'empresasSeleccionadas'
+        'buscar', 'confirmedUser', 'cerrarModal', 'limpiar'
     ];
 
     public $view = "create", $keyword;
-    public $name, $email, $password, $role, $usuario_id, $select_empresas, $ver_empresas;
+    public $name, $email, $password, $role, $usuarios_id;
     public $edit_name, $edit_email, $edit_password, $edit_role = 0, $edit_roles_id = 0, $created_at, $estatus = 1, $photo, $empresas_id;
-    public $tabla = "usuarios", $tabla_id, $tabla_nombre, $tabla_email, $tabla_permisos;
+    public $rol_nombre, $tabla = 'usuarios', $getPermisos, $cambios = false;
 
     public function render()
     {
@@ -35,21 +32,21 @@ class UsuariosComponent extends Component
         $users = User::buscar($this->keyword)
             ->orderBy('role', 'DESC')
             ->orderBy('roles_id', 'DESC')
-            ->orderBy('updated_at', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->paginate(numRowsPaginate());
         $rows = User::count();
         return view('livewire.dashboard.usuarios-component')
-            ->with('roles', $roles)
-            ->with('users', $users)
+            ->with('listarRoles', $roles)
+            ->with('listarUsers', $users)
             ->with('rows', $rows);
     }
 
     public function limpiar()
     {
         $this->reset([
-            'view', 'keyword', 'name', 'email', 'password', 'role', 'usuario_id',
-            'edit_name', 'edit_email', 'edit_password', 'edit_role', 'edit_roles_id', 'created_at', 'estatus', 'photo', 'empresas_id',
-            'tabla', 'tabla_id', 'tabla_nombre', 'tabla_permisos', 'tabla_email'
+            'view', 'keyword', 'name', 'email', 'password', 'role', 'usuarios_id',
+            'edit_name', 'edit_email', 'edit_password', 'edit_role', 'edit_roles_id', 'created_at', 'estatus',
+            'photo', 'empresas_id', 'rol_nombre', 'getPermisos', 'cambios'
         ]);
     }
 
@@ -85,32 +82,11 @@ class UsuariosComponent extends Component
 
     ];
 
-    public function accesoEmpresa($array)
-    {
-        //acceso a aempresas
-        if (!empty($array)){
-            foreach ($array as $id){
-                $empresa = Empresa::find($id);
-                $permisos = json_decode($empresa->permisos, true);
-                if (!leerJson($empresa->permisos, $this->usuario_id)){
-                    $permisos[$this->usuario_id] = true;
-                }else{
-                    unset($permisos[$this->usuario_id]);
-                }
-                $permisos = json_encode($permisos);
-                $empresa->permisos = $permisos;
-                $empresa->update();
-            }
-        }
-    }
-
     public function save()
     {
-        $type = 'success';
-        $message = 'Hola Mundo';
-        $this->validate($this->rules($this->usuario_id));
+        $this->validate($this->rules($this->usuarios_id));
 
-        if (is_null($this->usuario_id)) {
+        if (is_null($this->usuarios_id)) {
             //nuevo
             $usuarios = new User();
             $usuarios->name = ucwords($this->name);
@@ -127,14 +103,12 @@ class UsuariosComponent extends Component
                 $usuarios->role = $this->role;
                 $usuarios->roles_id = null;
             }
-            $message = "Usuario Creado";
             $usuarios->save();
-            $this->accesoEmpresa($this->select_empresas);
-            $this->alert($type, $message);
             $this->limpiar();
+            $this->alert('success', 'Usuario Creado.');
         } else {
             //editar
-            $usuarios = User::find($this->usuario_id);
+            $usuarios = User::find($this->usuarios_id);
             $usuarios->name = ucwords($this->edit_name);
             $usuarios->email = strtolower($this->edit_email);
             if ($this->edit_role > 1) {
@@ -148,20 +122,16 @@ class UsuariosComponent extends Component
                 $usuarios->role = $this->edit_role;
                 $usuarios->roles_id = null;
             }
-            $message = "Usuario Actualizado";
             $usuarios->update();
-            $this->accesoEmpresa($this->select_empresas);
-            $this->alert($type, $message);
-            $this->edit($this->usuario_id);
-
+            $this->edit($this->usuarios_id);
+            $this->alert('success', 'Usuario Actualizado.');
         }
-
     }
 
     public function edit($id)
     {
         $usuario = User::find($id);
-        $this->usuario_id = $usuario->id;
+        $this->usuarios_id = $usuario->id;
         $this->edit_name = $usuario->name;
         $this->edit_email = $usuario->email;
         if ($usuario->roles_id) {
@@ -169,29 +139,13 @@ class UsuariosComponent extends Component
         }else{
             $this->edit_role = $usuario->role;
         }
-        //$this->edit_role = $usuario->role;
         $this->edit_roles_id = $usuario->roles_id;
         $this->estatus = $usuario->estatus;
         $this->created_at = $usuario->created_at;
         $this->photo = $usuario->profile_photo_path;
-        $this->empresas_id = $usuario->empresas_id;
-
-        //acceso a empresas
-        $getEmpresas = Empresa::orderBy('nombre', 'ASC')->get();
-        $data = array();
-        $placeholder = '';
-        foreach ($getEmpresas as $empresa){
-            $option = [
-                'id' => $empresa->id,
-                'text' => $empresa->nombre
-            ];
-            if (leerJson($empresa->permisos, $this->usuario_id)){
-                $placeholder .= '['.$empresa->nombre.'] <br>';
-            }
-            array_push($data, $option);
-        }
-        $this->ver_empresas = $placeholder;
-        $this->emit('selectEmpresas', $data, $placeholder);
+        /*$this->empresas_id = $usuario->empresas_id;*/
+        $this->rol_nombre = verRole($usuario->role, $usuario->roles_id);
+        $this->getPermisos = $usuario->permisos;
     }
 
     public function cambiarEstatus($id)
@@ -225,13 +179,13 @@ class UsuariosComponent extends Component
         $this->edit_password = $clave;
         $this->alert(
             'success',
-            'Contraseña Restablecida'
+            'Contraseña Restablecida.'
         );
     }
 
-    public function destroyUser($id)
+    public function destroy($id)
     {
-        $this->usuario_id = $id;
+        $this->usuarios_id = $id;
         $this->confirm('¿Estas seguro?', [
             'toast' => false,
             'position' => 'center',
@@ -245,7 +199,7 @@ class UsuariosComponent extends Component
 
     public function confirmedUser()
     {
-        $usuario = User::find($this->usuario_id);
+        $usuario = User::find($this->usuarios_id);
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
@@ -262,11 +216,12 @@ class UsuariosComponent extends Component
             ]);
         } else {
             $usuario->delete();
+            $this->limpiar();
+            $this->emit('cerrarModal');
             $this->alert(
                 'success',
                 'Usuario Eliminado.'
             );
-            $this->limpiar();
         }
 
     }
@@ -276,211 +231,41 @@ class UsuariosComponent extends Component
         $this->keyword = $keyword;
     }
 
-    public function verPermisos($tabla, $id)
+    public function cerrarModal()
     {
-        $this->tabla = $tabla;
-        if ($this->tabla == "usuarios") {
-            $usuarios = User::find($id);
-            $this->tabla_id = $usuarios->id;
-            $this->tabla_nombre = $usuarios->name;
-            $this->tabla_email = $usuarios->email;
-            $this->tabla_permisos = $usuarios->permisos;
-        } else {
-            $parametro = Parametro::find($id);
-            $this->tabla_id = $parametro->id;
-            $this->tabla_nombre = $parametro->nombre;
-            $this->tabla_email = null;
-            $this->tabla_permisos = $parametro->valor;
-        }
-
+        //JS
     }
 
-    public function saveRol($nombre)
+    public function setPermisos($permiso)
     {
-        $type = "success";
-        $message = "Parametro Creado.";
-
-        if ((empty($nombre) || strlen($nombre) <= 3)) {
-            $type = "warning";
-            $message = "el campo nombre es requerido min 4 caracteres.";
-        } else {
-
-            $parametro = Parametro::where('nombre', $nombre)->where('tabla_id', -1)->first();
-            if ($parametro) {
-                //exite
-                $type = "error";
-                $message = "el rol ${nombre} ya existe.";
-            } else {
-                //crear
-                $parametro = new Parametro();
-                $parametro->nombre = $nombre;
-                $parametro->tabla_id = -1;
-                $parametro->save();
-                $this->emit('addRolList', $parametro->id, ucwords($parametro->nombre));
-            }
-
-        }
-
-        $this->alert(
-            $type,
-            $message
-        );
-    }
-
-    public function updateRol()
-    {
-        $type = "success";
-        $message = "Parametro Actualizado.";
-
-        if ((empty($this->tabla_nombre) || strlen($this->tabla_nombre) <= 3)) {
-            $type = "warning";
-            $message = "el campo nombre es requerido min 4 caracteres.";
-        } else {
-
-            $parametro = Parametro::where('nombre', $this->tabla_nombre)->where('tabla_id', -1)->where('id', '!=', $this->tabla_id)->first();
-            if ($parametro) {
-                //exite
-                $type = "error";
-                $message = "el rol " . $this->tabla_nombre . " ya existe.";
-            } else {
-                //crear
-                $parametro = Parametro::find($this->tabla_id);
-                $parametro->nombre = $this->tabla_nombre;
-                $parametro->update();
-                $this->emit('setRolList', $parametro->id, ucwords($parametro->nombre));
-            }
-
-            $this->alert(
-                $type,
-                $message
-            );
-        }
-    }
-
-    public function destroyRol($id)
-    {
-        $this->tabla_id = $id;
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' => '¡Sí, bórralo!',
-            'text' => '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedRol',
-        ]);
-    }
-
-    public function confirmedRol()
-    {
-        // Example code inside confirmed callback
-        $usuarios = User::where('roles_id', $this->tabla_id)->first();
-        if ($usuarios) {
-
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
-
-        } else {
-
-            $parametro = Parametro::find($this->tabla_id);
-            $id = $parametro->id;
-            $parametro->delete();
-            $this->emit('removeRolList', $id);
-
-            $this->alert(
-                'success',
-                'Parametro Eliminado.'
-            );
-            $this->limpiar();
-
-        }
-    }
-
-    public function updatePermisos($id, $permiso)
-    {
-        $type = "success";
-        $message = "Exito";
         $permisos = [];
-
-        if ($this->tabla == "parametros"){
-            //roles
-            $tabla = Parametro::find($id);
-            $tabla_permisos = $tabla->valor;
-        }else{
-            //usuarios
-            $tabla = User::find($id);
-            $tabla_permisos = $tabla->permisos;
-        }
-
-        $permisos = json_decode($tabla_permisos, true);
-        if (!leerJson($tabla_permisos, $permiso)){
+        if (!leerJson($this->getPermisos, $permiso)){
+            $permisos = json_decode($this->getPermisos, true);
             $permisos[$permiso] = true;
+            $permisos = json_encode($permisos);
             $message = "Permiso Agregado.";
         }else{
+            $permisos = json_decode($this->getPermisos, true);
             unset($permisos[$permiso]);
+            $permisos = json_encode($permisos);
             $message = "Permiso Eliminado.";
         }
-
-        $permisos = json_encode($permisos);
-
-        if ($this->tabla == "parametros"){
-            $tabla->valor = $permisos;
-        }else{
-            $tabla->permisos = $permisos;
-        }
-
-        $tabla->update();
-        $this->tabla_permisos = $permisos;
-        $this->alert(
-            $type,
-            $message
-        );
+        $this->getPermisos = $permisos;
+        $this->cambios = true;
     }
 
-    public function updateRolUsuarios()
-    {
-        $usuarios = User::where('roles_id', $this->tabla_id)->get();
-        foreach ($usuarios as $user){
-            $usuario = User::find($user->id);
-            $usuario->permisos = $this->tabla_permisos;
-            $usuario->update();
-        }
-        $this->alert(
-            'success',
-            'Usuarios Actualizados.'
-        );
+    public function savePermisos(){
+        $usuario = User::find($this->usuarios_id);
+        $usuario->permisos = $this->getPermisos;
+        $usuario->save();
+        $this->reset('cambios');
+        $this->alert('success', 'Permisos Guardados.');
     }
 
-    public function empresasSeleccionadas($data)
+    public function deletePermisos()
     {
-        $this->select_empresas = $data;
-    }
-
-    public function addRolList()
-    {
-        //agrego rol nuevo al right-sidebar
-    }
-
-    public function setRolList()
-    {
-        //edito nombre a un rol rol nuevo en el right-sidebar
-    }
-
-    public function removeRolList()
-    {
-        //elimino a un rol del right-sidebar
-    }
-
-    public function selectEmpresas($data)
-    {
-        //select acceso a empresas
+        $this->reset('getPermisos');
+        $this->cambios = true;
     }
 
 }

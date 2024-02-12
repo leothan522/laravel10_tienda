@@ -74,7 +74,7 @@
                     <select class="custom-select" wire:model.defer="role">
                         <option value="">Seleccione</option>
                         <option value="0">Estandar</option>
-                        @foreach($roles as $role)
+                        @foreach($listarRoles as $role)
                             <option value="{{ $role->id }}">{{ ucwords($role->nombre) }}</option>
                         @endforeach
                         @if(comprobarPermisos())
@@ -91,10 +91,7 @@
             </div>
 
             <div class="form-group">
-                {{--<input type="submit" class="btn btn-block btn-success" value="Guardar">--}}
-                <button type="submit" class="btn btn-block btn-success">
-                    <i class="fas fa-save"></i> Guardar
-                </button>
+                <input type="submit" class="btn btn-block btn-success" value="Guardar">
             </div>
 
         </form>

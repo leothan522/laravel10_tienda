@@ -1,14 +1,12 @@
 @extends('adminlte::page')
 
-@section('plugins.Select2', true)
-
 @section('title', 'Usuarios')
 
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark"><i class="fas fa-users"></i> Usuarios</h1>
+                <h1 class="m-0 text-dark"><i class="fas fa-users-cog"></i> Usuarios</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -22,6 +20,7 @@
 
 @section('content')
     @livewire('dashboard.usuarios-component')
+    @livewire('dashboard.roles-component')
 @endsection
 
 {{--@section('right-sidebar')
@@ -40,66 +39,51 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
-        $("#from_rol").submit(function(e) {
+        $("#from_role_usuario").submit(function(e) {
             e.preventDefault();
-            let nombre = document.getElementById("nuevo_rol");
-            Livewire.emit('saveRol', nombre.value);
+            let nombre = $('#input_role_nombre').val();
+            Livewire.emit('save', nombre);
         });
 
-        Livewire.on('addRolList', (idRol, nombreRol) => {
-            let input = document.getElementById("nuevo_rol");
-            input.value = null;
-            input.blur();
-            let boton = '<button type="button" ' +
-                'class="btn btn-primary btn-sm btn-block m-1" ' +
-                'data-toggle="modal" data-target="#modal-user-permisos" ' +
-                'class="btn btn-info btn-sm" ' +
-                'onclick="verRoles(' +  idRol + ')" id="set_rol_id_' + idRol + '">' +  nombreRol + ' </button>';
-            $('#listar_roles').append(boton);
+        Livewire.on('addRolList', (id, nombre, rows) => {
+            $('#input_role_nombre')
+                .val('')
+                .blur();
+            let boton = '';
+            boton += '<button type="button" class="btn btn-primary btn-sm btn-block m-1" data-toggle="modal"';
+            boton += 'data-target="#modal-roles-usuarios" onclick="showRol(\'' + id + '\')" id="button_role_id_' + id + '" >';
+            boton += nombre;
+            boton += '</button>';
+
+            $('#div_listar_roles').append(boton);
+            $('#span_roles_rows').text(rows);
         });
 
-        Livewire.on('setRolList', (idRol, nombreRol) => {
-            let boton = document.getElementById('set_rol_id_' + idRol);
-            boton.innerText = nombreRol;
-        });
-
-        Livewire.on('removeRolList', idRol =>{
-            let boton = document.getElementById("set_rol_id_" + idRol);
-            let cerrar = document.getElementById('boton_rol_modal_cerrar');
-            boton.classList.add("d-none");
-            cerrar.click();
-        });
-
-        function verRoles(id){
-            Livewire.emit('verPermisos', 'parametros', id);
+        function showRol(id){
+            $('#div_ver_spinner_roles').removeClass('d-none');
+            Livewire.emit('edit', id);
         }
 
-        //Initialize Select2 Elements
-       /* $('#select_acceso_empresas').select2({
-            theme: 'bootstrap4',
-            data: hola
-        });*/
-
-        function selectEmpresas(id, data)
-        {
-
-            $('#' + id).select2({
-                theme: 'bootstrap4',
-                data: data
-            });
-
-            $('#'  + id).val(null).trigger('change');
-        }
-
-        Livewire.on('selectEmpresas', data => {
-            selectEmpresas('select_acceso_empresas', data);
+        Livewire.on('setRolList', (id, nombre) => {
+            $('#button_role_id_' + id).text(nombre);
         });
 
-        $("#select_acceso_empresas").on('change', function() {
-            var val = $(this).val();
-            Livewire.emit('empresasSeleccionadas', val);
-            // te muestra un array de todos los seleccionados
-            console.log(val);
+        Livewire.on('removeRolList', id =>{
+            Livewire.emit('limpiar');
+            $('#button_role_id_' + id).addClass('d-none');
+            $('#button_rol_modal_cerrar').click();
+        });
+
+        Livewire.on('cerrarModal', () => {
+            $('#button_edit_modal_cerrar').click();
+        });
+
+        $('#button_rol_modal_cerrar').click(function (e) {
+            $('#div_ver_spinner_roles').removeClass('d-none');
+        });
+
+        $('#button_permisos_modal_cerrar').click(function (e) {
+            $('#div_ver_spinner_usuarios').removeClass('d-none');
         });
 
         console.log('Hi!');

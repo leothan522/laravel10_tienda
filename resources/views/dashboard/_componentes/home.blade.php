@@ -2,8 +2,6 @@
 
 @section('title', 'Dashboard')
 
-@section('plugins.Select2', true)
-
 @section('content_header')
     <h1>Dashboard</h1>
 @stop
@@ -14,6 +12,7 @@
 
     <br>
     <hr>
+    @include('dashboard._componentes.vista_desde_array')
 
 @stop
 
@@ -35,18 +34,6 @@
 
 @section('js')
     <script>
-
-        //Initialize Select2 Elements
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-
-        $("#comercial_lista_calc").on('change', function() {
-            var val = $(this).val();
-            Livewire.emit('prueba', val);
-            // te muestra un array de todos los seleccionados
-            console.log(val);
-        });
 
         $("#navbarSearch").focus(function () {
             let form = $(this).closest("form");
