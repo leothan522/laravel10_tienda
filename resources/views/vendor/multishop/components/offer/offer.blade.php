@@ -5,7 +5,7 @@
             @if(!$oferta->mostrar) @continue @endif
             <div class="col-md-6">
             <div class="product-offer mb-30" style="height: 300px;">
-                <img class="img-fluid" src="{{ verImagen($oferta->imagen) }}" alt="">
+                <img class="img-fluid" src="{{ verImagen($oferta->imagen, false, true) }}" alt="">
                 <div class="offer-text">
                     <h6 class="text-white text-uppercase">Ahorre {{ $oferta->descuento }}%</h6>
                     <h3 class="text-white mb-3">{{ $oferta->titulo }}</h3>

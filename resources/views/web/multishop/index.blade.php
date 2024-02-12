@@ -1,6 +1,6 @@
 @extends('vendor.multishop.master')
 
-@section('title', 'SPORTEC | Inicio')
+@section('title', mb_strtoupper(config('app.name')).' | Inicio')
 
 @section('content')
     @livewire('web.home-component')

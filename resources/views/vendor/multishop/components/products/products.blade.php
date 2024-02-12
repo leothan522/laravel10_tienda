@@ -14,7 +14,7 @@
                             @if($stock->porcentaje > 0)
                                 <div class="porcentaje-descuento">-{{ $stock->porcentaje }}%</div>
                             @endif
-                            <img class="img-fluid w-100" src="{{ verImagen($stock->imagen) }}" alt="">
+                            <img class="img-fluid w-100" src="{{ verImagen($stock->imagen, false, true) }}" alt="">
                             <div class="product-action">
                                 @if($stock->porcentaje > 0)
                                     <div class="porcentaje-descuento">-{{ $stock->porcentaje }}%</div>

@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'TIENDA',
+    'title' => 'Morros Devops',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>SPORTEC</b> TIENDA',
+    'logo' => '<b>'.mb_strtoupper(env('APP_NAME')).'</b>',
     /*'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',*/
     'logo_img' => 'img/logo_small_50x50.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
@@ -355,7 +355,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Usuarios',
-                    'icon' => 'fas fa-fw fa-users',
+                    'icon' => 'fas fa-fw fa-users-cog',
                     'route'  => 'usuarios.index',
                     'can'  => 'usuarios',
                 ],

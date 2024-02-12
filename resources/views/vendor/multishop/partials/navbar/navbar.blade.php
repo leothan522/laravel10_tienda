@@ -21,8 +21,8 @@
         <div class="col-lg-9">
             <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
                 <a href="{{ route('web.index') }}" class="text-decoration-none d-block d-lg-none">
-                    <span class="h1 text-uppercase text-dark bg-light px-2">Sportec</span>
-                    <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Tienda</span>
+                    <span class="h1 text-uppercase text-dark bg-light px-2">MORROS</span>
+                    <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">DEVOPS</span>
                 </a>
                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>

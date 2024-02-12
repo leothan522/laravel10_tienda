@@ -121,27 +121,36 @@ function verSpinner()
     return $spinner;
 }
 
-function verImagen($path, $user = false)
+function verImagen($path, $user = false, $web = null)
 {
-    if ($user){
-        $path_image = 'storage/'.$path;
-    }else{
-        $path_image = $path;
-    }
-    if (!is_null($path) && !empty($path)){
-        if (file_exists(public_path($path_image))){
-            return asset($path_image);
-        }else{
-            if ($user){
+    if (!is_null($path)){
+        if ($user){
+            if (file_exists(public_path('storage/'.$path))){
+                return asset('storage/'.$path);
+            }else{
                 return asset('img/user.png');
             }
-            return asset('img/img_placeholder.png');
+        }else{
+            if (file_exists(public_path($path))){
+                return asset($path);
+            }else{
+                if (is_null($web)){
+                    return asset('img/img_placeholder.png');
+                }else{
+                    return asset('img/web_img_placeholder.jpg');
+                }
+
+            }
         }
     }else{
         if ($user){
             return asset('img/user.png');
         }
-        return asset('img/img_placeholder.png');
+        if (is_null($web)){
+            return asset('img/img_placeholder.png');
+        }else{
+            return asset('img/web_img_placeholder.jpg');
+        }
     }
 }
 

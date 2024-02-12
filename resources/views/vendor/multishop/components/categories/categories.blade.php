@@ -7,7 +7,7 @@
                     <a class="text-decoration-none" @if($categoria->stock > 0) href="{{ route('web.categoria', $categoria->id) }}" @else wire:click="noCategoriaStock" @endif onclick="verCargando()">
                         <div class="cat-item d-flex align-items-center mb-4">
                             <div class="overflow-hidden" style="width: 100px; height: 100px;">
-                                <img class="img-fluid" src="{{ verImagen($categoria->mini) }}" alt="">
+                                <img class="img-fluid" src="{{ verImagen($categoria->mini, false, true) }}" alt="">
                             </div>
                             <div class="flex-fill pl-3">
                                 <h6>{{ $categoria->nombre }}</h6>

@@ -5,7 +5,7 @@
                 <div class="owl-carousel vendor-carousel">
                     @foreach($listarEmpresas as $empresa)
                         <div class="bg-light p-4">
-                            <img src="{{ verImagen($empresa->mini) }}" alt="">
+                            <img src="{{ verImagen($empresa->mini, false, true) }}" alt="">
                         </div>
                     @endforeach
                 </div>

@@ -57,8 +57,8 @@
     <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
         <div class="col-lg-4">
             <a href="{{ route('web.index') }}" class="text-decoration-none">
-                <span class="h1 text-uppercase text-primary bg-dark px-2">Sportec</span>
-                <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Tienda</span>
+                <span class="h1 text-uppercase text-primary bg-dark px-2">MORROS</span>
+                <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">DEVOPS</span>
             </a>
         </div>
         <div class="col-lg-4 col-6 text-left">
