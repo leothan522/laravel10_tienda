@@ -40,8 +40,7 @@
 
         function imgEmpresa()
         {
-            let input = document.getElementById('customFileLang');
-            input.click();
+            $('#customFileLang').click();
         }
 
         console.log('Hi!');

@@ -20,7 +20,7 @@
     <div class="card-body">
 
 
-        <form wire:submit.prevent="saveTributario">
+        <form wire:submit="saveTributario">
 
             <div class="form-group">
                 <label for="name">Codigo</label>
@@ -28,7 +28,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-code"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="tributario_codigo" placeholder="Codigo ">
+                    <input type="text" class="form-control" wire:model="tributario_codigo" placeholder="Codigo ">
                     @error('tributario_codigo')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -44,7 +44,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-percentage"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="tributario_nombre" placeholder="Porcentaje">
+                    <input type="text" class="form-control" wire:model="tributario_nombre" placeholder="Porcentaje">
                     @error('tributario_nombre')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>

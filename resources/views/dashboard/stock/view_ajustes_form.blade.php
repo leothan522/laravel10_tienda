@@ -1,11 +1,11 @@
-<form @if($new_ajuste) wire:submit.prevent="saveAjustes" @else wire:submit.prevent="updateAjustes" @endif xmlns:wire="http://www.w3.org/1999/xhtml">
+<form @if($new_ajuste) wire:submit="saveAjustes" @else wire:submit="updateAjustes" @endif xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="row col-12 mb-2">
         <div class="col-md-2">
             <label>Código:</label>
         </div>
         <div class="col-md-2 mb-2">
             <input type="text" class="form-control form-control-sm @error('ajuste_codigo') is-invalid @enderror"
-                   placeholder="Código" wire:model.defer="ajuste_codigo"
+                   placeholder="Código" wire:model="ajuste_codigo"
                    @if(!$proximo_codigo['editable']) readonly @endif>
         </div>
         <div class="col-md-3">
@@ -17,7 +17,7 @@
         <div class="col-md-3">
             <input type="datetime-local"
                    class="form-control form-control-sm @error('ajuste_fecha') is-invalid @enderror"
-                   wire:model.defer="ajuste_fecha" @if(!$proximo_codigo['editable_fecha']) readonly @endif>
+                   wire:model="ajuste_fecha" @if(!$proximo_codigo['editable_fecha']) readonly @endif>
         </div>
     </div>
 
@@ -27,7 +27,7 @@
         </div>
         <div class="col-md-10">
             <input type="text" class="form-control form-control-sm @error('ajuste_descripcion') is-invalid @enderror"
-                   placeholder="Descripción" wire:model.defer="ajuste_descripcion">
+                   placeholder="Descripción" wire:model="ajuste_descripcion">
         </div>
     </div>
 

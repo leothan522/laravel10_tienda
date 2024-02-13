@@ -20,14 +20,15 @@
 @section('js')
     {{--<script src="../../dist/js/adminlte.min.js"></script>--}}
     <script !src="">
-        Livewire.on('bajarScroll', idMessage => {
+        Livewire.on('bajarScroll', ({ id }) => {
             let scrollToBottom = document.querySelector("#scroll-to-bottom");
-            let pageBottom = document.querySelector("#page-bottom_" + idMessage);
+            let pageBottom = document.querySelector("#page-bottom_" + id);
+            //alert(id);
             pageBottom.scrollIntoView();
         });
 
         function refresh() {
-            Livewire.emit('refresh');
+            Livewire.dispatch('refresh');
         }
 
         $(document).ready(function () {

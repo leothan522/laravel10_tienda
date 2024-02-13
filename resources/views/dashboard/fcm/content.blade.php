@@ -15,7 +15,7 @@
             <!-- /.card-header -->
             <div class="card-body">
 
-                <form wire:submit.prevent="sendMessage">
+                <form wire:submit="sendMessage">
 
                     <div class="form-group">
                         <label for="name">Tipo FCM</label>
@@ -23,7 +23,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-paper-plane"></i></span>
                             </div>
-                            <select class="custom-select" wire:model.defer="fcm_tipo">
+                            <select class="custom-select" wire:model="fcm_tipo">
                                 <option value="">Seleccione...</option>
                                 <option value="notification">With Notification</option>
                                 <option value="data">With Data</option>
@@ -43,7 +43,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-window-maximize"></i></span>
                             </div>
-                            <input type="text" class="form-control" wire:model.defer="title" placeholder="Titulo para la Notificación">
+                            <input type="text" class="form-control" wire:model="title" placeholder="Titulo para la Notificación">
                             @error('title')
                             <span class="col-sm-12 text-sm text-bold text-danger">
                             <i class="icon fas fa-exclamation-triangle"></i>
@@ -59,7 +59,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-envelope-open-text"></i></span>
                             </div>
-                            <input type="text" class="form-control" wire:model.defer="body" placeholder="Mensaje para la Notificación">
+                            <input type="text" class="form-control" wire:model="body" placeholder="Mensaje para la Notificación">
                             @error('body')
                             <span class="col-sm-12 text-sm text-bold text-danger">
                             <i class="icon fas fa-exclamation-triangle"></i>

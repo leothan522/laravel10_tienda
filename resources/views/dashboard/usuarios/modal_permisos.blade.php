@@ -22,7 +22,9 @@
                     </div>
                 </div>
 
-                @include('dashboard.usuarios.show_permisos')
+                @if($usuarios_id)
+                    @include('dashboard.usuarios.show_permisos')
+                @endif
 
             </div>
             <div class="modal-footer row col-12 justify-content-between">

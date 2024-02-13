@@ -51,7 +51,7 @@
                                         @if($edit_password)
                                             <li class="list-group-item">
                                                 <b class="text-warning">Nueva Contraseña</b>
-                                                <input type="text" wire:model.defer="edit_password" class="form-control col-sm-4 form-control-sm float-right"/>
+                                                <input type="text" wire:model="edit_password" class="form-control col-sm-4 form-control-sm float-right"/>
                                             </li>
                                         @endif
                                     </ul>
@@ -99,7 +99,7 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <form wire:submit.prevent="save">
+                                    <form wire:submit="save">
 
                                         <div class="form-group">
                                             <label for="name">{{ __('Name') }}</label>
@@ -109,7 +109,7 @@
                                                         <i class="fas fa-user"></i>
                                                     </span>
                                                 </div>
-                                                <input type="text" class="form-control" wire:model.defer="edit_name" placeholder="Nombre y Apellido">
+                                                <input type="text" class="form-control" wire:model="edit_name" placeholder="Nombre y Apellido">
                                                 @error('edit_name')
                                                 <span class="col-sm-12 text-sm text-bold text-danger">
                                                     <i class="icon fas fa-exclamation-triangle"></i>
@@ -127,7 +127,7 @@
                                                         <i class="fas fa-envelope"></i>
                                                     </span>
                                                 </div>
-                                                <input type="text" class="form-control" wire:model.defer="edit_email" placeholder="Email">
+                                                <input type="text" class="form-control" wire:model="edit_email" placeholder="Email">
                                                 @error('edit_email')
                                                 <span class="col-sm-12 text-sm text-bold text-danger">
                                                     <i class="icon fas fa-exclamation-triangle"></i>
@@ -147,7 +147,7 @@
                                                         <i class="fas fa-user-cog"></i>
                                                     </span>
                                                     </div>
-                                                    <select class="custom-select" wire:model.defer="edit_role">
+                                                    <select class="custom-select" wire:model="edit_role">
                                                         <option value="0">Estandar</option>
                                                         @foreach($listarRoles as $role)
                                                             <option
@@ -174,7 +174,7 @@
                                                 {!! $ver_empresas !!}
                                             </p>
                                             <div wire:ignore>
-                                                <select class="form-control" multiple="multiple" {{--wire:model="select_empresas"--}}
+                                                <select class="form-control" multiple="multiple" {{--wire:model.live="select_empresas"--}}
                                                 data-placeholder="Seleccione las Empresas" id="select_acceso_empresas">
                                                 </select>
                                             </div>

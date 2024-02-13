@@ -20,7 +20,7 @@
     <div class="card-body">
 
 
-        <form wire:submit.prevent="saveTiposAjuste">
+        <form wire:submit="saveTiposAjuste">
 
             <div class="form-group">
                 <label for="name">Código</label>
@@ -28,7 +28,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-code"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="tipos_ajuste_codigo" placeholder="Código">
+                    <input type="text" class="form-control" wire:model="tipos_ajuste_codigo" placeholder="Código">
                     @error('tipos_ajuste_codigo')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -44,7 +44,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-tag"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="tipos_ajuste_nombre" placeholder="Descripción">
+                    <input type="text" class="form-control" wire:model="tipos_ajuste_nombre" placeholder="Descripción">
                     @error('tipos_ajuste_nombre')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -57,11 +57,11 @@
             <div class="form-group">
                 <label>Tipo</label>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" wire:model="tipos_ajuste_tipo" value="1">
+                    <input class="form-check-input" type="radio" wire:model.live="tipos_ajuste_tipo" value="1">
                     <label class="form-check-label">Entrada</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" wire:model="tipos_ajuste_tipo" value="2">
+                    <input class="form-check-input" type="radio" wire:model.live="tipos_ajuste_tipo" value="2">
                     <label class="form-check-label">Salida</label>
                 </div>
             </div>

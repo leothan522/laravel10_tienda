@@ -10,9 +10,9 @@
                         </h4>
                     </div>
                     <div class="col-md-5 justify-content-end">
-                        <form wire:submit.prevent="buscarUnidades">
+                        <form wire:submit="buscarUnidades">
                             <div class="input-group close">
-                                <input type="search" class="form-control" placeholder="Buscar" wire:model.defer="keywordUnidades" required>
+                                <input type="search" class="form-control" placeholder="Buscar" wire:model="keywordUnidades" required>
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-default">
                                         <i class="fa fa-search"></i>

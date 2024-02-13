@@ -20,7 +20,7 @@
     <div class="card-body">
 
 
-        <form wire:submit.prevent="saveAlmacen">
+        <form wire:submit="saveAlmacen">
 
             <div class="form-group">
                 <label for="name">Código</label>
@@ -28,7 +28,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-code"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="almacen_codigo" placeholder="Codigo Almacen">
+                    <input type="text" class="form-control" wire:model="almacen_codigo" placeholder="Codigo Almacen">
                     @error('almacen_codigo')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -44,7 +44,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-tag"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="almacen_nombre" placeholder="Nombre Almacen">
+                    <input type="text" class="form-control" wire:model="almacen_nombre" placeholder="Nombre Almacen">
                     @error('almacen_nombre')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>

@@ -33,9 +33,13 @@
 
     <div class="card-body">
 
-        @if($view)
-            @include('dashboard.articulos.view_'.$view)
-        @endif
+        @include('dashboard.articulos.view_show')
+        @include('dashboard.articulos.view_form')
+        @include('dashboard.articulos.view_unidad')
+        @include('dashboard.articulos.view_precios')
+        @include('dashboard.articulos.view_identificadores')
+        @include('dashboard.articulos.view_existencias')
+        @include('dashboard.articulos.view_imagen')
 
     </div>
 

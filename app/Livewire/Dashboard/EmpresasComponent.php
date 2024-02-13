@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard;
+namespace App\Livewire\Dashboard;
 
 use App\Models\Almacen;
 use App\Models\Empresa;
@@ -8,6 +8,7 @@ use App\Models\Parametro;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -15,8 +16,6 @@ class EmpresasComponent extends Component
 {
     use LivewireAlert;
     use WithFileUploads;
-
-    protected $listeners = ['buscar', 'confirmed'];
 
     public $view = "show", $keyword, $title = "Datos de la Tienda", $btn_cancelar = false, $footer = true;
     public $empresa_id, $empresa_default, $verDefault, $verImagen, $img_borrar_principal, $img_principal;
@@ -231,6 +230,7 @@ class EmpresasComponent extends Component
         ]);
     }
 
+    #[On('confirmed')]
     public function confirmed()
     {
         $empresa = Empresa::find($this->empresa_id);
@@ -473,6 +473,7 @@ class EmpresasComponent extends Component
 
     }
 
+    #[On('buscar')]
     public function buscar($keyword)
     {
         $this->keyword = $keyword;

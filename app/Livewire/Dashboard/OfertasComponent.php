@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard;
+namespace App\Livewire\Dashboard;
 
 use App\Models\Articulo;
 use App\Models\Categoria;
@@ -9,6 +9,7 @@ use App\Models\Oferta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,12 +18,12 @@ class OfertasComponent extends Component
     use LivewireAlert;
     use WithPagination;
 
-    protected $paginationTheme = 'bootstrap';
+    /*protected $paginationTheme = 'bootstrap';
 
     protected $listeners = [
         'changeEmpresa', 'setSelectForm', 'categoriaSeleccionada', 'articuloSeleccionado', 'oferta_id',
         'setEdit', 'confirmed'
-    ];
+    ];*/
 
     public $modulo_activo = false, $modulo_empresa, $modulo_articulo;
     public $empresa_id, $listarEmpresas, $empresa, $keyword;
@@ -101,6 +102,7 @@ class OfertasComponent extends Component
         $this->listarEmpresas = dataSelect2($array);
     }
 
+    #[On('changeEmpresa')]
     public function changeEmpresa()
     {
         $this->limpiar();
@@ -111,7 +113,7 @@ class OfertasComponent extends Component
         $this->reset([
             'afectados', 'categorias_id', 'articulos_id', 'desde', 'hasta', 'descuento', 'oferta_id'
         ]);
-        $this->emit('setEdit', null, null);
+        $this->dispatch('setEdit', categoria: null, articulo: null);
     }
 
     public function rules()
@@ -172,7 +174,7 @@ class OfertasComponent extends Component
         $this->desde = $oferta->desde;
         $this->hasta = $oferta->hasta;
         $this->descuento = $oferta->descuento;
-        $this->emit('setEdit', $this->categorias_id, $this->articulos_id);
+        $this->dispatch('setEdit', categoria: $this->categorias_id, articulo: $this->articulos_id);
     }
 
     public function destroy($id)
@@ -190,6 +192,7 @@ class OfertasComponent extends Component
         ]);
     }
 
+    #[On('confirmed')]
     public function confirmed()
     {
         $oferta = Oferta::find($this->oferta_id);
@@ -217,21 +220,25 @@ class OfertasComponent extends Component
         }
     }
 
+    #[On('setSelectForm')]
     public function setSelectForm($categorias, $articulos)
     {
         //select categorias formulario articulos
     }
 
+    #[On('categoriaSeleccionada')]
     public function categoriaSeleccionada($id)
     {
         $this->categorias_id = $id;
     }
 
+    #[On('articuloSeleccionado')]
     public function articuloSeleccionado($id)
     {
         $this->articulos_id = $id;
     }
 
+    #[On('setEdit')]
     public function setEdit($categoria, $articulo)
     {
         //select JS EDIT

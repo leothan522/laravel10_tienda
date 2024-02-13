@@ -13,11 +13,11 @@
     </th>
     <td>
         <input type="text" class="form-control form-control-sm {{ $classTipo[$i] }}
-        @error('ajusteTipo.'.$i) is-invalid @enderror" wire:model.lazy="ajusteTipo.{{ $i }}" placeholder="código">
+        @error('ajusteTipo.'.$i) is-invalid @enderror" wire:model.blur="ajusteTipo.{{ $i }}" placeholder="código">
     </td>
     <td>
         <input type="text" class="form-control form-control-sm {{ $classArticulo[$i] }}
-        @error('ajusteArticulo.'.$i) is-invalid @enderror" wire:model.lazy="ajusteArticulo.{{ $i }}"
+        @error('ajusteArticulo.'.$i) is-invalid @enderror" wire:model.blur="ajusteArticulo.{{ $i }}"
                data-toggle="tooltip" data-placement="bottom" title="{{ $ajusteArticulo[$i] }}" placeholder="código">
     </td>
     <td>
@@ -28,17 +28,17 @@
             </div>
             <input type="text" class="form-control form-control-sm"
                    data-toggle="tooltip" data-placement="bottom" title="{{ $ajusteDescripcion[$i] }}"
-                   wire:model="ajusteDescripcion.{{ $i }}" placeholder="Descripción"
+                   wire:model.live="ajusteDescripcion.{{ $i }}" placeholder="Descripción"
                    readonly>
         </div>
     </td>
     <td>
         <input type="text" class="form-control form-control-sm {{ $classAlmacen[$i] }} @error('ajusteAlmacen.'.$i) is-invalid @enderror"
-               wire:model.lazy="ajusteAlmacen.{{ $i }}" placeholder="código">
+               wire:model.blur="ajusteAlmacen.{{ $i }}" placeholder="código">
     </td>
     <td>
         <select class="form-control form-control-sm
-        @error('ajusteUnidad.'.$i) is-invalid @enderror" wire:model="ajusteUnidad.{{ $i }}">
+        @error('ajusteUnidad.'.$i) is-invalid @enderror" wire:model.live="ajusteUnidad.{{ $i }}">
             @foreach($selectUnidad[$i] as $unidad)
                 <option value="{{ $unidad['id'] }}">{{ $unidad['codigo'] }}</option>
             @endforeach
@@ -47,6 +47,6 @@
     <td>
         <input type="number" class="form-control form-control-sm
         @error('ajusteCantidad.'.$i) is-invalid @enderror" min="0.001" step=".001"
-               wire:model="ajusteCantidad.{{ $i }}">
+               wire:model.live="ajusteCantidad.{{ $i }}">
     </td>
 </tr>

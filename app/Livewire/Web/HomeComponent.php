@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Web;
+namespace App\Livewire\Web;
 
 use App\Models\Articulo;
 use App\Models\Categoria;
@@ -11,15 +11,12 @@ use App\Models\Unidad;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class HomeComponent extends Component
 {
     use LivewireAlert;
-
-    protected $listeners = [
-        'cerrarModalLogin'
-    ];
 
     public $login_email, $login_password;
 
@@ -76,7 +73,7 @@ class HomeComponent extends Component
         ];
 
         if (Auth::attempt($credentials)){
-            $this->emit('cerrarModalLogin', Auth::user()->name);
+            $this->dispatch('cerrarModalLogin', nombre: Auth::user()->name);
         }else{
             $this->addError('login_validacion', 'Las credenciales proporcionadas no coinciden con nuestros registros.');
         }
@@ -144,6 +141,7 @@ class HomeComponent extends Component
         ]);
     }
 
+    #[On('cerrarModalLogin')]
     public function cerrarModalLogin($nombre)
     {
         //cerrar con JS el modal

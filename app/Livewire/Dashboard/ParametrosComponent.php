@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard;
+namespace App\Livewire\Dashboard;
 
 use App\Models\Parametro;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,9 +13,6 @@ class ParametrosComponent extends Component
 {
     use LivewireAlert;
     use WithPagination;
-
-    protected $paginationTheme = 'bootstrap';
-    protected $listeners = ['buscar', 'confirmed'];
 
     public $view = "create", $keyword;
     public $parametro_id, $nombre, $tabla_id, $valor;
@@ -33,6 +31,7 @@ class ParametrosComponent extends Component
         $this->reset([
             'parametro_id', 'nombre', 'tabla_id', 'valor', 'view', 'keyword'
         ]);
+        $this->resetErrorBag();
     }
 
     protected function rules($id = null)
@@ -76,6 +75,7 @@ class ParametrosComponent extends Component
 
     public function edit($id)
     {
+        $this->limpiar();
         $parametro = Parametro::find($id);
         $this->parametro_id = $parametro->id;
         $this->nombre = $parametro->nombre;
@@ -84,6 +84,7 @@ class ParametrosComponent extends Component
         $this->view = "edit";
     }
 
+    #[On('buscar')]
     public function buscar($keyword)
     {
         $this->keyword = $keyword;
@@ -103,6 +104,7 @@ class ParametrosComponent extends Component
         ]);
     }
 
+    #[On('confirmed')]
     public function confirmed()
     {
         $parametro = Parametro::find($this->parametro_id);

@@ -11,7 +11,7 @@
 @section('js')
     <script>
 
-        Livewire.on('cerrarModalLogin', (nombre) => {
+        Livewire.on('cerrarModalLogin', ({ nombre }) => {
             setTopBar(nombre);
             $('#btn_modal_login_cerrar').click();
         });

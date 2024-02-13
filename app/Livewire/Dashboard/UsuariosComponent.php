@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard;
+namespace App\Livewire\Dashboard;
 
 use App\Models\Empresa;
 use App\Models\Parametro;
@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,12 +17,6 @@ class UsuariosComponent extends Component
 {
     use LivewireAlert;
     use WithPagination;
-
-    protected $paginationTheme = 'bootstrap';
-    protected $listeners = [
-        'buscar', 'confirmedUser', 'cerrarModal', 'limpiar',
-        'selectEmpresas', 'empresasSeleccionadas'
-    ];
 
     public $view = "create", $keyword;
     public $name, $email, $password, $role, $usuarios_id;
@@ -44,6 +39,7 @@ class UsuariosComponent extends Component
             ->with('rows', $rows);
     }
 
+    #[On('limpiar')]
     public function limpiar()
     {
         $this->reset([
@@ -167,7 +163,7 @@ class UsuariosComponent extends Component
             array_push($data, $option);
         }
         $this->ver_empresas = $placeholder;
-        $this->emit('selectEmpresas', $data, $placeholder);
+        $this->dispatch('selectEmpresas', data: $data);
 
     }
 
@@ -220,6 +216,7 @@ class UsuariosComponent extends Component
         ]);
     }
 
+    #[On('confirmedUser')]
     public function confirmedUser()
     {
         $usuario = User::find($this->usuarios_id);
@@ -240,7 +237,7 @@ class UsuariosComponent extends Component
         } else {
             $usuario->delete();
             $this->limpiar();
-            $this->emit('cerrarModal');
+            $this->dispatch('cerrarModal');
             $this->alert(
                 'success',
                 'Usuario Eliminado.'
@@ -249,11 +246,13 @@ class UsuariosComponent extends Component
 
     }
 
+    #[On('buscar')]
     public function buscar($keyword)
     {
         $this->keyword = $keyword;
     }
 
+    #[On('cerrarModal')]
     public function cerrarModal()
     {
         //JS
@@ -312,11 +311,13 @@ class UsuariosComponent extends Component
         }
     }
 
+    #[On('empresasSeleccionadas')]
     public function empresasSeleccionadas($data)
     {
         $this->select_empresas = $data;
     }
 
+    #[On('selectEmpresas')]
     public function selectEmpresas($data)
     {
         //select acceso a empresas // JS

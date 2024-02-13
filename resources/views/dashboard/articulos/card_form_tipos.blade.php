@@ -20,7 +20,7 @@
     <div class="card-body">
 
 
-        <form wire:submit.prevent="saveTipo">
+        <form wire:submit="saveTipo">
 
             <div class="form-group">
                 <label for="name">Nombre</label>
@@ -28,7 +28,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-tag"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="tipo_nombre" placeholder="Nombre">
+                    <input type="text" class="form-control" wire:model="tipo_nombre" placeholder="Nombre">
                     @error('tipo_nombre')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>

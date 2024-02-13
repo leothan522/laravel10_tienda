@@ -22,14 +22,14 @@
     <div class="card-body">
 
 
-        <form wire:submit.prevent="save">
+        <form wire:submit="save">
 
             <div class="form-group">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text text-bold">nombre</span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="nombre" name="nombre"
+                    <input type="text" class="form-control" wire:model="nombre" name="nombre"
                            placeholder="[string]">
                     @error('nombre')
                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -44,7 +44,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text text-bold">tabla_id</span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="tabla_id" name="tabla_id"
+                    <input type="text" class="form-control" wire:model="tabla_id" name="tabla_id"
                            placeholder="[integer]">
                     @error('tabla_id')
                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -60,7 +60,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text text-bold">valor</span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="valor" name="valor"
+                    <input type="text" class="form-control" wire:model="valor" name="valor"
                            placeholder="[string]">
                     @error('valor')
                     <span class="col-sm-12 text-sm text-bold text-danger">

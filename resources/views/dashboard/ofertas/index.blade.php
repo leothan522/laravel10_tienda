@@ -46,14 +46,14 @@
             if (keyword.length > 0){
                 input.blur();
                 alert('Falta vincular con el componente Livewire');
-                //Livewire.emit('increment', keyword);
+                //Livewire.dispatch('buscar', { keyword: keyword });
             }
             return false;
         }
 
         function cambiarEmpresa()
         {
-            Livewire.emit('changeEmpresa');
+            Livewire.dispatch('changeEmpresa');
         }
 
         $('#select_categorias').select2({
@@ -70,15 +70,15 @@
 
         $('#select_categorias').on('change', function () {
             var val = $(this).val();
-            Livewire.emit('categoriaSeleccionada', val);
+            Livewire.dispatch('categoriaSeleccionada', { id: val });
         });
 
         $('#select_articulos').on('change', function () {
             var val = $(this).val();
-            Livewire.emit('articuloSeleccionado', val);
+            Livewire.dispatch('articuloSeleccionado', { id: val });
         });
 
-        Livewire.on('setEdit', (categoria, articulo) => {
+        Livewire.on('setEdit', ({ categoria, articulo }) => {
             $('#select_categorias').val(categoria).trigger('change');
             $('#select_articulos').val(articulo).trigger('change');
         });

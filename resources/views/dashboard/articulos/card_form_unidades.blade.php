@@ -20,7 +20,7 @@
     <div class="card-body">
 
 
-        <form wire:submit.prevent="saveUnidad">
+        <form wire:submit="saveUnidad">
 
             <div class="form-group">
                 <label for="name">Codigo</label>
@@ -28,7 +28,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-code"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="unidad_codigo" placeholder="Codigo Unidad">
+                    <input type="text" class="form-control" wire:model="unidad_codigo" placeholder="Codigo Unidad">
                     @error('unidad_codigo')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -44,7 +44,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-tag"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="unidad_nombre" placeholder="Nombre Unidad">
+                    <input type="text" class="form-control" wire:model="unidad_nombre" placeholder="Nombre Unidad">
                     @error('unidad_nombre')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>

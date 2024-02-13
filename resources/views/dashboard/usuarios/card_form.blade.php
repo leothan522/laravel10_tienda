@@ -10,7 +10,7 @@
     <div class="card-body">
 
 
-        <form wire:submit.prevent="save" xmlns:wire="http://www.w3.org/1999/xhtml">
+        <form wire:submit="save" xmlns:wire="http://www.w3.org/1999/xhtml">
 
             <div class="form-group">
                 <label for="name">{{ __('Name') }}</label>
@@ -18,7 +18,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-user"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="name" placeholder="Nombre y Apellido">
+                    <input type="text" class="form-control" wire:model="name" placeholder="Nombre y Apellido">
                     @error('name')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -34,7 +34,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="email" placeholder="Email">
+                    <input type="text" class="form-control" wire:model="email" placeholder="Email">
                     @error('email')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -50,7 +50,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="password" placeholder="Contraseña">
+                    <input type="text" class="form-control" wire:model="password" placeholder="Contraseña">
                     <span class="input-group-append">
                         <button type="button" wire:click="generarClave" class="btn btn-info btn-flat btn-sm text-sm">
                             <i class="fas fa-key"></i>
@@ -71,7 +71,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-user-cog"></i></span>
                     </div>
-                    <select class="custom-select" wire:model.defer="role">
+                    <select class="custom-select" wire:model="role">
                         <option value="">Seleccione</option>
                         <option value="0">Estandar</option>
                         @foreach($listarRoles as $role)

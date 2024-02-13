@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard;
+namespace App\Livewire\Dashboard;
 
 use App\Models\AjusDetalle;
 use App\Models\Ajuste;
@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -24,15 +25,6 @@ class StockComponent extends Component
 {
     use LivewireAlert;
     use WithPagination;
-
-    protected $paginationTheme = 'bootstrap';
-
-    protected $listeners = [
-        'changeEmpresa',
-        'limpiarAlmacenes', 'confirmedAlmacenes',
-        'limpiarTiposAjuste', 'confirmedTiposAjuste',
-        'confirmedBorrarAjuste', 'verspinnerOculto', 'buscar'
-    ];
 
     public $modulo_activo = false, $modulo_empresa, $modulo_articulo;
     public $empresa_id, $listarEmpresas, $empresa;
@@ -197,6 +189,7 @@ class StockComponent extends Component
         $this->listarEmpresas = dataSelect2($array);
     }
 
+    #[On('changeEmpresa')]
     public function changeEmpresa()
     {
         $this->limpiarAjustes();
@@ -270,6 +263,7 @@ class StockComponent extends Component
 
     // ************************* Almacenes ********************************************
 
+    #[On('limpiarAlmacenes')]
     public function limpiarAlmacenes()
     {
         $this->reset([
@@ -340,6 +334,7 @@ class StockComponent extends Component
 
     }
 
+    #[On('confirmedAlmacenes')]
     public function confirmedAlmacenes()
     {
 
@@ -384,6 +379,7 @@ class StockComponent extends Component
 
     // ************************* Tipos de AJuste ********************************************
 
+    #[On('limpiarTiposAjuste')]
     public function limpiarTiposAjuste()
     {
         $this->reset([
@@ -455,6 +451,7 @@ class StockComponent extends Component
 
     }
 
+    #[On('confirmedTiposAjuste')]
     public function confirmedTiposAjuste()
     {
 
@@ -612,7 +609,7 @@ class StockComponent extends Component
     protected function rules()
     {
         return [
-            'ajuste_codigo' => ['nullable', 'min:4', 'alpha_num:ascii', Rule::unique('ajustes', 'codigo')->ignore($this->ajuste_id)],
+            'ajuste_codigo' => ['nullable', 'min:4', 'alpha_dash:ascii', Rule::unique('ajustes', 'codigo')->ignore($this->ajuste_id)],
             'ajuste_fecha' => 'nullable',
             'ajuste_descripcion' => 'required|min:4',
             'ajusteTipo.*' => ['required', Rule::exists('ajustes_tipos', 'codigo')],
@@ -1433,7 +1430,7 @@ class StockComponent extends Component
     public function destroyAjustes($opcion = "delete")
     {
         $this->opcionDestroy = $opcion;
-        $this->emit('verspinnerOculto', 1);
+        $this->dispatch('verspinnerOculto', 1);
         $this->confirm('¿Estas seguro?', [
             'toast' => false,
             'position' => 'center',
@@ -1445,9 +1442,10 @@ class StockComponent extends Component
         ]);
     }
 
+    #[On('confirmedBorrarAjuste')]
     public function confirmedBorrarAjuste()
     {
-        $this->emit('verspinnerOculto', 1);
+        $this->dispatch('verspinnerOculto', 1);
         $ajuste = Ajuste::find($this->ajuste_id);
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
@@ -1530,10 +1528,12 @@ class StockComponent extends Component
         }
     }
 
+    #[On('verspinnerOculto')]
     public function verspinnerOculto($valor){
         //ver spinner oculto desde JS
     }
 
+    #[On('buscar')]
     public function buscar($keyword)
     {
         $this->reset('keywordStock');

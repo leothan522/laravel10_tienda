@@ -28,7 +28,7 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
-        function search(){
+        function buscar(){
             let input = $("#navbarSearch");
             let keyword  = input.val();
             if (keyword.length > 0){
@@ -46,7 +46,7 @@
 
         $('#fcm_token_users').on('change', function () {
             let token = $(this).val();
-            Livewire.emit('tokenSeleccionado', token);
+            Livewire.dispatch('tokenSeleccionado', { token:token });
         });
 
         console.log('Hi!');

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard;
+namespace App\Livewire\Dashboard;
 
 use App\Models\Parametro;
 use App\Models\User;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,12 +13,6 @@ class RolesComponent extends Component
 {
     use LivewireAlert;
     use WithPagination;
-
-    protected $paginationTheme = 'bootstrap';
-
-    protected $listeners = [
-        'save', 'addRolList', 'edit', 'setRolList', 'confirmedRol', 'removeRolList',
-    ];
 
     public $roles_id, $nombre, $tabla = 'roles', $getPermisos, $cambios = false;
 
@@ -33,6 +28,7 @@ class RolesComponent extends Component
         ]);
     }
 
+    #[On('save')]
     public function save($nombre = null)
     {
         if (!is_null($nombre)){
@@ -90,14 +86,14 @@ class RolesComponent extends Component
         $parametro->save();
 
         if ($this->roles_id){
-            $this->emit('setRolList', $parametro->id, ucwords($parametro->nombre));
+            $this->dispatch('setRolList', id: $parametro->id, nombre: ucwords($parametro->nombre));
             $this->edit($parametro->id);
             $this->alert(
                 'success',
                 'Rol Actualizado.'
             );
         }else{
-            $this->emit('addRolList', $parametro->id, ucwords($parametro->nombre), $count + 1);
+            $this->dispatch('addRolList', id: $parametro->id, nombre: ucwords($parametro->nombre), rows: $count + 1);
             $this->limpiarRoles();
             $this->alert(
                 'success',
@@ -105,10 +101,11 @@ class RolesComponent extends Component
             );
         }
 
-        $this->emit('limpiar');
+        $this->dispatch('limpiar');
 
     }
 
+    #[On('edit')]
     public function edit($id)
     {
         $rol = Parametro::find($id);
@@ -132,6 +129,7 @@ class RolesComponent extends Component
         ]);
     }
 
+    #[On('confirmedRol')]
     public function confirmedRol()
     {
         $row = Parametro::find($this->roles_id);
@@ -157,7 +155,7 @@ class RolesComponent extends Component
         } else {
             $row->delete();
             $this->limpiarRoles();
-            $this->emit('removeRolList', $id);
+            $this->dispatch('removeRolList', id: $id);
             $this->alert(
                 'success',
                 'Rol Eliminado.'
@@ -166,16 +164,19 @@ class RolesComponent extends Component
         }
     }
 
+    #[On('addRolList')]
     public function addRolList($id, $nombre, $rows)
     {
         //agrego rol nuevo al right-sidebar
     }
 
+    #[On('setRolList')]
     public function setRolList($id, $nombre)
     {
         //edito nombre a un rol rol nuevo en el right-sidebar
     }
 
+    #[On('removeRolList')]
     public function removeRolList($id)
     {
         //elimino a un rol del right-sidebar

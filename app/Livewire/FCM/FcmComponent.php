@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\FCM;
+namespace App\Livewire\FCM;
 
 use App\Models\User;
 use App\Services\FirebaseCloudMessagingService;
@@ -9,15 +9,12 @@ use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class FcmComponent extends Component
 {
     use LivewireAlert;
-
-    protected $listeners = [
-        'tokenSeleccionado'
-    ];
 
     public $title, $body, $fcm_token = "todos", $fcm_tipo;
     private $messaging;
@@ -99,6 +96,7 @@ class FcmComponent extends Component
         }
     }
 
+    #[On('tokenSeleccionado')]
     public function tokenSeleccionado($token)
     {
         $this->fcm_token = $token;

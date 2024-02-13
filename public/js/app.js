@@ -1,17 +1,17 @@
 //CAMPO BUSQUEDA EN EL NAVBAR
 $("#navbarSearch").focus(function(){
     let form = $(this).closest("form");
-    form.attr("onsubmit","return search()");
+    form.attr("onsubmit","return buscar()");
 });
 
-function search(){
+function buscar(){
     let input = $("#navbarSearch");
     let keyword  = input.val();
     if (keyword.length > 0){
         input.blur();
         //alert('Falta vincular con el componente Livewire');
         //$('#cargar_buscar').removeClass('d-none');
-        Livewire.emit('buscar', keyword);
+        Livewire.dispatch('buscar', { keyword: keyword });
     }
     return false;
 }

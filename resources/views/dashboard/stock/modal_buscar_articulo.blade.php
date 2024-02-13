@@ -12,10 +12,10 @@
 
                 <div class="row justify-content-center">
                     <div class="col-md-6 justify-content-end">
-                        <form wire:submit.prevent="buscarAjustesArticulos">
+                        <form wire:submit="buscarAjustesArticulos">
                             <div class="input-group close">
                                 <input type="search" class="form-control" placeholder="Buscar"
-                                       wire:model.defer="keywordAjustesArticulos">
+                                       wire:model="keywordAjustesArticulos">
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-default">
                                         <i class="fa fa-search"></i>

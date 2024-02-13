@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard;
+namespace App\Livewire\Dashboard;
 
 use App\Models\Articulo;
 use App\Models\ArtIden;
@@ -17,6 +17,7 @@ use App\Models\Unidad;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -27,7 +28,7 @@ class ArticulosComponent extends Component
     use WithPagination;
     use WithFileUploads;
 
-    protected $paginationTheme = 'bootstrap';
+    /*protected $paginationTheme = 'bootstrap';
     protected $listeners = [
         'limpiarCategorias', 'confirmedCategorias',
         'limpiarUnidades', 'confirmedUnidades',
@@ -38,7 +39,7 @@ class ArticulosComponent extends Component
         'tributoSeleccionado', 'setSelectFormUnidades', 'unidadSeleccionada', 'secundariaSeleccionada',
         'buscar', 'confirmed', 'setSelectFormEmpresas', 'empresaSeleccionada', 'setSelectFormEditar',
         'setSelectFormEditUnd', 'setSelectPrecioEmpresas'
-    ];
+    ];*/
 
     public $categoria_id, $categoria_codigo, $categoria_nombre, $categoriaPhoto, $keywordCategorias;
     public $unidad_id, $unidad_codigo, $unidad_nombre, $keywordUnidades;
@@ -134,6 +135,8 @@ class ArticulosComponent extends Component
     }
 
     // ************************* Categorias ********************************************
+
+    #[On('limpiarCategorias')]
     public function limpiarCategorias()
     {
         $this->reset([
@@ -250,6 +253,7 @@ class ArticulosComponent extends Component
         ]);
     }
 
+    #[On('confirmedCategorias')]
     public function confirmedCategorias()
     {
         $categoria = Categoria::find($this->categoria_id);
@@ -298,6 +302,7 @@ class ArticulosComponent extends Component
 
     // ************************* Unidades ********************************************
 
+    #[On('limpiarUnidades')]
     public function limpiarUnidades()
     {
         $this->reset([
@@ -366,6 +371,7 @@ class ArticulosComponent extends Component
         ]);
     }
 
+    #[On('confirmedUnidades')]
     public function confirmedUnidades()
     {
         $unidad = Unidad::find($this->unidad_id);
@@ -404,6 +410,7 @@ class ArticulosComponent extends Component
 
     // ************************* Procedencias ********************************************
 
+    #[On('limpiarProcedencias')]
     public function limpiarProcedencias()
     {
         $this->reset([
@@ -473,6 +480,7 @@ class ArticulosComponent extends Component
         ]);
     }
 
+    #[On('confirmedProcedencias')]
     public function confirmedProcedencias()
     {
         $procedencia = Procedencia::find($this->procedencia_id);
@@ -512,6 +520,7 @@ class ArticulosComponent extends Component
 
     // ************************* Tributarios ********************************************
 
+    #[On('limpiarTributarios')]
     public function limpiarTributarios()
     {
         $this->reset([
@@ -582,6 +591,7 @@ class ArticulosComponent extends Component
         ]);
     }
 
+    #[On('confirmedTributarios')]
     public function confirmedTributarios()
     {
         $tributario = Tributario::find($this->tributario_id);
@@ -622,6 +632,7 @@ class ArticulosComponent extends Component
 
     // ************************* Tipo ********************************************
 
+    #[On('limpiarTipos')]
     public function limpiarTipos()
     {
         $this->reset([
@@ -686,6 +697,7 @@ class ArticulosComponent extends Component
         ]);
     }
 
+    #[On('confirmedTipos')]
     public function confirmedTipos()
     {
         $tipo = TipoArticulo::find($this->tipo_id);
@@ -894,6 +906,7 @@ class ArticulosComponent extends Component
         ]);
     }
 
+    #[On('confirmed')]
     public function confirmed()
     {
         $articulo = Articulo::find($this->articulo_id);
@@ -1549,7 +1562,7 @@ class ArticulosComponent extends Component
         $this->precio_precio = $precio->precio;
         $this->precio_unidad = $precio->unidades_id;
         $this->precio_form = true;
-        $this->emit('setSelectPrecioEmpresas', $this->precio_empresas_id);
+        $this->dispatch('setSelectPrecioEmpresas', empresas: $this->precio_empresas_id);
     }
 
     public function borrarPrecio($id)
@@ -1610,19 +1623,19 @@ class ArticulosComponent extends Component
         $tipos = dataSelect2(TipoArticulo::get());
         $procedencias = dataSelect2(Procedencia::get());
         $tributarios = dataSelect2(Tributario::get());
-        $this->emit('setSelectFormArticulos', $tipos, $categorias, $procedencias, $tributarios);
+        $this->dispatch('setSelectFormArticulos', tipos: $tipos, categorias: $categorias, procedencias: $procedencias, tributarios: $tributarios);
         if ($editar){
-            $this->emit('setSelectFormEditar', $this->articulo_tipos_id, $this->articulo_categorias_id, $this->articulo_procedencias_id, $this->articulo_tributarios_id);
+            $this->dispatch('setSelectFormEditar', tipos: $this->articulo_tipos_id, categorias: $this->articulo_categorias_id, procedencias:$this->articulo_procedencias_id, tributarios: $this->articulo_tributarios_id);
         }
     }
 
     public function selectFormUnidades($editar = false)
     {
         $unidades = dataSelect2(Unidad::get());
-        $this->emit('setSelectFormUnidades', $unidades);
+        $this->dispatch('setSelectFormUnidades', unidades: $unidades);
         if ($editar){
             $articulo = Articulo::find($this->articulo_id);
-            $this->emit('setSelectFormEditUnd', $articulo->unidades_id);
+            $this->dispatch('setSelectFormEditUnd', unidades: $articulo->unidades_id);
         }
     }
 
@@ -1640,7 +1653,7 @@ class ArticulosComponent extends Component
 
         $empresas = dataSelect2($array);
         $this->precio_form = $empresas;
-        $this->emit('setSelectFormEmpresas', $empresas);
+        $this->dispatch('setSelectFormEmpresas', empresas: $empresas);
     }
 
     public function btnCancelar()
@@ -1680,71 +1693,85 @@ class ArticulosComponent extends Component
         );
     }
 
+    #[On('setSelectFormArticulos')]
     public function setSelectFormArticulos($tipos, $categorias, $procedencias, $tributarios)
     {
         //select categorias formulario articulos
     }
 
+    #[On('setSelectFormEditar')]
     public function setSelectFormEditar($tipos, $categorias, $procedencias, $tributarios)
     {
         //select categorias formulario articulos
     }
 
+    #[On('setSelectFormUnidades')]
     public function setSelectFormUnidades($unidades)
     {
         //select categorias formulario articulos
     }
 
+    #[On('setSelectFormEditUnd')]
     public function setSelectFormEditUnd($unidades)
     {
         //select categorias formulario articulos
     }
 
+    #[On('setSelectFormEmpresas')]
     public function setSelectFormEmpresas($empresas)
     {
         //select empresas formulario precios
     }
 
+    #[On('setSelectPrecioEmpresas')]
     public function setSelectPrecioEmpresas($empresas)
     {
         //select empresas formulario precios
     }
 
+    #[On('tipoSeleccionado')]
     public function tipoSeleccionado($id)
     {
         $this->articulo_tipos_id = $id;
     }
 
+    #[On('categoriaSeleccionada')]
     public function categoriaSeleccionada($id)
     {
         $this->articulo_categorias_id = $id;
     }
 
+    #[On('procedenciaSeleccionada')]
     public function procedenciaSeleccionada($id)
     {
         $this->articulo_procedencias_id = $id;
     }
 
+    #[On('tributoSeleccionado')]
     public function tributoSeleccionado($id)
     {
         $this->articulo_tributarios_id = $id;
     }
 
+    #[On('unidadSeleccionada')]
     public function unidadSeleccionada($id)
     {
         $this->articulo_unidades_id = $id;
     }
 
+    #[On('secundariaSeleccionada')]
     public function secundariaSeleccionada($id)
     {
         $this->artund_unidades_id = $id;
     }
 
+    #[On('empresaSeleccionada')]
     public function empresaSeleccionada($id)
     {
         $this->precio_empresas_id = $id;
     }
 
+    #[On('buscar')]
     public function buscar($keyword)
     {
         $this->keyword = $keyword;

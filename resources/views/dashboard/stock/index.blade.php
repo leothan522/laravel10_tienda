@@ -40,29 +40,29 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
-        function search(){
+        function buscar(){
             let input = $("#navbarSearch");
             let keyword  = input.val();
             if (keyword.length > 0){
                 input.blur();
                 //alert('Falta vincular con el componente Livewire');
                 $('.cargar_buscar').removeClass('d-none');
-                Livewire.emit('buscar', keyword);
+                Livewire.dispatch('buscar', { keyword: keyword });
             }
             return false;
         }
 
         function verAlmacenes() {
-            Livewire.emit('limpiarAlmacenes');
+            Livewire.dispatch('limpiarAlmacenes');
         }
 
         function verTiposAjuste() {
-            Livewire.emit('limpiarTiposAjuste');
+            Livewire.dispatch('limpiarTiposAjuste');
         }
 
         function cambiarEmpresa()
         {
-            Livewire.emit('changeEmpresa');
+            Livewire.dispatch('changeEmpresa');
         }
 
         Livewire.on('verspinnerOculto', valor => {

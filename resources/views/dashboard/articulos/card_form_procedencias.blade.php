@@ -20,7 +20,7 @@
     <div class="card-body">
 
 
-        <form wire:submit.prevent="saveProcedencia">
+        <form wire:submit="saveProcedencia">
 
             <div class="form-group">
                 <label for="name">Codigo</label>
@@ -28,7 +28,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-code"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="procedencia_codigo" placeholder="Codigo Procedencia">
+                    <input type="text" class="form-control" wire:model="procedencia_codigo" placeholder="Codigo Procedencia">
                     @error('procedencia_codigo')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -44,7 +44,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-tag"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="procedencia_nombre" placeholder="Nombre Procedencia">
+                    <input type="text" class="form-control" wire:model="procedencia_nombre" placeholder="Nombre Procedencia">
                     @error('procedencia_nombre')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>

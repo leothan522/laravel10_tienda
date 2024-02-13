@@ -8,7 +8,7 @@
                 <h3>
                     <i class="fas fa-store-alt"></i> {{ $empresa->nombre }}
                     <small class="float-right">
-                        <select class="custom-select" wire:model="empresa_id" onchange="cambiarEmpresa()">
+                        <select class="custom-select" wire:model.live="empresa_id" onchange="cambiarEmpresa()">
                             @foreach($listarEmpresas as $empresa)
                                 <option value="{{ $empresa['id'] }}">{{ $empresa['text'] }}</option>
                             @endforeach

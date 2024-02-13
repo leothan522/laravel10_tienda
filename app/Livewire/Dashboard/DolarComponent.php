@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard;
+namespace App\Livewire\Dashboard;
 
 use App\Models\Parametro;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +11,7 @@ class DolarComponent extends Component
 {
     use LivewireAlert;
 
-    public $dollar = 1, $edit = false, $parametro_id;
+    public $dollar = 1, $editar = false, $parametro_id;
 
     public function render()
     {
@@ -23,12 +23,12 @@ class DolarComponent extends Component
         return view('livewire.dashboard.dolar-component');
     }
 
-    public function edit($valor)
+    public function edit($valor = false)
     {
         if ($valor){
-            $this->reset(['edit', 'dollar', 'parametro_id']);
+            $this->reset(['editar', 'dollar', 'parametro_id']);
         }else{
-            $this->edit = true;
+            $this->editar = true;
         }
     }
 
@@ -37,7 +37,7 @@ class DolarComponent extends Component
         $tipo = 'success';
         $message = null;
 
-        if (is_numeric($this->dollar)){
+        if (is_numeric($this->dollar) && $this->dollar > 0){
 
             if ($this->parametro_id){
                 $parametro = Parametro::find($this->parametro_id);
@@ -49,11 +49,11 @@ class DolarComponent extends Component
             $parametro->tabla_id = Auth::id();
             $parametro->save();
             $message = 'Precio Actualizado.';
-            $this->reset(['edit', 'dollar', 'parametro_id']);
+            $this->reset(['editar', 'dollar', 'parametro_id']);
 
         }else{
             $tipo = 'error';
-            $message = "El precio debe ser numerico.";
+            $message = "El precio debe ser numerico y Mayor a 0.";
         }
 
         $this->alert(

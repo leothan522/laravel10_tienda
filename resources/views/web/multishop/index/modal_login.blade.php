@@ -8,7 +8,7 @@
      aria-labelledby="staticBackdropLabel" aria-hidden="true" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form wire:submit.prevent="login">
+            <form wire:submit="login">
                 <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel"></h5>
                     <h5 class="modal-title" id="staticBackdropLabel">Iniciar Sesión</h5>
@@ -38,7 +38,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                     </div>
-                                    <input type="email" class="form-control" wire:model.defer="login_email"
+                                    <input type="email" class="form-control" wire:model="login_email"
                                            placeholder="Ingrese su email">
                                     @error('login_email')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
@@ -55,7 +55,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-unlock"></i></span>
                                     </div>
-                                    <input type="password" class="form-control" wire:model.defer="login_password"
+                                    <input type="password" class="form-control" wire:model="login_password"
                                            placeholder="Ingrese su clave">
                                     @error('login_password')
                                     <span class="col-sm-12 text-sm text-bold text-danger">

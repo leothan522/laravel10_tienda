@@ -38,7 +38,7 @@
 
 
                         <div class="row table-responsive p-0">
-                            <form wire:submit.prevent="savePrecios" xmlns:wire="http://www.w3.org/1999/xhtml">
+                            <form wire:submit="savePrecios" xmlns:wire="http://www.w3.org/1999/xhtml">
                                 <table class="table">
                                     <thead>
                                     <tr class="text-navy">

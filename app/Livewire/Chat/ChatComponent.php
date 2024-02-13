@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Chat;
+namespace App\Livewire\Chat;
 
 use App\Models\Chat;
 use App\Models\ChatMessage;
@@ -13,6 +13,7 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Kreait\Firebase\Exception\FirebaseException;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\CloudMessage;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -20,9 +21,6 @@ class ChatComponent extends Component
 {
     use LivewireAlert;
     use WithPagination;
-
-    protected $paginationTheme = 'bootstrap';
-    protected $listeners = ['bajarScroll', 'refresh', 'verMessage'];
 
     public $chat_id, $chat_tipo, $chat_count, $count_new;
     public $new_message, $ultimo_mensaje;
@@ -110,12 +108,13 @@ class ChatComponent extends Component
         $chatUser->mensajes_vistos = $this->chat_count;
         $chatUser->save();
         $this->count_new = 0;
-        $this->emit('bajarScroll', $chatmessage->id);
+        $this->dispatch('bajarScroll', id: $chatmessage->id);
         $this->limpiar();
         $this->alert('success', 'Mensaje Enviado.');
         $this->sendMessage(ucwords($chatmessage->user->name), $chatmessage->message);
     }
 
+    #[On('refresh')]
     public function refresh()
     {
         $count = ChatMessage::where('chats_id', $this->chat_id)->count();
@@ -124,6 +123,7 @@ class ChatComponent extends Component
         }
     }
 
+    #[On('verMessage')]
     public function verMessage()
     {
         $this->chat_count = ChatMessage::where('chats_id', $this->chat_id)->count();
@@ -132,10 +132,11 @@ class ChatComponent extends Component
         $chatUser->save();
         $this->count_new = 0;
         $ultimo = ChatMessage::where('chats_id', $this->chat_id)->orderBy('created_at', 'DESC')->first();
-        $this->emit('bajarScroll', $ultimo->id);
+        $this->dispatch('bajarScroll', id: $ultimo->id);
     }
 
-    public function bajarScroll()
+    #[On('bajarScroll')]
+    public function bajarScroll($id)
     {
         //desplazamiento hasta el final del scroll
     }

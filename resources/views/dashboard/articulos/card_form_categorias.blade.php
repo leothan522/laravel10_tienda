@@ -20,7 +20,7 @@
     <div class="card-body">
 
 
-        <form wire:submit.prevent="saveCategoria">
+        <form wire:submit="saveCategoria">
 
             <div class="form-group">
                 <label for="name">Codigo</label>
@@ -28,7 +28,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-code"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="categoria_codigo" placeholder="Codigo Categoria">
+                    <input type="text" class="form-control" wire:model="categoria_codigo" placeholder="Codigo Categoria">
                     @error('categoria_codigo')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -44,7 +44,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-tag"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model.defer="categoria_nombre" placeholder="Nombre Categoria">
+                    <input type="text" class="form-control" wire:model="categoria_nombre" placeholder="Nombre Categoria">
                     @error('categoria_nombre')
                     <span class="col-sm-12 text-sm text-bold text-danger">
                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -81,7 +81,7 @@
                 <div class="col-md-12">
                     <div class="input-group d-none">
                         <div class="custom-file">
-                            <input type="file" wire:model="categoriaPhoto" class="custom-file-input" id="customFileLangCategoria"
+                            <input type="file" wire:model.live="categoriaPhoto" class="custom-file-input" id="customFileLangCategoria"
                                    lang="es" accept="image/jpeg, image/png"
                                    @if(!comprobarPermisos('categorias.create') || ($categoria_id && !comprobarPermisos('categorias.edit')))
                                    disabled @endif >
@@ -89,7 +89,7 @@
                                 Seleccionar Imagen
                             </label>
                         </div>
-                        <input type="text" wire:model="img_borrar_categoria">
+                        <input type="text" wire:model.live="img_borrar_categoria">
                     </div>
                     @error('categoriaPhoto')
                     <span class="text-sm text-bold text-danger text-center">

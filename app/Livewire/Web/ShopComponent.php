@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Web;
+namespace App\Livewire\Web;
 
 use App\Models\Articulo;
 use App\Models\Categoria;
@@ -10,6 +10,7 @@ use App\Models\Unidad;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,12 +18,6 @@ class ShopComponent extends Component
 {
     use LivewireAlert;
     use WithPagination;
-
-    protected $paginationTheme = 'bootstrap';
-
-    protected $listeners = [
-        'cerrarModalLogin', 'cerrarCargando'
-    ];
 
     public $login_email, $login_password;
     public $shop_view, $shop_id;
@@ -104,7 +99,7 @@ class ShopComponent extends Component
     {
         $this->verProductos = false;
         $this->verCategoria = true;
-        $this->emit('cerrarCargando');
+        $this->dispatch('cerrarCargando');
     }
 
     public function login()
@@ -129,7 +124,7 @@ class ShopComponent extends Component
         ];
 
         if (Auth::attempt($credentials)) {
-            $this->emit('cerrarModalLogin', Auth::user()->name);
+            $this->dispatch('cerrarModalLogin', nombre: Auth::user()->name);
         } else {
             $this->addError('login_validacion', 'Las credenciales proporcionadas no coinciden con nuestros registros.');
         }
@@ -179,11 +174,13 @@ class ShopComponent extends Component
         });
     }
 
+    #[On('cerrarModalLogin')]
     public function cerrarModalLogin($nombre)
     {
         //cerrar con JS el modal
     }
 
+    #[On('cerrarCargando')]
     public function cerrarCargando()
     {
         //cerrar con JS el modal

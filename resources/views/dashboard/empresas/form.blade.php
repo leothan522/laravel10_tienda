@@ -1,6 +1,6 @@
 <div class="row" xmlns:wire="http://www.w3.org/1999/xhtml">
 
-    <form class="row col-md-12" wire:submit.prevent="save">
+    <form class="row col-md-12" wire:submit="save">
 
         <div class="col-md-6">
 
@@ -22,7 +22,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-book"></i></span>
                             </div>
-                            <input type="text" class="form-control" wire:model.defer="nombre" placeholder="Nombre de la Empresa">
+                            <input type="text" class="form-control" wire:model="nombre" placeholder="Nombre de la Empresa">
                             @error('nombre')
                             <span class="col-sm-12 text-sm text-bold text-danger">
                                 <i class="icon fas fa-exclamation-triangle"></i>
@@ -38,7 +38,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                             </div>
-                            <input type="text" class="form-control" wire:model.defer="rif" placeholder="RIF de la Empresa">
+                            <input type="text" class="form-control" wire:model="rif" placeholder="RIF de la Empresa">
                             @error('rif')
                             <span class="col-sm-12 text-sm text-bold text-danger">
                                 <i class="icon fas fa-exclamation-triangle"></i>
@@ -54,7 +54,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            <input type="text" class="form-control" wire:model.defer="jefe" placeholder="Nombre del jefe de la Empresa">
+                            <input type="text" class="form-control" wire:model="jefe" placeholder="Nombre del jefe de la Empresa">
                             @error('jefe')
                             <span class="col-sm-12 text-sm text-bold text-danger">
                                 <i class="icon fas fa-exclamation-triangle"></i>
@@ -70,7 +70,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
                             </div>
-                            <select class="custom-select" wire:model.defer="moneda">
+                            <select class="custom-select" wire:model="moneda">
                                 <option value="">Seleccione</option>
                                 <option value="Bolivares">Bolivares</option>
                                 <option value="Dolares">Dolares</option>
@@ -90,7 +90,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-phone"></i></span>
                             </div>
-                            <input type="text" class="form-control" wire:model.defer="telefonos" placeholder="Telefonos">
+                            <input type="text" class="form-control" wire:model="telefonos" placeholder="Telefonos">
                             @error('telefonos')
                             <span class="col-sm-12 text-sm text-bold text-danger">
                                 <i class="icon fas fa-exclamation-triangle"></i>
@@ -106,7 +106,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                             </div>
-                            <input type="text" class="form-control" wire:model.defer="email" placeholder="Email">
+                            <input type="text" class="form-control" wire:model="email" placeholder="Email">
                             @error('email')
                             <span class="col-sm-12 text-sm text-bold text-danger">
                                 <i class="icon fas fa-exclamation-triangle"></i>
@@ -122,7 +122,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-directions"></i></span>
                             </div>
-                            <input type="text" class="form-control" wire:model.defer="direccion" placeholder="Dirección">
+                            <input type="text" class="form-control" wire:model="direccion" placeholder="Dirección">
                             @error('direccion')
                             <span class="col-sm-12 text-sm text-bold text-danger">
                                 <i class="icon fas fa-exclamation-triangle"></i>
@@ -156,12 +156,12 @@
                         <div class="d-none">
                             <div class="input-group mb-3">
                                 <div class="custom-file">
-                                    <input type="file" wire:model="photo" class="custom-file-input" id="customFileLang"
+                                    <input type="file" wire:model.live="photo" class="custom-file-input" id="customFileLang"
                                            lang="es" accept="image/jpeg, image/png">
                                     <label class="custom-file-label text-sm" for="customFileLang" data-browse="Elegir">
                                         Seleccionar Imagen</label>
                                 </div>
-                                <input type="text" wire:model="img_borrar_principal">
+                                <input type="text" wire:model.live="img_borrar_principal">
                             </div>
                         </div>
 

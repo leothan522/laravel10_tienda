@@ -41,28 +41,27 @@
     <script>
 
         function verCategorias() {
-                Livewire.emit('limpiarCategorias');
+                Livewire.dispatch('limpiarCategorias');
         }
 
         function verUnidades() {
-            Livewire.emit('limpiarUnidades');
+            Livewire.dispatch('limpiarUnidades');
         }
 
         function verTributarios() {
-            Livewire.emit('limpiarTributarios');
+            Livewire.dispatch('limpiarTributarios');
         }
 
         function verProcedencias() {
-            Livewire.emit('limpiarProcedencias');
+            Livewire.dispatch('limpiarProcedencias');
         }
 
         function verTipos() {
-            Livewire.emit('limpiarTipos');
+            Livewire.dispatch('limpiarTipos');
         }
 
         function imgCategoria() {
-            let input = document.getElementById('customFileLangCategoria');
-            input.click();
+            $('#customFileLangCategoria').click();
         }
 
         function select_2(id, data, opcion)
@@ -77,31 +76,31 @@
                 var val = $(this).val();
                 switch (opcion) {
                     case 0:
-                        Livewire.emit('tipoSeleccionado', val);
+                        Livewire.dispatch('tipoSeleccionado', { id: val });
                     break;
                     case 1:
-                        Livewire.emit('categoriaSeleccionada', val);
+                        Livewire.dispatch('categoriaSeleccionada', { id: val });
                     break;
                     case 2:
-                        Livewire.emit('procedenciaSeleccionada', val);
+                        Livewire.dispatch('procedenciaSeleccionada', { id: val });
                     break;
                     case 3:
-                        Livewire.emit('tributoSeleccionado', val);
+                        Livewire.dispatch('tributoSeleccionado', { id: val });
                     break;
                     case 4:
-                        Livewire.emit('unidadSeleccionada', val);
+                        Livewire.dispatch('unidadSeleccionada', { id: val });
                     break;
                     case 5:
-                        Livewire.emit('secundariaSeleccionada', val);
+                        Livewire.dispatch('secundariaSeleccionada', { id: val });
                     break;
                     case 6:
-                        Livewire.emit('empresaSeleccionada', val);
+                        Livewire.dispatch('empresaSeleccionada', { id: val });
                     break;
                 }
             });
         }
 
-        Livewire.on('setSelectFormArticulos', (tipos, categorias, procedencias, tributarios) => {
+        Livewire.on('setSelectFormArticulos', ({ tipos, categorias, procedencias, tributarios }) => {
             select_2('select_articulos_tipos', tipos, 0);
             select_2('select_articulos_categorias', categorias, 1);
             select_2('select_articulos_procedencias', procedencias, 2);
@@ -114,36 +113,35 @@
             $("#" + id).trigger('change');
         }
 
-        Livewire.on('setSelectFormEditar', (tipos, categorias, procedencias, tributarios) => {
+        Livewire.on('setSelectFormEditar', ({ tipos, categorias, procedencias, tributarios }) => {
             selectEditar('select_articulos_tipos', tipos);
             selectEditar('select_articulos_categorias', categorias);
             selectEditar('select_articulos_procedencias', procedencias);
             selectEditar('select_articulos_tributarios', tributarios);
         });
 
-        Livewire.on('setSelectFormUnidades', unidades =>{
+        Livewire.on('setSelectFormUnidades', ({ unidades }) =>{
             select_2('select_articulos_unidades', unidades, 4);
             select_2('select_unidades_artund', unidades, 5);
         });
 
-        Livewire.on('setSelectFormEditUnd', unidades =>{
+        Livewire.on('setSelectFormEditUnd', ({ unidades }) =>{
             $('#select_articulos_unidades').val(unidades);
             $('#select_articulos_unidades').trigger('change');
         });
 
-        Livewire.on('setSelectFormEmpresas', empresas => {
+        Livewire.on('setSelectFormEmpresas', ({ empresas }) => {
             select_2('select_precios_empresas', empresas, 6)
         });
 
-        Livewire.on('setSelectPrecioEmpresas', empresas => {
+        Livewire.on('setSelectPrecioEmpresas', ({ empresas }) => {
             $('#select_precios_empresas').val(empresas);
             $('#select_precios_empresas').trigger('change');
         });
 
         function imgPrincipal()
         {
-            let input = document.getElementById('customFileLang');
-            input.click();
+            $('#customFileLang').click();
         }
 
         function imgGaleria(i)
@@ -152,14 +150,14 @@
             input.click();
         }
 
-        function search(){
+        function buscar(){
             let input = $("#navbarSearch");
             let keyword  = input.val();
             if (keyword.length > 0){
                 input.blur();
                 //alert('Falta vincular con el componente Livewire');
                 $('.cargar_buscar').removeClass('d-none');
-                Livewire.emit('buscar', keyword);
+                Livewire.dispatch('buscar', { keyword: keyword });
             }
             return false;
         }
