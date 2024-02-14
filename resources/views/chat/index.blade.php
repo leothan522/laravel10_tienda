@@ -10,39 +10,17 @@
 
 @section('css')
     {{--<link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">--}}
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
-    </style>
 @endsection
 
 @section('js')
     {{--<script src="../../dist/js/adminlte.min.js"></script>--}}
-    <script !src="">
-        Livewire.on('bajarScroll', ({ id }) => {
-            let scrollToBottom = document.querySelector("#scroll-to-bottom");
-            let pageBottom = document.querySelector("#page-bottom_" + id);
-            //alert(id);
-            pageBottom.scrollIntoView();
-        });
+    <script>
 
-        function refresh() {
-            Livewire.dispatch('refresh');
-        }
-
-        $(document).ready(function () {
-            let html = '<div class="col-12 text-center mt-3"><span class="text-sm text-muted link-black"><i class="far fa-comments mr-1"></i> Nuevos </span> </div>';
-            let elemento = document.getElementById('ultimo_mensaje_abrir');
-            let ultimo = elemento.dataset.mensaje_id;
-            let coutn_new = elemento.dataset.coutn_new;
-            if (coutn_new > 0){
-                $("#page-bottom_" + ultimo).append(html);
-            }
-            let scrollToBottom = document.querySelector("#scroll-to-bottom");
-            let pageBottom = document.querySelector("#page-bottom_" + ultimo);
-            pageBottom.scrollIntoView();
-            setInterval(refresh, 5000);
+        Livewire.on('downScroll', ({ i }) => {
+            setTimeout(function () {
+                let pageBottom = document.querySelector("#page-bottom_" + i);
+                pageBottom.scrollIntoView();
+            }, 500);
         });
 
         $('#textarea_message').on('keyup keypress', function(e) {
@@ -51,12 +29,19 @@
                 e.preventDefault();
 
                 // Ajax code here
-                $('#btn_subtmit_chat').click();
+                $('#btn_chat_send_message').click();
 
                 return false;
             }
         });
 
+        function refresh() {
+            Livewire.dispatch('refresh');
+        }
+
+        $(document).ready(function () {
+            setInterval(refresh, 5000);
+        });
 
         console.log('Hi!')
     </script>
