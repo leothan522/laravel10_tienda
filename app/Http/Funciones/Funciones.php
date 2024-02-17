@@ -154,6 +154,11 @@ function verImagen($path, $user = false, $web = null)
     }
 }
 
+function verUtf8($string){
+    //$utf8_string = "Some UTF-8 encoded BATE QUEBRADO ÑñíÍÁÜ niño ó Ó string: é, ö, ü";
+    return mb_convert_encoding($string, 'UTF-8');
+}
+
 function iconoPlataforma($plataforma)
 {
     if ($plataforma == 0) {
@@ -209,6 +214,30 @@ function verFecha($fecha, $format = null){
     $carbon = new Carbon();
     if ($format == null){ $format = "j/m/Y"; }
     return $carbon->parse($fecha)->format($format);
+}
+
+function generarStringAleatorio($largo = 10, $espacio = false): string
+{
+    $caracteres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $caracteres = $espacio ? $caracteres . ' ' : $caracteres;
+    $string = '';
+    for ($i = 0; $i < $largo; $i++) {
+        $string .= $caracteres[rand(0, strlen($caracteres) - 1)];
+    }
+    return $string;
+}
+
+function diaEspanol($fecha){
+    $diaSemana = date("w",strtotime($fecha));
+    $diasEspanol = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
+    $dia = $diasEspanol[$diaSemana];
+    return $dia;
+}
+
+function mesEspanol($numMes){
+    $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+    $mes = $meses[$numMes - 1];
+    return $mes;
 }
 
 function numRowsPaginate(){
@@ -581,6 +610,29 @@ function nextCodigoAjuste($empresa_id){
 
 }
 
+function nextCodigo($next = 1, $parametros_nombre = null, $parametros_tabla_id = null, $formato = null){
+    $codigo = null;
+
+    //buscamos algun formato para el codigo
+    $parametro = Parametro::where("nombre", $parametros_nombre)->where('tabla_id', $parametros_tabla_id)->first();
+    if ($parametro) {
+        $codigo = $parametro->valor;
+    }else{
+        if (is_null($formato)){
+            $codigo = "N".$parametros_tabla_id.'-';
+        }else{
+            $codigo = $formato;
+        }
+    }
+
+    if (!is_numeric($next)){ $next = 1; }
+
+    $size = cerosIzquierda($next, numSizeCodigo());
+
+    return $codigo . $size;
+
+}
+
 //Ceros a la izquierda
 function cerosIzquierda($cantidad, $cantCeros = 2)
 {
@@ -673,7 +725,6 @@ function recorrerCategorias($categorias)
 
 //***********************************************************************************
 
-
 function cuantosDias($fecha_inicio, $fecha_final){
 
     if ($fecha_inicio == null){
@@ -685,19 +736,6 @@ function cuantosDias($fecha_inicio, $fecha_final){
     $fechaExpiracion = $carbon->parse($fecha_final);
     $diasDiferencia = $fechaExpiracion->diffInDays($fechaEmision);
     return $diasDiferencia;
-}
-
-function diaEspanol($fecha){
-    $diaSemana = date("w",strtotime($fecha));
-    $diasEspanol = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado");
-    $dia = $diasEspanol[$diaSemana];
-    return $dia;
-}
-
-function mesEspanol($numMes){
-    $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-    $mes = $meses[$numMes - 1];
-    return $mes;
 }
 
 //calculo de porcentaje
@@ -712,12 +750,7 @@ function obtenerPorcentaje($cantidad, $total)
 }
 
 
-
-
-
 /*
-
-
 
 function verIconoEstatusPedico($estatus)
 {

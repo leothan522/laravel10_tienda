@@ -12,6 +12,7 @@ function buscar(){
         //alert('Falta vincular con el componente Livewire');
         //$('#cargar_buscar').removeClass('d-none');
         Livewire.dispatch('buscar', { keyword: keyword });
+        $('#nabvar_cerrar_buscar').click();
     }
     return false;
 }

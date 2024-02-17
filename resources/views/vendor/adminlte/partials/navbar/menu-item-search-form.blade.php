@@ -24,7 +24,7 @@
                     <button class="btn btn-navbar" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
-                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                    <button class="btn btn-navbar" type="button" data-widget="navbar-search" id="nabvar_cerrar_buscar">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
