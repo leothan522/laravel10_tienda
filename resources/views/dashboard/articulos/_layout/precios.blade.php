@@ -1,0 +1,129 @@
+<div wire:ignore.self class="modal fade" id="modal-sm-articulos-precios" xmlns:wire="http://www.w3.org/1999/xhtml">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+
+
+            <div class="modal-header bg-navy">
+                <h4 class="modal-title">Precios</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="text-white" aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive p-0" style="height: 40vh;">
+
+                    <table class="table table-sm table-head-fixed table-hover text-nowrap">
+                        <thead>
+                        <tr class="text-navy">
+                            <th style="width: 10%">Unidad</th>
+                            <th style="width: 10%">Moneda</th>
+                            <th class="text-right">Precio</th>
+                            <th style="width: 5%">&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if($listarPrecios->isNotEmpty())
+                            @foreach($listarPrecios as $precio)
+                                <tr>
+                                    <td>{{ $precio->unidad->codigo }}</td>
+                                    <td>{{ $precio->moneda }}</td>
+                                    <td class="text-right">{{ formatoMillares($precio->precio, 2) }}</td>
+                                    <td class="text-right">
+                                        @if($precios_id == $precio->id)
+                                            <button class="btn btn-sm text-primary m-0" wire:click="limpiarPrecios">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                        @else
+                                            <button class="btn btn-sm text-danger m-0" wire:click="edit({{ $precio->id }})">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm text-danger m-0" wire:click="destroy({{ $precio->id }})">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="4" class="text-center text-danger">
+                                    No se ha establecido ningun Precio.
+                                </td>
+                            </tr>
+                        @endif
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+                <form wire:submit="save" class="p-0">
+                    <table class="table table-sm">
+                        <tbody>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <select class="custom-select custom-select-sm @error("unidades_id") is-invalid @enderror" wire:model="unidades_id" id="precios_select_unidades">
+                                            <option value="">Seleccione</option>
+                                            @foreach($listarUnidades as $unidad)
+                                                @if($unidad->ver)
+                                                    <option value="{{ $unidad->id }}">{{ $unidad->codigo }}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <select class="custom-select custom-select-sm @error("moneda") is-invalid @enderror" wire:model="moneda">
+                                            <option value="">Seleccione</option>
+                                            <option value="Bolivares">Bolivares</option>
+                                            <option value="Dolares">Dolares</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control form-control-sm @error("precio") is-invalid @enderror" wire:model="precio" placeholder="precio">
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="width: 5%;">
+                                <button type="submit" class="btn @if($precios_id) btn-primary @else btn-success @endif btn-sm"
+                                        @if(!comprobarPermisos('articulos.precios')) disabled @endif >
+                                    <i class="fas fa-save"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+
+
+
+            </div>
+
+            <div class="modal-footer card-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+            </div>
+
+            {!! verSpinner() !!}
+
+            <div class="overlay-wrapper d-none cargar_precio">
+                <div class="overlay">
+                    <div class="spinner-border text-navy" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -48,7 +48,8 @@ class AjustesComponent extends Component
             ->get();
 
         return view('livewire.dashboard.ajustes-component')
-            ->with('listarAjustes', $ajustes);
+            ->with('listarAjustes', $ajustes)
+            ;
     }
 
     #[On('getEmpresaAjuste')]
@@ -61,11 +62,7 @@ class AjustesComponent extends Component
 
     public function setLimit()
     {
-        if (numRowsPaginate() < 10) {
-            $rows = 10;
-        } else {
-            $rows = numRowsPaginate();
-        }
+        if (numRowsPaginate() < 14) { $rows = 14; } else { $rows = numRowsPaginate(); }
         $this->rows = $this->rows + $rows;
     }
 
@@ -75,9 +72,9 @@ class AjustesComponent extends Component
             'view', 'footer', 'nuevo', 'btn_nuevo', 'btn_editar', 'btn_cancelar',
             'ajuste_contador', 'ajuste_codigo', 'ajuste_descripcion', 'ajuste_fecha',
             'ajusteTipo', 'classTipo', 'ajusteArticulo', 'classArticulo', 'ajusteDescripcion', 'ajusteUnidad',
-            'selectUnidad', 'ajusteAlmacen', 'ajusteCantidad', 'ajusteListarArticulos', 'keywordAjustesArticulos',
-            'ajusteItem', 'ajuste_tipos_id', 'ajuste_articulos_id', 'ajuste_almacenes_id', 'ajuste_almacenes_tipo',
-            'listarDetalles', 'detalles_id', 'borraritems', 'ajuste_estatus'
+            'selectUnidad', 'ajusteAlmacen', 'ajusteCantidad', 'ajusteListarArticulos', 'keywordAjustesArticulos', 'ajusteItem',
+            'ajuste_tipos_id', 'ajuste_articulos_id', 'ajuste_almacenes_id', 'ajuste_almacenes_tipo',
+            'listarDetalles', 'detalles_id', 'borraritems', 'ajuste_estatus',
         ]);
         $this->resetErrorBag();
     }
@@ -322,7 +319,10 @@ class AjustesComponent extends Component
         foreach ($this->ajusteArticulo as $key => $value) {
             $array = array();
             if ($value) {
-                $articulo = Articulo::where('codigo', $value)->where('estatus', 1)->first();
+                $articulo = Articulo::where('codigo', $value)
+                    ->where('empresas_id', $this->empresas_id)
+                    ->where('estatus', 1)
+                    ->first();
                 if ($articulo && !empty($articulo->unidades_id)) {
                     $array[] = [
                         'id' => $articulo->unidades_id,
@@ -381,7 +381,11 @@ class AjustesComponent extends Component
 
     public function buscarAjustesArticulos()
     {
-        $this->ajusteListarArticulos = Articulo::buscar($this->keywordAjustesArticulos)->where('estatus', 1)->limit(100)->get();
+        $this->ajusteListarArticulos = Articulo::buscar($this->keywordAjustesArticulos)
+            ->where('empresas_id', $this->empresas_id)
+            ->where('estatus', 1)
+            ->limit(100)
+            ->get();
     }
 
     public function selectArticuloAjuste($codigo)
@@ -469,6 +473,8 @@ class AjustesComponent extends Component
         $db_codigo = $ajuste->codigo;
         $db_fecha = $ajuste->fecha;
         $db_descripcion = $ajuste->descripcion;
+        $db_segmento = $ajuste->segmentos_id;
+        $db_municipio = $ajuste->municipios_id;
 
         if ($db_codigo != $this->ajuste_codigo) {
             $procesar_ajuste = true;

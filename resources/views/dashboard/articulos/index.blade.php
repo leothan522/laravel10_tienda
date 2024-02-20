@@ -2,7 +2,7 @@
 
 @section('plugins.Select2', true)
 
-@section('title', 'Dashboard')
+@section('title', 'Pagna de Prueba')
 
 @section('content_header')
     <div class="container-fluid">
@@ -18,11 +18,23 @@
             </div>
         </div>
     </div>
-@endsection
+@stop
 
 @section('content')
-    @livewire('dashboard.articulos-component')
-@endsection
+    {{--<p>Welcome to this beautiful admin panel.</p>--}}
+    @livewire('dashboard.mount-empresas-component')
+    <div>
+        @livewire('dashboard.articulos-component')
+    </div>
+    <div class="row">
+        @livewire('dashboard.categorias-component')
+        @livewire('dashboard.unidades-component')
+        @livewire('dashboard.procedencias-component')
+        @livewire('dashboard.tributarios-component')
+        @livewire('dashboard.tipos-component')
+    </div>
+
+@stop
 
 @section('right-sidebar')
     @include('dashboard.articulos.right-sidebar')
@@ -30,7 +42,7 @@
 
 @section('footer')
     @include('dashboard.footer')
-@endsection
+@stop
 
 @section('css')
     {{--<link rel="stylesheet" href="/css/admin_custom.css">--}}
@@ -41,102 +53,75 @@
     <script>
 
         function verCategorias() {
-                Livewire.dispatch('limpiarCategorias');
-        }
-
-        function verUnidades() {
-            Livewire.dispatch('limpiarUnidades');
-        }
-
-        function verTributarios() {
-            Livewire.dispatch('limpiarTributarios');
-        }
-
-        function verProcedencias() {
-            Livewire.dispatch('limpiarProcedencias');
-        }
-
-        function verTipos() {
-            Livewire.dispatch('limpiarTipos');
+            Livewire.dispatch('limpiarCategorias');
         }
 
         function imgCategoria() {
             $('#customFileLangCategoria').click();
         }
 
-        function select_2(id, data, opcion)
+        function verUnidades() {
+            Livewire.dispatch('limpiarUnidades');
+        }
+
+        function verProcedencias() {
+            Livewire.dispatch('limpiarProcedencias');
+        }
+
+        function verTributarios() {
+            Livewire.dispatch('limpiarTributarios');
+        }
+
+        function verTipos() {
+            Livewire.dispatch('limpiarTipos');
+        }
+
+        function verSpinnerOculto() {
+            $('.cargar_articulos').removeClass('d-none');
+        }
+
+        $(document).ready(function () {
+            verSpinnerOculto();
+            Livewire.dispatch('updatedEmpresaID');
+        });
+
+        function changeEmpresa() {
+            $('.cargar_articulos').removeClass('d-none');
+        }
+
+        function select_2(id, data, evento, icono = 'far fa-bookmark')
         {
-            $('#'  + id).select2({
+            let html = '<div class="input-group-prepend">';
+            html += '<span class="input-group-text">';
+            html += '<i class="' + icono + '"></i>';
+            html += '</span>';
+            html += '</div>';
+            html += '<select id="' + id + '"></select>';
+            $('#div_' + id).html(html);
+
+            $('#' + id).select2({
                 theme: 'bootstrap4',
                 data: data,
                 placeholder: 'Seleccione'
             });
-            $('#'  + id).val(null).trigger('change');
-            $('#'  + id).on('change', function() {
+            $('#' + id).val(null).trigger('change');
+            $('#' + id).on('change', function () {
                 var val = $(this).val();
-                switch (opcion) {
-                    case 0:
-                        Livewire.dispatch('tipoSeleccionado', { id: val });
-                    break;
-                    case 1:
-                        Livewire.dispatch('categoriaSeleccionada', { id: val });
-                    break;
-                    case 2:
-                        Livewire.dispatch('procedenciaSeleccionada', { id: val });
-                    break;
-                    case 3:
-                        Livewire.dispatch('tributoSeleccionado', { id: val });
-                    break;
-                    case 4:
-                        Livewire.dispatch('unidadSeleccionada', { id: val });
-                    break;
-                    case 5:
-                        Livewire.dispatch('secundariaSeleccionada', { id: val });
-                    break;
-                    case 6:
-                        Livewire.dispatch('empresaSeleccionada', { id: val });
-                    break;
-                }
+                Livewire.dispatch(evento, {id: val});
             });
         }
 
-        Livewire.on('setSelectFormArticulos', ({ tipos, categorias, procedencias, tributarios }) => {
-            select_2('select_articulos_tipos', tipos, 0);
-            select_2('select_articulos_categorias', categorias, 1);
-            select_2('select_articulos_procedencias', procedencias, 2);
-            select_2('select_articulos_tributarios', tributarios, 3);
-        });
-
-        function selectEditar(id, valor)
-        {
+        function selectEditar(id, valor) {
             $("#" + id).val(valor);
             $("#" + id).trigger('change');
         }
 
-        Livewire.on('setSelectFormEditar', ({ tipos, categorias, procedencias, tributarios }) => {
-            selectEditar('select_articulos_tipos', tipos);
-            selectEditar('select_articulos_categorias', categorias);
-            selectEditar('select_articulos_procedencias', procedencias);
-            selectEditar('select_articulos_tributarios', tributarios);
+        Livewire.on('selectFormArticulos', ({id, data, evento, icono }) => {
+            select_2(id, data, evento, icono);
         });
 
-        Livewire.on('setSelectFormUnidades', ({ unidades }) =>{
-            select_2('select_articulos_unidades', unidades, 4);
-            select_2('select_unidades_artund', unidades, 5);
-        });
-
-        Livewire.on('setSelectFormEditUnd', ({ unidades }) =>{
-            $('#select_articulos_unidades').val(unidades);
-            $('#select_articulos_unidades').trigger('change');
-        });
-
-        Livewire.on('setSelectFormEmpresas', ({ empresas }) => {
-            select_2('select_precios_empresas', empresas, 6)
-        });
-
-        Livewire.on('setSelectPrecioEmpresas', ({ empresas }) => {
-            $('#select_precios_empresas').val(empresas);
-            $('#select_precios_empresas').trigger('change');
+        Livewire.on('setSelectFormArticulos', ({id, valor}) => {
+            selectEditar(id, valor)
         });
 
         function imgPrincipal()
@@ -150,18 +135,56 @@
             input.click();
         }
 
-        function buscar(){
+        function verArticulosUnidad()
+        {
+            $('.cargar_ArtUnd').removeClass('d-none');
+        }
+
+        Livewire.on('clickBtnUnidad', () => {
+            setTimeout(function () {
+                $('#button_card_view_unidad').click();
+            }, 500);
+        });
+
+        Livewire.on('setUnd', ({ id }) => {
+            setTimeout(function () {
+                $('#unidades_select_unidad')
+                    .val(id)
+                    .trigger('change');
+            }, 500);
+        });
+
+        function verArticulosPrecios()
+        {
+            $('.cargar_precio').removeClass('d-none');
+        }
+
+        Livewire.on('setUnidad', ({ id }) => {
+            setTimeout(function () {
+                $('#precios_select_unidades')
+                    .val(id)
+                    .trigger('change');
+            }, 500);
+        });
+
+        function verArticulosIdentificadores()
+        {
+            $('.cargar_indentificador').removeClass('d-none');
+        }
+
+
+        /*function buscar() {
             let input = $("#navbarSearch");
-            let keyword  = input.val();
-            if (keyword.length > 0){
+            let keyword = input.val();
+            if (keyword.length > 0) {
                 input.blur();
-                //alert('Falta vincular con el componente Livewire');
-                $('.cargar_buscar').removeClass('d-none');
-                Livewire.dispatch('buscar', { keyword: keyword });
+                alert('Falta vincular con el componente Livewire');
+                //Livewire.dispatch('buscar', { keyword: keyword });
+                $('#nabvar_cerrar_buscar').click();
             }
             return false;
-        }
+        }*/
 
         console.log('Hi!');
     </script>
-@endsection
+@stop

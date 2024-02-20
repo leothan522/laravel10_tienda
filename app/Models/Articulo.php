@@ -26,6 +26,7 @@ class Articulo extends Model
         'adicional',
         'decimales',
         'estatus',
+        'empresas_id',
         'imagen',
         'mini',
         'detail',

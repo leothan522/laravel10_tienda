@@ -62,6 +62,7 @@ class AlmacenesComponent extends Component
         $rules = [
             'codigo' => ['required', 'min:2', 'max:6', 'alpha_num:ascii', Rule::unique('almacenes', 'codigo')->ignore($this->almacenes_id)],
             'nombre' => 'required|min:4',
+            'empresas_id' => 'required'
         ];
         $messages = [
             'codigo.required' => 'El campo codigo es obligatorio.',

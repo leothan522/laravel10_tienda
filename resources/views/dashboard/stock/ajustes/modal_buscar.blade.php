@@ -28,8 +28,8 @@
                     </div>
                 </div>
 
-                <div class="row mt-2 table-responsive p-0" style="height: 310px;">
-                    <table class="table table-head-fixed table-hover text-nowrap">
+                <div class="row mt-2 table-responsive p-0" style="height: 30vh;">
+                    <table class="table table-sm table-head-fixed table-hover text-nowrap">
                         <thead>
                         <tr class="text-navy">
                             <th style="width: 10%">Código</th>
