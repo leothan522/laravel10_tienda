@@ -2,7 +2,7 @@
 
 @section('plugins.Select2', true)
 
-@section('title', 'Pagna de Prueba')
+@section('title', 'Articulos')
 
 @section('content_header')
     <div class="container-fluid">
