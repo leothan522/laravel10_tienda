@@ -21,6 +21,7 @@
             </thead>
             <tbody>
             @php($i = 0)
+            @if($listarStock->isNotEmpty())
             @foreach($listarStock as $stock)
 
                 @if(!empty($keywordStock))
@@ -125,6 +126,11 @@
                     </td>
                 </tr>
             @endforeach
+            @else
+                <tr>
+                    <td colspan="12" class="text-center">Sin Existencias</td>
+                </tr>
+            @endif
             </tbody>
         </table>
 

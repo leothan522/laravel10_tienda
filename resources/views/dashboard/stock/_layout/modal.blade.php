@@ -27,7 +27,7 @@
                                     <div class="row col-12 justify-content-center mb-3 mt-3">
                                         <div class="col-10">
                                             <img class="img-thumbnail"
-                                                 src="{{ asset(verImagen($getStock['imagen'] ?? '')) }}"
+                                                 src="{{ verImagen($getStock['imagen'] ?? null, false, true) }}"
                                                  {{--width="101" height="100"--}}  alt="Imagen Articulo"/>
                                         </div>
                                     </div>
