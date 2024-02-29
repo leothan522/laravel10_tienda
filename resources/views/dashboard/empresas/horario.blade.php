@@ -19,7 +19,7 @@
                 <div class="card-body">
 
                     <h1 class="profile-username text-center text-bold">
-                        {{ $nombre }}
+                        {{ mb_strtoupper($nombre) }}
                     </h1>
 
                     <div class="input-group">
@@ -102,7 +102,7 @@
 
                 <div class="card-body">
 
-                    @if(estatusTienda($empresa_id))
+                    @if(estatusTienda($empresas_id))
                         <div class="alert alert-success">
                             <h5><i class="icon fas fa-check"></i> ¡Abierto!</h5>
                             Hora actual: <strong>{{ date('h:i a') }}</strong>. Estatus: <strong> OPEN </strong>
@@ -146,6 +146,14 @@
                         </div>
                     </div>
 
+                        <div class="col-md-12">
+                            <div class="col-md-6 float-right">
+                                <button type="submit" class="btn btn-block btn-success">
+                                    <i class="fas fa-save"></i> Guardar Horas
+                                </button>
+                            </div>
+                        </div>
+
                 </div>
 
             </div>
@@ -154,13 +162,7 @@
 
         </div>
 
-        <div class="col-md-12">
-            <div class="col-md-4 float-right">
-                <button type="submit" class="btn btn-block btn-success">
-                    <i class="fas fa-save"></i> Guardar Horas
-                </button>
-            </div>
-        </div>
+
 
     </form>
 </div>

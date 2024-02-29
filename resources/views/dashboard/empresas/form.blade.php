@@ -17,10 +17,10 @@
 
 
                     <div class="form-group">
-                        <label for="name">{{ __('Name') }}</label>
-                        <div class="input-group mb-3">
+                        {{--<label for="name">{{ __('Name') }}</label>--}}
+                        <div class="input-group {{--mb-3--}}">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-book"></i></span>
+                                <span class="input-group-text">{{--<i class="fas fa-book"></i>--}}{{ __('Name') }}</span>
                             </div>
                             <input type="text" class="form-control" wire:model="nombre" placeholder="Nombre de la Empresa">
                             @error('nombre')
@@ -33,10 +33,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email">RIF</label>
-                        <div class="input-group mb-3">
+                        {{--<label for="email">RIF</label>--}}
+                        <div class="input-group {{--mb-3--}}">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                <span class="input-group-text">{{--<i class="fas fa-id-card"></i>--}}RIF</span>
                             </div>
                             <input type="text" class="form-control" wire:model="rif" placeholder="RIF de la Empresa">
                             @error('rif')
@@ -49,10 +49,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="name">Jefe</label>
-                        <div class="input-group mb-3">
+                        {{--<label for="name">Jefe</label>--}}
+                        <div class="input-group {{--mb-3--}}">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <span class="input-group-text">{{--<i class="fas fa-user"></i>--}}Jefe</span>
                             </div>
                             <input type="text" class="form-control" wire:model="jefe" placeholder="Nombre del jefe de la Empresa">
                             @error('jefe')
@@ -65,10 +65,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Moneda Base</label>
-                        <div class="input-group mb-3">
+                        {{--<label for="email">Moneda Base</label>--}}
+                        <div class="input-group {{--mb-3--}}">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+                                <span class="input-group-text">{{--<i class="fas fa-credit-card"></i>--}}Moneda Base</span>
                             </div>
                             <select class="custom-select" wire:model="moneda">
                                 <option value="">Seleccione</option>
@@ -85,10 +85,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Telefonos</label>
-                        <div class="input-group mb-3">
+                        {{--<label for="email">Telefonos</label>--}}
+                        <div class="input-group {{--mb-3--}}">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                <span class="input-group-text">{{--<i class="fas fa-phone"></i>--}}Teléfonos</span>
                             </div>
                             <input type="text" class="form-control" wire:model="telefonos" placeholder="Telefonos">
                             @error('telefonos')
@@ -101,10 +101,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <div class="input-group mb-3">
+                        {{--<label for="email">Email</label>--}}
+                        <div class="input-group {{--mb-3--}}">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <span class="input-group-text">{{--<i class="fas fa-envelope"></i>--}}Email</span>
                             </div>
                             <input type="text" class="form-control" wire:model="email" placeholder="Email">
                             @error('email')
@@ -117,10 +117,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Dirección</label>
-                        <div class="input-group mb-3">
+                        {{--<label for="email">Dirección</label>--}}
+                        <div class="input-group {{--mb-3--}}">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-directions"></i></span>
+                                <span class="input-group-text">{{--<i class="fas fa-directions"></i>--}}Dirección</span>
                             </div>
                             <input type="text" class="form-control" wire:model="direccion" placeholder="Dirección">
                             @error('direccion')
@@ -209,8 +209,8 @@
 
         <div class="col-md-12">
             <div class="col-md-4 float-right">
-                <button type="submit" class="btn btn-block btn-success">
-                    <i class="fas fa-save"></i> Guardar
+                <button type="submit" class="btn btn-block @if($empresas_id) btn-primary @else btn-success @endif">
+                    <i class="fas fa-save"></i> Guardar @if($empresas_id) Cambios @endif
                 </button>
             </div>
         </div>

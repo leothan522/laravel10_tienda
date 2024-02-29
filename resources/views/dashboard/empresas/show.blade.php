@@ -6,7 +6,7 @@
 
             <div class="card-body box-profile">
                 <h1 class="profile-username text-center text-bold">
-                    {{ $nombre }}
+                    {{ mb_strtoupper($nombre) }}
                 </h1>
                 <ul class="list-group list-group-unbordered mt-3">
                     <li class="list-group-item">
@@ -26,19 +26,26 @@
                     </li>
                     <li class="list-group-item">
                         <b>Email</b> <a
-                                class="float-right">{{ strtolower($email) }}</a>
+                                class="float-right">{{ mb_strtolower($email) }}</a>
                     </li>
                     <li class="list-group-item">
                         <b>Dirección</b> <a
-                                class="float-right">{{ $direccion }}</a>
+                                class="float-right">{{ mb_strtoupper($direccion) }}</a>
                     </li>
                     @if(auth()->user()->role == 100)
                         <li class="list-group-item">
-                            <b>empresa_id</b> <a
-                                    class="float-right">{{ $empresa_id }}</a>
+                            <b>empresas_id</b> <a
+                                    class="float-right">{{ $empresas_id }}</a>
+                        </li>
+                    @endif
+                    @if($verDefault)
+                        <li class="list-group-item text-muted text-center">
+                            <i class="fas fa-certificate text-muted text-xs"></i>
+                            Tienda Default
                         </li>
                     @endif
                 </ul>
+
             </div>
 
         </div>
@@ -74,7 +81,7 @@
 
                         <div class="row col-12 justify-content-center mb-3 mt-3">
                             <div class="col-8">
-                                <img class="img-thumbnail" src="{{ asset(verImagen($verImagen)) }}"
+                                <img class="img-thumbnail" src="{{ verImagen($verImagen, false, true) }}"
                                      {{--width="101" height="100"--}}  alt="Logo Tienda"/>
                             </div>
                         </div>
@@ -83,7 +90,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        @if(estatusTienda($empresa_id))
+                        @if(estatusTienda($empresas_id))
                             <div class="alert alert-success">
                                 <h5><i class="icon fas fa-check"></i> ¡Abierto!</h5>
                                 Hora actual: <strong>{{ date('h:i a') }}</strong>. Estatus: <strong> OPEN </strong>
@@ -94,7 +101,7 @@
                                 Hora actual: <strong>{{ date('h:i a') }}</strong>. Estatus: <strong> CLOSED </strong>
                             </div>
                         @endif
-                        @if($verDefault)
+                        {{--@if($verDefault)
                             <ul class="list-group text-sm">
                                 <li class="list-group-item bg-warning text-bold">
                                     Tienda Default
@@ -102,7 +109,7 @@
                                                 class="fas fa-certificate text-muted text-xs"></i></span>
                                 </li>
                             </ul>
-                        @endif
+                        @endif--}}
                     </div>
                 </div>
             </div>

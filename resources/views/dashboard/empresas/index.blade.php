@@ -38,6 +38,10 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
+        function verSpinnerOculto() {
+            $('.cargar_empresas').removeClass('d-none');
+        }
+
         function imgEmpresa()
         {
             $('#customFileLang').click();
