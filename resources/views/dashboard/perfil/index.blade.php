@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <x-app-layout>
+    {{--<x-app-layout>--}}
 
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
@@ -43,7 +43,7 @@
                 @endif
             </div>
         </div>
-    </x-app-layout>
+    {{--</x-app-layout>--}}
 
 @endsection
 
@@ -57,6 +57,7 @@
 
 @section('css')
     {{--<link rel="stylesheet" href="/css/admin_custom.css">--}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 @stop
 
 @section('js')
